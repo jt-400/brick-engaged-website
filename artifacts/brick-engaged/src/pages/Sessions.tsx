@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import kidsImg from "@assets/lego_kids.png";
+import minifigsImg from "@assets/lego_minifigs.png";
 import handsImg from "@assets/lego_hands.png";
 import therapyImg from "@assets/lego_therapy.png";
 
@@ -75,8 +75,8 @@ export default function Sessions() {
           >
             <div className="grid grid-cols-1 md:grid-cols-2">
               <img
-                src={kidsImg}
-                alt="Children doing Brick-by-Brick programme"
+                src={minifigsImg}
+                alt="LEGO minifigures representing Brick-by-Brick programme"
                 className="w-full h-64 md:h-full object-cover"
                 data-testid="img-brick-by-brick"
               />

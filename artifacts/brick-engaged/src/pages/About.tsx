@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import kidsImg from "@assets/lego_kids.png";
+import danImg from "@assets/Screenshot_2026-05-18_at_4.09.32_PM_1779077577066.png";
 
 export default function About() {
   return (
@@ -53,12 +53,12 @@ export default function About() {
           transition={{ delay: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
         >
-          {/* Photo placeholder — replace src with a real photo of Dan */}
           <div className="rounded-3xl overflow-hidden shadow-xl border-2 border-slate-200">
             <img
-              src={kidsImg}
-              alt="Dan Mulholland — replace with real photo"
-              className="w-full h-72 md:h-full object-cover"
+              src={danImg}
+              alt="Daniel Mulholland — Brick Engaged Facilitator"
+              className="w-full h-80 md:h-full object-cover"
+              style={{ objectPosition: "33% 38%" }}
               data-testid="img-about-dan"
             />
           </div>
