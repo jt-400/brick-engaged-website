@@ -1,0 +1,38 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "0Ssu5TLxIllzZs3mGpvsC"
+uri = "file://attached_assets/lego_hero.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "_f6xr3GgWOeYhqwndRDl4"
+uri = "file://attached_assets/lego_kids.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "E9HnzctkFl1OmotK42vl0"
+uri = "file://attached_assets/lego_minifigs.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "evOGRgMc8lq2R87GPv4rE"
+uri = "file://attached_assets/lego_bricks_close.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "6JxGktFq5gUNbyU9wAvYW"
+uri = "file://attached_assets/lego_hands.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "K_S40je3dWFlGVZZUGfzv"
+uri = "file://attached_assets/lego_therapy.png"
+type = "image"
+title = "generated_image"
