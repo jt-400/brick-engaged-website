@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { ArrowRight, Puzzle, Heart, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import heroImg from "@assets/lego_hero.png";
+import heroImg from "@assets/ChatGPT_Image_May_18,_2026,_01_27_36_PM_1779078714442.png";
 import kidsImg from "@assets/lego_kids.png";
 import minifigsImg from "@assets/lego_minifigs.png";
 import bricksImg from "@assets/lego_bricks_close.png";
@@ -27,57 +27,45 @@ export default function Home() {
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
-      <section className="bg-lego-blue text-white overflow-hidden relative">
-        <div className="absolute inset-0 bg-brick-pattern opacity-20 pointer-events-none"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 min-h-[600px] items-center gap-0">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="py-16 md:py-24 pr-0 md:pr-8"
+      <section className="relative overflow-hidden min-h-[600px] flex items-center">
+        <img
+          src={heroImg}
+          alt="Colorful LEGO bricks border"
+          className="absolute inset-0 w-full h-full object-cover"
+          data-testid="img-hero-lego"
+        />
+        <div className="relative z-10 w-full flex items-center justify-center py-24 px-4">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+            className="text-center max-w-3xl"
+          >
+            <motion.h1
+              variants={fadeInUp}
+              className="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tighter text-lego-blue drop-shadow-sm"
             >
-              <motion.h1
-                variants={fadeInUp}
-                className="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tighter"
-              >
-                Building connections, one brick at a time
-              </motion.h1>
-              <motion.p
-                variants={fadeInUp}
-                className="text-xl md:text-2xl mb-10 font-medium opacity-90 max-w-lg leading-relaxed"
-              >
-                We believe in the transformative power of play and its ability to create positive, lasting change in the lives of our clients.
-              </motion.p>
-              <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
-                <Link href="/sessions">
-                  <Button size="lg" data-testid="button-view-sessions" className="bg-lego-yellow text-black hover:bg-white text-lg h-14 px-8 rounded-full font-bold">
-                    View Sessions
-                  </Button>
-                </Link>
-                <Link href="/contact">
-                  <Button size="lg" variant="outline" data-testid="button-get-in-touch" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-lego-blue text-lg h-14 px-8 rounded-full font-bold">
-                    Get in Touch
-                  </Button>
-                </Link>
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="relative h-[400px] md:h-full min-h-[400px]"
+              Building connections, one brick at a time
+            </motion.h1>
+            <motion.p
+              variants={fadeInUp}
+              className="text-xl md:text-2xl mb-10 font-bold text-slate-700 max-w-xl mx-auto leading-relaxed"
             >
-              <img
-                src={heroImg}
-                alt="Colorful LEGO bricks"
-                className="w-full h-full object-cover"
-                data-testid="img-hero-lego"
-              />
-              <div className="absolute inset-0 bg-lego-blue/20"></div>
+              We believe in the transformative power of play and its ability to create positive, lasting change in the lives of our clients.
+            </motion.p>
+            <motion.div variants={fadeInUp} className="flex flex-wrap gap-4 justify-center">
+              <Link href="/sessions">
+                <Button size="lg" data-testid="button-view-sessions" className="bg-lego-blue text-white hover:bg-lego-red text-lg h-14 px-8 rounded-full font-bold shadow-lg">
+                  View Sessions
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button size="lg" data-testid="button-get-in-touch" className="bg-lego-yellow text-black hover:bg-lego-orange hover:text-white text-lg h-14 px-8 rounded-full font-bold shadow-lg">
+                  Get in Touch
+                </Button>
+              </Link>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
