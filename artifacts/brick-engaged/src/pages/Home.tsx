@@ -10,31 +10,29 @@ import bricksImg from "@assets/lego_bricks_close.png";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
+    transition: { staggerChildren: 0.2 },
+  },
 };
 
 export default function Home() {
   return (
     <div className="flex flex-col w-full">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[600px] flex items-center">
+      {/* Hero Section — full bleed so the fixed header overlaps it */}
+      <section className="relative overflow-hidden min-h-[620px] flex items-center">
         <img
           src={heroImg}
           alt="Colorful LEGO bricks border"
           className="absolute inset-0 w-full h-full object-cover"
           data-testid="img-hero-lego"
         />
-        <div className="relative z-10 w-full flex items-center justify-center py-24 px-4">
+        <div className="relative z-10 w-full flex items-center justify-center pt-32 pb-24 px-4">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -43,7 +41,7 @@ export default function Home() {
           >
             <motion.h1
               variants={fadeInUp}
-              className="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tighter text-lego-blue drop-shadow-sm"
+              className="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tighter text-charcoal drop-shadow-sm"
             >
               Building connections, one brick at a time
             </motion.h1>
@@ -51,16 +49,25 @@ export default function Home() {
               variants={fadeInUp}
               className="text-xl md:text-2xl mb-10 font-bold text-slate-700 max-w-xl mx-auto leading-relaxed"
             >
-              We believe in the transformative power of play and its ability to create positive, lasting change in the lives of our clients.
+              We believe in the transformative power of play and its ability to create positive,
+              lasting change in the lives of our clients.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-wrap gap-4 justify-center">
               <Link href="/sessions">
-                <Button size="lg" data-testid="button-view-sessions" className="bg-lego-blue text-white hover:bg-lego-red text-lg h-14 px-8 rounded-full font-bold shadow-lg">
+                <Button
+                  size="lg"
+                  data-testid="button-view-sessions"
+                  className="bg-lego-orange text-white hover:bg-charcoal text-lg h-14 px-8 rounded-full font-bold shadow-lg"
+                >
                   View Sessions
                 </Button>
               </Link>
               <Link href="/contact">
-                <Button size="lg" data-testid="button-get-in-touch" className="bg-lego-yellow text-black hover:bg-lego-orange hover:text-white text-lg h-14 px-8 rounded-full font-bold shadow-lg">
+                <Button
+                  size="lg"
+                  data-testid="button-get-in-touch"
+                  className="bg-charcoal text-white hover:bg-lego-orange text-lg h-14 px-8 rounded-full font-bold shadow-lg"
+                >
                   Get in Touch
                 </Button>
               </Link>
@@ -70,9 +77,9 @@ export default function Home() {
       </section>
 
       {/* Mission strip */}
-      <section className="bg-lego-yellow py-10">
+      <section className="bg-lego-orange py-10">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-2xl md:text-3xl font-black text-black max-w-4xl mx-auto tracking-tight">
+          <p className="text-2xl md:text-3xl font-black text-white max-w-4xl mx-auto tracking-tight">
             At Brick Engaged, our mission is to build connections, one brick at a time.
           </p>
         </div>
@@ -100,18 +107,22 @@ export default function Home() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="bg-lego-red text-white flex items-center px-10 md:px-16 py-16"
+            className="bg-charcoal text-white flex items-center px-10 md:px-16 py-16"
           >
             <div>
-              <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tighter leading-tight">LEGO® as a tool for growth</h2>
+              <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tighter leading-tight">
+                LEGO® as a tool for growth
+              </h2>
               <p className="text-xl font-medium opacity-90 leading-relaxed mb-6">
-                Brick Engaged conducts Mindful LEGO® Building sessions for small groups in a safe, welcoming and inclusive environment.
+                Brick Engaged conducts Mindful LEGO® Building sessions for small groups in a safe,
+                welcoming and inclusive environment.
               </p>
-              <p className="text-lg font-medium opacity-80 leading-relaxed">
-                We focus on social skills, life skills, mental wellbeing and meaningful interactions while building and playing with LEGO® bricks.
+              <p className="text-lg font-medium opacity-70 leading-relaxed">
+                We focus on social skills, life skills, mental wellbeing and meaningful interactions
+                while building and playing with LEGO® bricks.
               </p>
               <Link href="/sessions">
-                <Button className="mt-8 bg-white text-lego-red hover:bg-lego-yellow hover:text-black font-bold rounded-full h-12 px-8 text-base">
+                <Button className="mt-8 bg-lego-orange hover:bg-white hover:text-charcoal text-white font-bold rounded-full h-12 px-8 text-base">
                   Explore Sessions <ArrowRight className="ml-2" size={18} />
                 </Button>
               </Link>
@@ -121,7 +132,7 @@ export default function Home() {
       </section>
 
       {/* Who can benefit */}
-      <section className="py-24 bg-white text-foreground">
+      <section className="py-24 bg-slate-50 text-foreground">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -130,8 +141,13 @@ export default function Home() {
             variants={fadeInUp}
             className="mb-16 text-center"
           >
-            <h2 className="text-4xl md:text-5xl font-black text-lego-blue mb-4 tracking-tighter">Who can benefit?</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Our programmes are designed for a wide range of individuals seeking growth and connection.</p>
+            <h2 className="text-4xl md:text-5xl font-black text-charcoal mb-4 tracking-tighter">
+              Who can benefit?
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Our programmes are designed for a wide range of individuals seeking growth and
+              connection.
+            </p>
           </motion.div>
 
           <motion.div
@@ -143,22 +159,32 @@ export default function Home() {
           >
             {/* Children */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full border-4 border-lego-yellow rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                <div className="bg-lego-yellow h-2"></div>
+              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-lego-orange h-2"></div>
                 <CardContent className="p-8">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="bg-lego-yellow rounded-2xl p-3">
-                      <Puzzle size={32} className="text-black" />
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="bg-lego-orange/10 rounded-2xl p-3">
+                      <Puzzle size={28} className="text-lego-orange" />
                     </div>
-                    <h3 className="text-2xl font-bold">Children 7-12</h3>
+                    <span className="text-xs font-black bg-lego-orange text-white px-3 py-1 rounded-full">
+                      Brick-by-Brick® Programme
+                    </span>
                   </div>
-                  <ul className="space-y-3 font-medium text-muted-foreground">
-                    <li className="flex gap-2"><span className="text-lego-yellow font-black text-lg leading-tight">•</span> Neurodiverse (ADHD, Autistic)</li>
-                    <li className="flex gap-2"><span className="text-lego-yellow font-black text-lg leading-tight">•</span> Home schooled</li>
-                    <li className="flex gap-2"><span className="text-lego-yellow font-black text-lg leading-tight">•</span> Struggling with Mental Health</li>
-                    <li className="flex gap-2"><span className="text-lego-yellow font-black text-lg leading-tight">•</span> Suffered Trauma</li>
-                    <li className="flex gap-2"><span className="text-lego-yellow font-black text-lg leading-tight">•</span> Low self-confidence</li>
-                    <li className="flex gap-2"><span className="text-lego-yellow font-black text-lg leading-tight">•</span> Feeling like you don't 'fit-in'</li>
+                  <h3 className="text-2xl font-black text-charcoal mt-4 mb-4">Children 7–12</h3>
+                  <ul className="space-y-2 font-medium text-muted-foreground">
+                    {[
+                      "Neurodiverse (ADHD, Autistic)",
+                      "Home schooled",
+                      "Struggling with Mental Health",
+                      "Suffered Trauma",
+                      "Low self-confidence",
+                      "Feeling like you don't 'fit-in'",
+                    ].map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <span className="text-lego-orange font-black text-lg leading-tight">•</span>
+                        {item}
+                      </li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
@@ -166,22 +192,32 @@ export default function Home() {
 
             {/* Teens */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full border-4 border-lego-orange rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                <div className="bg-lego-orange h-2"></div>
+              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-charcoal h-2"></div>
                 <CardContent className="p-8">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="bg-lego-orange rounded-2xl p-3">
-                      <Users size={32} className="text-white" />
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="bg-charcoal/10 rounded-2xl p-3">
+                      <Users size={28} className="text-charcoal" />
                     </div>
-                    <h3 className="text-2xl font-bold">Teens 13-19</h3>
+                    <span className="text-xs font-black bg-charcoal text-white px-3 py-1 rounded-full">
+                      Mindful Building Sessions
+                    </span>
                   </div>
-                  <ul className="space-y-3 font-medium text-muted-foreground">
-                    <li className="flex gap-2"><span className="text-lego-orange font-black text-lg leading-tight">•</span> Neurodiverse (ADHD, Autistic)</li>
-                    <li className="flex gap-2"><span className="text-lego-orange font-black text-lg leading-tight">•</span> Home schooled</li>
-                    <li className="flex gap-2"><span className="text-lego-orange font-black text-lg leading-tight">•</span> Struggling with Mental Health</li>
-                    <li className="flex gap-2"><span className="text-lego-orange font-black text-lg leading-tight">•</span> Suffered Trauma</li>
-                    <li className="flex gap-2"><span className="text-lego-orange font-black text-lg leading-tight">•</span> Low self-confidence</li>
-                    <li className="flex gap-2"><span className="text-lego-orange font-black text-lg leading-tight">•</span> Feeling like you don't 'fit-in'</li>
+                  <h3 className="text-2xl font-black text-charcoal mt-4 mb-4">Teens 13–19</h3>
+                  <ul className="space-y-2 font-medium text-muted-foreground">
+                    {[
+                      "Neurodiverse (ADHD, Autistic)",
+                      "Home schooled",
+                      "Struggling with Mental Health",
+                      "Suffered Trauma",
+                      "Low self-confidence",
+                      "Feeling like you don't 'fit-in'",
+                    ].map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <span className="text-charcoal font-black text-lg leading-tight">•</span>
+                        {item}
+                      </li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
@@ -189,23 +225,32 @@ export default function Home() {
 
             {/* Adults */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full border-4 border-lego-green rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                <div className="bg-lego-green h-2"></div>
+              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-lego-orange h-2"></div>
                 <CardContent className="p-8">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="bg-lego-green rounded-2xl p-3">
-                      <Heart size={32} className="text-white" />
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="bg-lego-orange/10 rounded-2xl p-3">
+                      <Heart size={28} className="text-lego-orange" />
                     </div>
-                    <h3 className="text-2xl font-bold">Adults</h3>
+                    <span className="text-xs font-black bg-lego-orange text-white px-3 py-1 rounded-full">
+                      Therapeutic Use of LEGO®
+                    </span>
                   </div>
-                  <ul className="space-y-3 font-medium text-muted-foreground">
-                    <li className="flex gap-2"><span className="text-lego-green font-black text-lg leading-tight">•</span> Neurodiverse (ADHD, Autistic)</li>
-                    <li className="flex gap-2"><span className="text-lego-green font-black text-lg leading-tight">•</span> Struggling with Mental Health</li>
-                    <li className="flex gap-2"><span className="text-lego-green font-black text-lg leading-tight">•</span> Suffered Trauma</li>
-                    <li className="flex gap-2"><span className="text-lego-green font-black text-lg leading-tight">•</span> Low self-confidence</li>
-                    <li className="flex gap-2"><span className="text-lego-green font-black text-lg leading-tight">•</span> Feeling like you don't 'fit-in'</li>
-                    <li className="flex gap-2"><span className="text-lego-red font-black text-lg leading-tight">•</span> Need a break</li>
-                    <li className="flex gap-2"><span className="text-lego-red font-black text-lg leading-tight">•</span> Lowering Anxiety and stress</li>
+                  <h3 className="text-2xl font-black text-charcoal mt-4 mb-4">Adults 20+</h3>
+                  <ul className="space-y-2 font-medium text-muted-foreground">
+                    {[
+                      "Neurodiverse (ADHD, Autistic)",
+                      "Struggling with Mental Health",
+                      "Suffered Trauma",
+                      "Low self-confidence",
+                      "Feeling like you don't 'fit-in'",
+                      "Need a break / Lower Anxiety",
+                    ].map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <span className="text-lego-orange font-black text-lg leading-tight">•</span>
+                        {item}
+                      </li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
@@ -222,27 +267,28 @@ export default function Home() {
           className="w-full h-full object-cover"
           data-testid="img-minifigs-band"
         />
-        <div className="absolute inset-0 bg-lego-blue/60 flex items-center justify-center">
+        <div className="absolute inset-0 bg-charcoal/65 flex items-center justify-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             className="text-center text-white px-4"
           >
-            <p className="text-2xl md:text-4xl font-black tracking-tight">Everyone deserves to feel like they belong.</p>
+            <p className="text-2xl md:text-4xl font-black tracking-tight">
+              Everyone deserves to feel like they belong.
+            </p>
           </motion.div>
         </div>
       </section>
 
       {/* Pathways */}
-      <section className="bg-lego-yellow py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none"></div>
+      <section className="bg-white py-24 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-black text-center text-black mb-14 tracking-tighter"
+            className="text-4xl md:text-5xl font-black text-center text-charcoal mb-14 tracking-tighter"
           >
             Find your path
           </motion.h2>
@@ -255,14 +301,20 @@ export default function Home() {
           >
             <motion.div variants={fadeInUp}>
               <Link href="/sessions">
-                <div className="bg-lego-blue text-white rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:-rotate-1 transition-transform duration-300 shadow-xl" data-testid="link-sessions-card">
+                <div
+                  className="bg-charcoal text-white rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:-rotate-1 transition-transform duration-300 shadow-xl"
+                  data-testid="link-sessions-card"
+                >
                   <img src={bricksImg} alt="LEGO bricks" className="w-full h-48 object-cover" />
                   <div className="p-8 flex flex-col flex-1 justify-between">
                     <div>
                       <h3 className="text-3xl font-black mb-3">Brick Engaged Sessions</h3>
-                      <p className="text-lg opacity-90 mb-6 font-medium">Discover our specialized LEGO-based programmes tailored for different age groups and needs.</p>
+                      <p className="text-lg opacity-80 mb-6 font-medium">
+                        Discover our specialised LEGO-based programmes tailored for different age
+                        groups and needs.
+                      </p>
                     </div>
-                    <div className="flex items-center gap-2 font-bold text-lego-yellow">
+                    <div className="flex items-center gap-2 font-bold text-lego-orange">
                       <span>Learn more</span> <ArrowRight size={20} />
                     </div>
                   </div>
@@ -272,14 +324,24 @@ export default function Home() {
 
             <motion.div variants={fadeInUp}>
               <Link href="/foundation">
-                <div className="bg-lego-red text-white rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:rotate-1 transition-transform duration-300 shadow-xl" data-testid="link-foundation-card">
-                  <img src={minifigsImg} alt="LEGO minifigures" className="w-full h-48 object-cover" />
+                <div
+                  className="bg-lego-orange text-white rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:rotate-1 transition-transform duration-300 shadow-xl"
+                  data-testid="link-foundation-card"
+                >
+                  <img
+                    src={minifigsImg}
+                    alt="LEGO minifigures"
+                    className="w-full h-48 object-cover"
+                  />
                   <div className="p-8 flex flex-col flex-1 justify-between">
                     <div>
                       <h3 className="text-3xl font-black mb-3">Brick Engaged Foundation</h3>
-                      <p className="text-lg opacity-90 mb-6 font-medium">Our charitable arm providing fully-funded sessions to neurodivergent children.</p>
+                      <p className="text-lg opacity-90 mb-6 font-medium">
+                        Our charitable arm providing fully-funded sessions to neurodivergent
+                        children.
+                      </p>
                     </div>
-                    <div className="flex items-center gap-2 font-bold text-lego-yellow">
+                    <div className="flex items-center gap-2 font-bold text-white/80">
                       <span>Learn more</span> <ArrowRight size={20} />
                     </div>
                   </div>

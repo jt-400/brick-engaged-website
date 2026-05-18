@@ -1,0 +1,126 @@
+Please implement the following design and UI updates across the Brook Engaged website.
+
+Overall Design Direction
+
+The current site structure, typography, and overall style are strong. The main focus now is improving consistency and simplifying the visual design system.
+
+Colour System
+
+* Reduce the amount of competing colours used throughout the website.
+* Shift toward a more cohesive palette using:
+    * Orange as the primary accent colour
+    * Charcoal as the primary dark/base colour
+* Avoid using too many bright UI colours throughout sections/cards/buttons.
+* Let photography and imagery provide most of the visual colour/energy instead.
+* Ensure colour usage is consistent across all pages.
+
+⸻
+
+Header / Navigation Updates
+
+Transparent Hero Header
+
+* Make the header/navigation overlap the hero section.
+* On initial page load:
+    * Header should be transparent
+    * Navigation should sit over the hero content cleanly
+* On scroll:
+    * Header should transition into the current white solid version
+    * Add a smooth transition effect
+
+Remove Header Accent Line
+
+* Remove the red line underneath the header/navigation completely across the entire website.
+
+⸻
+
+Homepage Updates
+
+Hero Section
+
+* Ensure the transparent overlapping header works cleanly with the hero.
+* Keep the section visually clean and aligned with the new orange + charcoal design direction.
+
+“Who Can Benefit” Section
+
+* Add small tags/labels/chips to each of the 3 cards.
+* These tags should help users quickly identify which programme/service is right for them.
+* Keep the tags subtle and consistent with the new design system.
+
+Footer
+
+* Keep the footer charcoal.
+* Ensure footer styling aligns with the simplified colour palette.
+
+⸻
+
+Sessions Page Updates
+
+* Remove the image currently underneath/in the first row section.
+* Keep the existing content/layout structure.
+* Update colours to align with the orange + charcoal system.
+* Ensure the first-row/hero section visually matches the same structure and styling used across all other pages.
+
+⸻
+
+Foundation Page Updates
+
+* Remove the icon currently in the first row.
+* Remove the image underneath the first row.
+* Keep the holiday programme content and layout as-is.
+* Maintain the current typography/style direction.
+* Update colours and spacing for consistency with the rest of the website.
+
+⸻
+
+About Dan Page Updates
+
+* Remove the image underneath the first row.
+* Add a proper photo/image of Dan into the page.
+* Refine colours so they feel more cohesive and less visually scattered.
+
+⸻
+
+Contact Page Updates
+
+* Keep the existing structure.
+* Update colours and styling to match the consistent orange + charcoal design direction.
+
+⸻
+
+Global Layout & Design System Updates
+
+Consistent First-Row / Hero Sections
+
+Across ALL pages:
+
+* Make the first row/hero sections feel structurally consistent.
+* Current hero sections feel too visually different from page to page.
+* Create a shared visual system for:
+    * spacing
+    * typography hierarchy
+    * layout structure
+    * background treatment
+    * button styling
+    * section transitions
+
+“Building Block” Section Concept
+
+Explore a subtle visual system where the first row of each page feels like a connected “building block” that transitions into the next section.
+
+Potential ideas:
+
+* connector shapes
+* subtle plug/join details
+* curved or stepped transitions
+* visual anchor points at the bottom of hero sections
+
+Keep this subtle, modern, and clean — not overly decorative.
+
+⸻
+
+Important Notes
+
+* Preserve the existing typography direction and overall feel of the site.
+* Focus on refinement, consistency, and cohesion rather than redesigning everything.
+* Keep the site modern, clean, and easy to navigate.
