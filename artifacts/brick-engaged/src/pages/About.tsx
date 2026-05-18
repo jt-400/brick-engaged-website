@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import danImg from "@assets/Screenshot_2026-05-18_at_4.09.32_PM_1779077577066.png";
+import danImg from "@assets/Screenshot_2026-05-18_at_5.17.02_PM_1779081478608.png";
 
 export default function About() {
   return (
@@ -58,7 +58,7 @@ export default function About() {
               src={danImg}
               alt="Daniel Mulholland — Brick Engaged Facilitator"
               className="w-full h-80 md:h-full object-cover"
-              style={{ objectPosition: "33% 38%" }}
+              style={{ objectPosition: "50% 20%" }}
               data-testid="img-about-dan"
             />
           </div>

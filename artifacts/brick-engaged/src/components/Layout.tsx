@@ -14,10 +14,12 @@ const NAV_LINKS = [
 const NavLink = ({
   href,
   children,
+  scrolled,
   onClick,
 }: {
   href: string;
   children: React.ReactNode;
+  scrolled: boolean;
   onClick?: () => void;
 }) => {
   const [location] = useLocation();
@@ -29,8 +31,10 @@ const NavLink = ({
         onClick={onClick}
         className={`cursor-pointer px-4 py-2 rounded-full font-bold transition-all duration-200 ${
           isActive
-            ? "text-lego-orange"
-            : "text-charcoal hover:text-lego-orange"
+            ? "bg-lego-orange text-white"
+            : scrolled
+            ? "text-slate-800 hover:bg-slate-100"
+            : "text-white hover:bg-white/20"
         }`}
       >
         {children}
@@ -59,13 +63,28 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col bg-background">
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-white/80 backdrop-blur-sm"
+          scrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-transparent"
         }`}
       >
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           <Link href="/">
             <span className="cursor-pointer flex items-center gap-2">
-              <span className="font-display font-black text-2xl tracking-tighter text-charcoal">
+              <div
+                className={`w-8 h-8 rounded-sm flex items-center justify-center transition-colors duration-300 ${
+                  scrolled ? "bg-lego-orange" : "bg-white/90"
+                }`}
+              >
+                <div
+                  className={`w-4 h-4 rounded-full transition-colors duration-300 ${
+                    scrolled ? "bg-white/30" : "bg-lego-orange/40"
+                  }`}
+                ></div>
+              </div>
+              <span
+                className={`font-display font-black text-2xl tracking-tighter transition-colors duration-300 ${
+                  scrolled ? "text-lego-orange" : "text-white"
+                }`}
+              >
                 BRICK ENGAGED
               </span>
             </span>
@@ -73,14 +92,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           <nav className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map(({ href, label }) => (
-              <NavLink key={href} href={href}>
+              <NavLink key={href} href={href} scrolled={scrolled}>
                 {label}
               </NavLink>
             ))}
           </nav>
 
           <button
-            className="md:hidden p-2 text-charcoal"
+            className={`md:hidden p-2 transition-colors duration-300 ${
+              scrolled ? "text-slate-800" : "text-white"
+            }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
