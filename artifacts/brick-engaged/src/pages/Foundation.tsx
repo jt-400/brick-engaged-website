@@ -12,7 +12,7 @@ export default function Foundation() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase"
+            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
           >
             Charitable Organisation
           </motion.div>
@@ -99,7 +99,7 @@ export default function Foundation() {
             viewport={{ once: true }}
             className="text-center"
           >
-            <div className="w-12 h-1 bg-lego-orange mx-auto mb-8 rounded-full"></div>
+            <div className="w-12 h-1 bg-lego-orange mx-auto mb-8 rounded-lg"></div>
             <blockquote className="text-2xl md:text-3xl font-black text-charcoal leading-relaxed tracking-tight">
               "The Brick Engaged Foundation's mission is to build connections, one brick at a time.
               We believe in the transformative power of play and its ability to create positive,
@@ -113,7 +113,7 @@ export default function Foundation() {
             <div className="mt-10">
               <Button
                 size="lg"
-                className="bg-lego-orange hover:bg-charcoal text-white rounded-full font-bold h-14 px-10 text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+                className="bg-lego-orange hover:bg-charcoal text-white rounded-lg font-bold h-14 px-10 text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
                 data-testid="button-donate"
               >
                 Make a Donation

@@ -28,7 +28,7 @@ export default function Sessions() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase"
+            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
           >
             Programmes
           </motion.div>
@@ -82,7 +82,7 @@ export default function Sessions() {
               />
               <div className="p-8 md:p-10">
                 <div className="flex items-center gap-3 mb-5">
-                  <span className="bg-lego-orange text-white text-xs font-black px-3 py-1.5 rounded-full">
+                  <span className="bg-lego-orange text-white text-xs font-black px-3 py-1.5 rounded-lg">
                     Ages 7–13
                   </span>
                 </div>
@@ -91,12 +91,12 @@ export default function Sessions() {
                 </h2>
                 <div className="space-y-3 text-base text-muted-foreground font-medium mb-6">
                   <p>
-                    Young people collaborate together to build LEGO® models — making friends and
-                    developing skills all whilst having fun.
+                    Children build LEGO® models together, making friends and developing skills along
+                    the way.
                   </p>
                   <p>
-                    Children work together to collaborate, communicate, problem-solve and share fun
-                    experiences all through collaborative LEGO® play.
+                    Each session weaves in communication, problem-solving and shared fun — the
+                    perfect mix for confident, connected kids.
                   </p>
                 </div>
                 <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-sm space-y-1.5 mb-6 font-medium">
@@ -115,7 +115,7 @@ export default function Sessions() {
                 <div className="flex flex-wrap gap-3">
                   <Button
                     size="lg"
-                    className="bg-lego-orange hover:bg-charcoal text-white rounded-full font-bold h-11 px-6"
+                    className="bg-lego-orange hover:bg-charcoal text-white rounded-lg font-bold h-11 px-6"
                     data-testid="button-enrol-bbk"
                   >
                     Enrolment Form
@@ -123,7 +123,7 @@ export default function Sessions() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-2 border-slate-300 text-charcoal rounded-full font-bold h-11 px-6 hover:border-lego-orange hover:text-lego-orange"
+                    className="border-2 border-slate-300 text-charcoal rounded-lg font-bold h-11 px-6 hover:border-lego-orange hover:text-lego-orange"
                     data-testid="button-email-bbk"
                   >
                     <Mail className="mr-2" size={16} /> Email Us
@@ -141,7 +141,7 @@ export default function Sessions() {
             <div className="grid grid-cols-1 md:grid-cols-2">
               <div className="p-8 md:p-10 order-2 md:order-1">
                 <div className="flex items-center gap-3 mb-5">
-                  <span className="bg-charcoal text-white text-xs font-black px-3 py-1.5 rounded-full">
+                  <span className="bg-charcoal text-white text-xs font-black px-3 py-1.5 rounded-lg">
                     Ages 7–14
                   </span>
                 </div>
@@ -168,7 +168,7 @@ export default function Sessions() {
                     ].map((skill) => (
                       <span
                         key={skill}
-                        className="bg-lego-orange/10 text-lego-orange border border-lego-orange/30 rounded-full text-xs font-bold px-3 py-1"
+                        className="bg-lego-orange/10 text-lego-orange border border-lego-orange/30 rounded-lg text-xs font-bold px-3 py-1"
                       >
                         {skill}
                       </span>
@@ -187,7 +187,7 @@ export default function Sessions() {
                 <div className="flex flex-wrap gap-3">
                   <Button
                     size="lg"
-                    className="bg-lego-orange hover:bg-charcoal text-white rounded-full font-bold h-11 px-6"
+                    className="bg-lego-orange hover:bg-charcoal text-white rounded-lg font-bold h-11 px-6"
                     data-testid="button-enrol-mindful"
                   >
                     Enrolment Form
@@ -195,7 +195,7 @@ export default function Sessions() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-2 border-slate-300 text-charcoal rounded-full font-bold h-11 px-6 hover:border-lego-orange hover:text-lego-orange"
+                    className="border-2 border-slate-300 text-charcoal rounded-lg font-bold h-11 px-6 hover:border-lego-orange hover:text-lego-orange"
                     data-testid="button-email-mindful"
                   >
                     <Mail className="mr-2" size={16} /> Email Us
@@ -225,7 +225,7 @@ export default function Sessions() {
               />
               <div className="p-8 md:p-10">
                 <div className="flex items-center gap-3 mb-5">
-                  <span className="bg-lego-orange text-white text-xs font-black px-3 py-1.5 rounded-full">
+                  <span className="bg-lego-orange text-white text-xs font-black px-3 py-1.5 rounded-lg">
                     Ages 15+
                   </span>
                 </div>
@@ -250,7 +250,7 @@ export default function Sessions() {
                 <div className="flex flex-wrap gap-3">
                   <Button
                     size="lg"
-                    className="bg-lego-orange hover:bg-charcoal text-white rounded-full font-bold h-11 px-6"
+                    className="bg-lego-orange hover:bg-charcoal text-white rounded-lg font-bold h-11 px-6"
                     data-testid="button-enrol-therapeutic"
                   >
                     Enrolment Form
@@ -258,7 +258,7 @@ export default function Sessions() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-2 border-slate-300 text-charcoal rounded-full font-bold h-11 px-6 hover:border-lego-orange hover:text-lego-orange"
+                    className="border-2 border-slate-300 text-charcoal rounded-lg font-bold h-11 px-6 hover:border-lego-orange hover:text-lego-orange"
                     data-testid="button-email-therapeutic"
                   >
                     <Mail className="mr-2" size={16} /> Email Us

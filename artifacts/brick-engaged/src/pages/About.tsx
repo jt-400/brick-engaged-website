@@ -12,7 +12,7 @@ export default function About() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase"
+            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
           >
             Facilitator
           </motion.div>
@@ -141,21 +141,21 @@ export default function About() {
               <div className="flex flex-wrap gap-3">
                 <Badge
                   variant="outline"
-                  className="text-sm py-2 px-4 border-lego-orange text-lego-orange bg-lego-orange/5 rounded-full font-bold"
+                  className="text-sm py-2 px-4 border-lego-orange text-lego-orange bg-lego-orange/5 rounded-lg font-bold"
                   data-testid="badge-lego-sp"
                 >
                   Certified Facilitator — LEGO® SERIOUS PLAY®
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="text-sm py-2 px-4 border-charcoal text-charcoal bg-charcoal/5 rounded-full font-bold"
+                  className="text-sm py-2 px-4 border-charcoal text-charcoal bg-charcoal/5 rounded-lg font-bold"
                   data-testid="badge-lego-therapy"
                 >
                   LEGO-Based Therapy Facilitator Training
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="text-sm py-2 px-4 border-lego-orange text-lego-orange bg-lego-orange/5 rounded-full font-bold"
+                  className="text-sm py-2 px-4 border-lego-orange text-lego-orange bg-lego-orange/5 rounded-lg font-bold"
                   data-testid="badge-bbk"
                 >
                   Brick-by-Brick® Programme Foundation Course

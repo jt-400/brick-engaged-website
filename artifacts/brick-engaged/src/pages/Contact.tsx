@@ -45,7 +45,7 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase"
+            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
           >
             Get in Touch
           </motion.div>
@@ -94,7 +94,7 @@ export default function Contact() {
 
             <div className="space-y-5 text-lg font-medium text-slate-700">
               <div className="flex items-center gap-4">
-                <div className="bg-lego-orange text-white p-3 rounded-xl shrink-0">
+                <div className="bg-lego-orange text-white p-3 rounded-lg shrink-0">
                   <Phone size={22} />
                 </div>
                 <a
@@ -106,7 +106,7 @@ export default function Contact() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="bg-charcoal text-white p-3 rounded-xl shrink-0">
+                <div className="bg-charcoal text-white p-3 rounded-lg shrink-0">
                   <Mail size={22} />
                 </div>
                 <a
@@ -118,7 +118,7 @@ export default function Contact() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="bg-lego-orange text-white p-3 rounded-xl shrink-0">
+                <div className="bg-lego-orange text-white p-3 rounded-lg shrink-0">
                   <MapPin size={22} />
                 </div>
                 <div>
@@ -144,7 +144,7 @@ export default function Contact() {
             <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
               {isSubmitted ? (
                 <div className="text-center py-16 space-y-4">
-                  <div className="w-20 h-20 bg-lego-orange text-white rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 bg-lego-orange text-white rounded-lg flex items-center justify-center mx-auto mb-6">
                     <Send size={40} />
                   </div>
                   <h3 className="text-2xl font-black text-charcoal">Message Sent!</h3>
@@ -152,7 +152,7 @@ export default function Contact() {
                     Thank you for reaching out. We'll get back to you soon.
                   </p>
                   <Button
-                    className="mt-6 bg-lego-orange hover:bg-charcoal rounded-full font-bold text-white"
+                    className="mt-6 bg-lego-orange hover:bg-charcoal rounded-lg font-bold text-white"
                     onClick={() => {
                       setIsSubmitted(false);
                       form.reset();
@@ -173,7 +173,7 @@ export default function Contact() {
                           <FormControl>
                             <Input
                               placeholder="Your name"
-                              className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:border-lego-orange"
+                              className="h-12 rounded-lg bg-slate-50 border-slate-200 focus:border-lego-orange"
                               {...field}
                             />
                           </FormControl>
@@ -191,7 +191,7 @@ export default function Contact() {
                             <Input
                               placeholder="Your email address"
                               type="email"
-                              className="h-12 rounded-xl bg-slate-50 border-slate-200"
+                              className="h-12 rounded-lg bg-slate-50 border-slate-200"
                               {...field}
                             />
                           </FormControl>
@@ -208,7 +208,7 @@ export default function Contact() {
                           <FormControl>
                             <Input
                               placeholder="What is this regarding?"
-                              className="h-12 rounded-xl bg-slate-50 border-slate-200"
+                              className="h-12 rounded-lg bg-slate-50 border-slate-200"
                               {...field}
                             />
                           </FormControl>
@@ -225,7 +225,7 @@ export default function Contact() {
                           <FormControl>
                             <Textarea
                               placeholder="How can we help?"
-                              className="min-h-[150px] resize-none rounded-xl bg-slate-50 border-slate-200"
+                              className="min-h-[150px] resize-none rounded-lg bg-slate-50 border-slate-200"
                               {...field}
                             />
                           </FormControl>
@@ -236,7 +236,7 @@ export default function Contact() {
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full bg-lego-orange hover:bg-charcoal text-white rounded-full font-bold h-14 text-lg mt-4"
+                      className="w-full bg-lego-orange hover:bg-charcoal text-white rounded-lg font-bold h-14 text-lg mt-4"
                     >
                       Submit <Send className="ml-2" size={18} />
                     </Button>

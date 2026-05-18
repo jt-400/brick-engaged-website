@@ -4,7 +4,7 @@ import { ArrowRight, Puzzle, Heart, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import heroImg from "@assets/ChatGPT_Image_May_18,_2026,_01_27_36_PM_1779078714442.png";
-import kidsImg from "@assets/lego_kids.png";
+import happyMinifigsImg from "@assets/lego_happy_minifigs.png";
 import minifigsImg from "@assets/lego_minifigs.png";
 import bricksImg from "@assets/lego_bricks_close.png";
 
@@ -32,13 +32,24 @@ export default function Home() {
           className="absolute inset-0 w-full h-full object-cover"
           data-testid="img-hero-lego"
         />
-        <div className="relative z-10 w-full flex items-center justify-center pt-32 pb-24 px-4">
+        <div className="relative z-10 w-full flex items-center justify-center pt-28 pb-24 px-4">
           <motion.div
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
             className="text-center max-w-3xl"
           >
+            <motion.div
+              variants={fadeInUp}
+              className="flex flex-col items-center gap-3 mb-10"
+            >
+              <div className="w-14 h-14 rounded-md bg-lego-orange flex items-center justify-center shadow-lg">
+                <div className="w-7 h-7 rounded-full bg-white/30"></div>
+              </div>
+              <span className="font-display font-black text-3xl md:text-4xl tracking-tighter text-charcoal">
+                BRICK ENGAGED
+              </span>
+            </motion.div>
             <motion.h1
               variants={fadeInUp}
               className="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tighter text-charcoal drop-shadow-sm"
@@ -57,7 +68,7 @@ export default function Home() {
                 <Button
                   size="lg"
                   data-testid="button-view-sessions"
-                  className="bg-lego-orange text-white hover:bg-charcoal text-lg h-14 px-8 rounded-full font-bold shadow-lg"
+                  className="bg-lego-orange text-white hover:bg-charcoal text-lg h-14 px-8 rounded-lg font-bold shadow-lg"
                 >
                   View Sessions
                 </Button>
@@ -66,22 +77,13 @@ export default function Home() {
                 <Button
                   size="lg"
                   data-testid="button-get-in-touch"
-                  className="bg-charcoal text-white hover:bg-lego-orange text-lg h-14 px-8 rounded-full font-bold shadow-lg"
+                  className="bg-charcoal text-white hover:bg-lego-orange text-lg h-14 px-8 rounded-lg font-bold shadow-lg"
                 >
                   Get in Touch
                 </Button>
               </Link>
             </motion.div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Mission strip */}
-      <section className="bg-lego-orange py-10">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-2xl md:text-3xl font-black text-white max-w-4xl mx-auto tracking-tight">
-            At Brick Engaged, our mission is to build connections, one brick at a time.
-          </p>
         </div>
       </section>
 
@@ -96,10 +98,10 @@ export default function Home() {
             className="relative"
           >
             <img
-              src={kidsImg}
-              alt="Children building with LEGO together"
+              src={happyMinifigsImg}
+              alt="Two smiling LEGO minifigures against a brick wall"
               className="w-full h-full object-cover min-h-[320px]"
-              data-testid="img-kids-building"
+              data-testid="img-happy-minifigs"
             />
           </motion.div>
           <motion.div
@@ -122,7 +124,7 @@ export default function Home() {
                 while building and playing with LEGO® bricks.
               </p>
               <Link href="/sessions">
-                <Button className="mt-8 bg-lego-orange hover:bg-white hover:text-charcoal text-white font-bold rounded-full h-12 px-8 text-base">
+                <Button className="mt-8 bg-lego-orange hover:bg-white hover:text-charcoal text-white font-bold rounded-lg h-12 px-8 text-base">
                   Explore Sessions <ArrowRight className="ml-2" size={18} />
                 </Button>
               </Link>
@@ -166,19 +168,19 @@ export default function Home() {
                     <div className="bg-lego-orange/10 rounded-2xl p-3">
                       <Puzzle size={28} className="text-lego-orange" />
                     </div>
-                    <span className="text-xs font-black bg-lego-orange text-white px-3 py-1 rounded-full">
+                    <span className="text-xs font-black bg-lego-orange text-white px-3 py-1 rounded-lg">
                       Brick-by-Brick® Programme
                     </span>
                   </div>
                   <h3 className="text-2xl font-black text-charcoal mt-4 mb-4">Children 7–12</h3>
                   <ul className="space-y-2 font-medium text-muted-foreground">
                     {[
-                      "Neurodiverse (ADHD, Autistic)",
-                      "Home schooled",
-                      "Struggling with Mental Health",
-                      "Suffered Trauma",
-                      "Low self-confidence",
-                      "Feeling like you don't 'fit-in'",
+                      "Neurodiverse kids (ADHD, Autistic)",
+                      "Home-schooled learners",
+                      "Building friendships & social skills",
+                      "Processing tough experiences",
+                      "Growing confidence through play",
+                      "Finding their tribe",
                     ].map((item) => (
                       <li key={item} className="flex gap-2">
                         <span className="text-lego-orange font-black text-lg leading-tight">•</span>
@@ -199,19 +201,19 @@ export default function Home() {
                     <div className="bg-charcoal/10 rounded-2xl p-3">
                       <Users size={28} className="text-charcoal" />
                     </div>
-                    <span className="text-xs font-black bg-charcoal text-white px-3 py-1 rounded-full">
+                    <span className="text-xs font-black bg-charcoal text-white px-3 py-1 rounded-lg">
                       Mindful Building Sessions
                     </span>
                   </div>
                   <h3 className="text-2xl font-black text-charcoal mt-4 mb-4">Teens 13–19</h3>
                   <ul className="space-y-2 font-medium text-muted-foreground">
                     {[
-                      "Neurodiverse (ADHD, Autistic)",
-                      "Home schooled",
-                      "Struggling with Mental Health",
-                      "Suffered Trauma",
-                      "Low self-confidence",
-                      "Feeling like you don't 'fit-in'",
+                      "Navigating anxiety or low mood",
+                      "Feeling disconnected at school",
+                      "Recovering from trauma",
+                      "Quiet space for big feelings",
+                      "Peer-to-peer connection",
+                      "Calm focus through hands-on play",
                     ].map((item) => (
                       <li key={item} className="flex gap-2">
                         <span className="text-charcoal font-black text-lg leading-tight">•</span>
@@ -232,19 +234,19 @@ export default function Home() {
                     <div className="bg-lego-orange/10 rounded-2xl p-3">
                       <Heart size={28} className="text-lego-orange" />
                     </div>
-                    <span className="text-xs font-black bg-lego-orange text-white px-3 py-1 rounded-full">
+                    <span className="text-xs font-black bg-lego-orange text-white px-3 py-1 rounded-lg">
                       Therapeutic Use of LEGO®
                     </span>
                   </div>
                   <h3 className="text-2xl font-black text-charcoal mt-4 mb-4">Adults 20+</h3>
                   <ul className="space-y-2 font-medium text-muted-foreground">
                     {[
-                      "Neurodiverse (ADHD, Autistic)",
-                      "Struggling with Mental Health",
-                      "Suffered Trauma",
-                      "Low self-confidence",
-                      "Feeling like you don't 'fit-in'",
-                      "Need a break / Lower Anxiety",
+                      "Respite from a busy mind",
+                      "Mindful, screen-free downtime",
+                      "Wellbeing & mental health support",
+                      "Reconnecting with creativity",
+                      "Small-group or 1:1 sessions",
+                      "A reset for tough weeks",
                     ].map((item) => (
                       <li key={item} className="flex gap-2">
                         <span className="text-lego-orange font-black text-lg leading-tight">•</span>

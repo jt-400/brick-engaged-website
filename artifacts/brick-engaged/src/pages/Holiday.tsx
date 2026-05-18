@@ -15,7 +15,7 @@ export default function Holiday() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-block bg-lego-yellow text-black font-black px-4 py-2 rounded-xl text-sm mb-6 rotate-[-2deg] shadow-md">
+            <div className="inline-block bg-lego-yellow text-black font-black px-4 py-2 rounded-lg text-sm mb-6 rotate-[-2deg] shadow-md">
               School Holidays
             </div>
             <h1 className="text-5xl md:text-6xl font-black mb-6 tracking-tighter leading-tight">
@@ -26,11 +26,11 @@ export default function Holiday() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-lego-yellow text-black hover:bg-white text-lg h-14 px-8 rounded-full font-bold shadow-xl border-none">
+              <Button size="lg" className="bg-lego-yellow text-black hover:bg-white text-lg h-14 px-8 rounded-lg font-bold shadow-xl border-none">
                 <Phone className="mr-2" size={20} />
                 Call 021 270 0301
               </Button>
-              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-lego-blue text-lg h-14 px-8 rounded-full font-bold">
+              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-lego-blue text-lg h-14 px-8 rounded-lg font-bold">
                 Text Dan
               </Button>
             </div>
@@ -43,7 +43,7 @@ export default function Holiday() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="bg-white text-slate-800 rounded-3xl p-8 shadow-2xl relative border-4 border-lego-yellow">
-              <div className="absolute -top-6 -right-6 bg-lego-red text-white w-24 h-24 rounded-full flex flex-col items-center justify-center font-black rotate-12 shadow-lg">
+              <div className="absolute -top-6 -right-6 bg-lego-red text-white w-24 h-24 rounded-lg flex flex-col items-center justify-center font-black rotate-12 shadow-lg">
                 <span className="text-2xl">$110</span>
                 <span className="text-xs">per day</span>
               </div>
@@ -52,7 +52,7 @@ export default function Holiday() {
               
               <ul className="space-y-6">
                 <li className="flex items-start gap-4">
-                  <div className="bg-lego-blue/10 p-3 rounded-xl text-lego-blue shrink-0">
+                  <div className="bg-lego-blue/10 p-3 rounded-lg text-lego-blue shrink-0">
                     <Calendar size={24} />
                   </div>
                   <div>
@@ -62,7 +62,7 @@ export default function Holiday() {
                 </li>
                 
                 <li className="flex items-start gap-4">
-                  <div className="bg-lego-green/10 p-3 rounded-xl text-lego-green shrink-0">
+                  <div className="bg-lego-green/10 p-3 rounded-lg text-lego-green shrink-0">
                     <Clock size={24} />
                   </div>
                   <div>
@@ -72,7 +72,7 @@ export default function Holiday() {
                 </li>
 
                 <li className="flex items-start gap-4">
-                  <div className="bg-lego-orange/10 p-3 rounded-xl text-lego-orange shrink-0">
+                  <div className="bg-lego-orange/10 p-3 rounded-lg text-lego-orange shrink-0">
                     <MapPin size={24} />
                   </div>
                   <div>
@@ -82,7 +82,7 @@ export default function Holiday() {
                 </li>
               </ul>
               
-              <div className="mt-8 bg-slate-50 p-4 rounded-xl text-center text-sm font-bold text-slate-500">
+              <div className="mt-8 bg-slate-50 p-4 rounded-lg text-center text-sm font-bold text-slate-500">
                 Book now to secure your spot!
               </div>
             </div>
