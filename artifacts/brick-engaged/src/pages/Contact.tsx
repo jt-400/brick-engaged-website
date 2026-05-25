@@ -53,7 +53,8 @@ export default function Contact() {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl font-black mb-4 tracking-tighter"
+            className="text-5xl md:text-6xl font-black mb-4 tracking-tight"
+            style={{ letterSpacing: '-0.02em' }}
           >
             Let's talk
           </motion.h1>
@@ -65,17 +66,6 @@ export default function Contact() {
           >
             We'd love to hear from you
           </motion.p>
-        </div>
-        {/* Angled bottom connector */}
-        <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
-          <svg
-            className="relative block w-full h-10"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 40"
-            preserveAspectRatio="none"
-          >
-            <path d="M0,40 L0,10 L1200,30 L1200,40 Z" fill="rgb(248 250 252)" />
-          </svg>
         </div>
       </section>
 

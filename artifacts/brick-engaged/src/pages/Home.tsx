@@ -49,20 +49,60 @@ export default function Home() {
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/20 to-transparent z-[5]" />
 
         <div className="relative z-10 w-full flex justify-center px-5 sm:px-6 pt-[85px] sm:pt-[105px] md:pt-[129px]">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center w-full max-w-[1200px]"
+          <motion.h1
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
+            }}
+            className="font-black text-white leading-none tracking-tight text-center w-full max-w-[1200px] text-[34px] sm:text-[52px] md:text-[72px] lg:text-[88px] xl:text-[95px]"
+            style={{ letterSpacing: '-0.02em' }}
+            aria-label="Building connections. One brick at a time."
           >
-            <h1
-              className="font-extrabold text-white leading-none tracking-tight text-[34px] sm:text-[52px] md:text-[72px] lg:text-[88px] xl:text-[95px]"
-              style={{ letterSpacing: '-0.02em' }}
-            >
-              Building connections.<br />
-              One brick at a time.
-            </h1>
-          </motion.div>
+            <span className="block">
+              {"Building connections.".split(" ").map((word, i) => (
+                <motion.span
+                  key={`l1-${i}`}
+                  variants={{
+                    hidden: { opacity: 0, y: -60, rotate: -2 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      rotate: 0,
+                      transition: { type: "spring", damping: 14, stiffness: 220 },
+                    },
+                  }}
+                  className="inline-block"
+                  style={{ transformOrigin: "50% 100%" }}
+                >
+                  {word}
+                  {i < 1 && " "}
+                </motion.span>
+              ))}
+            </span>
+            <span className="block">
+              {"One brick at a time.".split(" ").map((word, i, arr) => (
+                <motion.span
+                  key={`l2-${i}`}
+                  variants={{
+                    hidden: { opacity: 0, y: -60, rotate: 2 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      rotate: 0,
+                      transition: { type: "spring", damping: 14, stiffness: 220 },
+                    },
+                  }}
+                  className="inline-block"
+                  style={{ transformOrigin: "50% 100%" }}
+                >
+                  {word}
+                  {i < arr.length - 1 && " "}
+                </motion.span>
+              ))}
+            </span>
+          </motion.h1>
         </div>
       </section>
 

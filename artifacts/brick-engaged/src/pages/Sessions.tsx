@@ -35,7 +35,8 @@ export default function Sessions() {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl font-black mb-6 tracking-tighter"
+            className="text-5xl md:text-6xl font-black mb-6 tracking-tight"
+            style={{ letterSpacing: '-0.02em' }}
           >
             Brick Engaged Sessions
           </motion.h1>
@@ -47,17 +48,6 @@ export default function Sessions() {
           >
             Therapeutic and mindful LEGO® building programmes for all ages
           </motion.p>
-        </div>
-        {/* Angled bottom connector */}
-        <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
-          <svg
-            className="relative block w-full h-10"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 40"
-            preserveAspectRatio="none"
-          >
-            <path d="M0,40 L0,10 L1200,30 L1200,40 Z" fill="white" />
-          </svg>
         </div>
       </section>
 
