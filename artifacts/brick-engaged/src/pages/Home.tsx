@@ -231,15 +231,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer brick divider */}
-      <section className="w-full">
-        <img
-          src={footerBrickImg}
-          alt=""
-          aria-hidden
-          className="w-full block"
-        />
-      </section>
+      {/* Footer brick divider — image stretched as background across full screen */}
+      <section
+        aria-hidden
+        className="w-full h-32 md:h-40 bg-no-repeat"
+        style={{
+          backgroundImage: `url(${footerBrickImg})`,
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+        }}
+      />
 
       {/* Pathways */}
       <section className="bg-white py-24 relative overflow-hidden">

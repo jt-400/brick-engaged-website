@@ -11,23 +11,6 @@ const NAV_LINKS = [
   { href: "/holiday", label: "Holiday" },
 ];
 
-// ── Footer LEGO brick divider ─────────────────────────────────────────────────
-const STUD_COLOR = '#ffe527'; // brand yellow studs
-
-function LegoBrickDivider() {
-  return (
-    <div className="flex w-full" style={{ background: 'transparent' }} aria-hidden>
-      {Array.from({ length: 40 }).map((_, i) => (
-        <div key={i} className="flex justify-center" style={{ flex: '1 1 0', minWidth: 64 }}>
-          <div style={{ width: '52%', height: 8, borderRadius: '3px 3px 0 0', background: STUD_COLOR }} />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -156,8 +139,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* ── Footer ── */}
       <footer className="bg-charcoal text-white">
-        {/* LEGO brick row divider */}
-        <LegoBrickDivider />
 
         <div className="container mx-auto px-4 py-14 text-center space-y-8">
           <div className="max-w-2xl mx-auto space-y-3">
