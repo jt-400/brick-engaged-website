@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Direction</title>
+<script src="http://localhost:54256/_helper.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #0f0f0f; color: #fff; padding: 32px 24px 60px; }
+  h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 32px; }
+
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 960px; margin: 0 auto; }
+
+  .card {
+    border: 2px solid transparent;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+    background: #1a1a1a;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .card.selected { border-color: #fff !important; }
+
+  .preview { height: 280px; position: relative; overflow: hidden; }
+  .card-body { padding: 16px 18px 18px; }
+  .card-body h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: #fff; }
+  .card-body p { font-size: 12px; color: #888; line-height: 1.5; }
+
+  /* ── OPTION A: Bold Playground ── */
+  .preview-a {
+    background: #fff;
+    display: flex; flex-direction: column;
+  }
+  .preview-a .nav-a {
+    background: #F57C20;
+    padding: 10px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .preview-a .nav-logo { font-size: 11px; font-weight: 900; color: #fff; letter-spacing: 1px; }
+  .preview-a .nav-links { display: flex; gap: 10px; }
+  .preview-a .nav-link { font-size: 9px; color: rgba(255,255,255,0.85); font-weight: 600; }
+  .preview-a .hero-a {
+    flex: 1;
+    background: linear-gradient(135deg, #FFF9F0 0%, #FFF 100%);
+    padding: 20px 16px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .preview-a .tag-a { background: #F57C20; color: #fff; font-size: 8px; font-weight: 800; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+  .preview-a .h1-a { font-size: 22px; font-weight: 900; color: #1a1a1a; line-height: 1.15; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .preview-a .sub-a { font-size: 9px; color: #555; line-height: 1.5; margin-bottom: 12px; }
+  .preview-a .btns-a { display: flex; gap: 6px; }
+  .preview-a .btn-orange { background: #F57C20; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 9px; font-weight: 700; cursor: pointer; }
+  .preview-a .btn-dark { background: #2D2D2D; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 9px; font-weight: 700; cursor: pointer; }
+  .preview-a .blocks-row { display: flex; gap: 3px; position: absolute; bottom: 0; right: 0; padding: 6px; }
+  .preview-a .block { width: 14px; height: 14px; border-radius: 2px; }
+
+  /* ── OPTION B: Dark Premium ── */
+  .preview-b { background: #0D0D0D; display: flex; flex-direction: column; }
+  .preview-b .nav-b { padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .preview-b .nav-logo-b { font-size: 10px; font-weight: 800; color: #fff; letter-spacing: 2px; }
+  .preview-b .nav-links-b { display: flex; gap: 10px; }
+  .preview-b .nav-link-b { font-size: 9px; color: rgba(255,255,255,0.4); font-weight: 500; }
+  .preview-b .hero-b { flex: 1; padding: 20px 16px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+  .preview-b .glow { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 200px; height: 200px; background: radial-gradient(ellipse, rgba(245,124,32,0.25) 0%, transparent 70%); pointer-events: none; }
+  .preview-b .eyebrow-b { font-size: 9px; color: #F57C20; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .preview-b .h1-b { font-size: 20px; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .preview-b .h1-b span { color: #F57C20; }
+  .preview-b .sub-b { font-size: 9px; color: rgba(255,255,255,0.45); line-height: 1.5; margin-bottom: 12px; }
+  .preview-b .btns-b { display: flex; gap: 6px; }
+  .preview-b .btn-glow { background: #F57C20; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 9px; font-weight: 700; box-shadow: 0 0 12px rgba(245,124,32,0.5); cursor: pointer; }
+  .preview-b .btn-ghost { background: transparent; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 6px; font-size: 9px; font-weight: 600; cursor: pointer; }
+
+  /* ── OPTION C: Warm Editorial ── */
+  .preview-c { background: #FFFBF5; display: flex; flex-direction: column; }
+  .preview-c .nav-c { padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; }
+  .preview-c .nav-logo-c { font-size: 10px; font-weight: 900; color: #2D2D2D; letter-spacing: 1px; }
+  .preview-c .nav-links-c { display: flex; gap: 10px; }
+  .preview-c .nav-link-c { font-size: 9px; color: #666; font-weight: 600; }
+  .preview-c .hero-c { flex: 1; padding: 16px 16px 12px; display: flex; flex-direction: column; justify-content: center; }
+  .preview-c .chip-c { background: rgba(245,124,32,0.12); color: #F57C20; font-size: 8px; font-weight: 700; padding: 3px 8px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+  .preview-c .h1-c { font-size: 19px; font-weight: 800; color: #2D2D2D; line-height: 1.2; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .preview-c .sub-c { font-size: 9px; color: #888; line-height: 1.6; margin-bottom: 12px; }
+  .preview-c .btns-c { display: flex; gap: 6px; margin-bottom: 16px; }
+  .preview-c .btn-fill-c { background: #2D2D2D; color: #fff; border: none; padding: 6px 14px; border-radius: 30px; font-size: 9px; font-weight: 700; cursor: pointer; }
+  .preview-c .btn-outline-c { background: transparent; color: #2D2D2D; border: 1.5px solid #2D2D2D; padding: 6px 14px; border-radius: 30px; font-size: 9px; font-weight: 700; cursor: pointer; }
+  .preview-c .band-c { background: #2D2D2D; padding: 8px 16px; display: flex; gap: 12px; }
+  .preview-c .band-stat { text-align: center; }
+  .preview-c .stat-num { font-size: 13px; font-weight: 900; color: #F57C20; }
+  .preview-c .stat-label { font-size: 7px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── OPTION D: Vibrant Gradient ── */
+  .preview-d { background: #fff; display: flex; flex-direction: column; }
+  .preview-d .nav-d { padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; }
+  .preview-d .nav-logo-d { font-size: 10px; font-weight: 900; color: #1a1a1a; }
+  .preview-d .nav-links-d { display: flex; gap: 10px; }
+  .preview-d .nav-link-d { font-size: 9px; color: #444; font-weight: 600; }
+  .preview-d .hero-d { flex: 1; background: linear-gradient(135deg, #FF6B35 0%, #F57C20 30%, #FFB347 60%, #4FC3F7 100%); padding: 20px 16px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+  .preview-d .circle1 { position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+  .preview-d .circle2 { position: absolute; bottom: -20px; left: -20px; width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+  .preview-d .h1-d { font-size: 19px; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 8px; letter-spacing: -0.5px; text-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+  .preview-d .sub-d { font-size: 9px; color: rgba(255,255,255,0.85); line-height: 1.5; margin-bottom: 12px; }
+  .preview-d .btns-d { display: flex; gap: 6px; }
+  .preview-d .btn-white { background: #fff; color: #F57C20; border: none; padding: 6px 12px; border-radius: 8px; font-size: 9px; font-weight: 800; cursor: pointer; }
+  .preview-d .btn-transp { background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 6px 12px; border-radius: 8px; font-size: 9px; font-weight: 700; cursor: pointer; }
+
+  .badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; margin-bottom: 4px; }
+  .badge-rec { background: #22c55e22; color: #22c55e; }
+</style>
+</head>
+<body>
+<h2>What design direction feels right for Brick Engaged?</h2>
+<p class="subtitle">Pick the vibe that best represents the brand. Click to select.</p>
+
+<div class="cards">
+
+  <!-- A: Bold Playground -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="preview preview-a" style="position:relative;">
+      <div class="nav-a">
+        <span class="nav-logo">BRICK ENGAGED</span>
+        <div class="nav-links">
+          <span class="nav-link">Sessions</span>
+          <span class="nav-link">Foundation</span>
+          <span class="nav-link">Contact</span>
+        </div>
+      </div>
+      <div class="hero-a">
+        <span class="tag-a">Mindful LEGO® Building</span>
+        <div class="h1-a">Building connections,<br>one brick at a time</div>
+        <div class="sub-a">Transforming lives through the power of play.</div>
+        <div class="btns-a">
+          <button class="btn-orange">View Sessions</button>
+          <button class="btn-dark">Get in Touch</button>
+        </div>
+      </div>
+      <div class="blocks-row">
+        <div class="block" style="background:#E3000F;"></div>
+        <div class="block" style="background:#0055BF;"></div>
+        <div class="block" style="background:#F2CD00;"></div>
+        <div class="block" style="background:#00852B;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Bold Playground</h3>
+      <p>Orange header, white body, high-contrast type. Energetic and fun — feels like the brand is a LEGO set itself.</p>
+    </div>
+  </div>
+
+  <!-- B: Dark Premium -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="preview preview-b">
+      <div class="nav-b">
+        <span class="nav-logo-b">BRICK ENGAGED</span>
+        <div class="nav-links-b">
+          <span class="nav-link-b">Sessions</span>
+          <span class="nav-link-b">Foundation</span>
+          <span class="nav-link-b">Contact</span>
+        </div>
+      </div>
+      <div class="hero-b">
+        <div class="glow"></div>
+        <div class="eyebrow-b">Mindful LEGO® Building</div>
+        <div class="h1-b">Building <span>connections</span>,<br>one brick at a time</div>
+        <div class="sub-b">Transforming lives through the power of play.</div>
+        <div class="btns-b">
+          <button class="btn-glow">View Sessions</button>
+          <button class="btn-ghost">Get in Touch</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Dark & Premium</h3>
+      <p>Near-black background, orange glow accents. Sophisticated and cinematic — makes the falling-bricks animation look stunning.</p>
+    </div>
+  </div>
+
+  <!-- C: Warm Editorial -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)" style="position:relative;">
+    <div style="position:absolute;top:10px;left:10px;z-index:10;" class="badge badge-rec">★ Recommended</div>
+    <div class="preview preview-c">
+      <div class="nav-c">
+        <span class="nav-logo-c">BRICK ENGAGED</span>
+        <div class="nav-links-c">
+          <span class="nav-link-c">Sessions</span>
+          <span class="nav-link-c">Foundation</span>
+          <span class="nav-link-c">Contact</span>
+        </div>
+      </div>
+      <div class="hero-c">
+        <span class="chip-c">Mindful LEGO® Building</span>
+        <div class="h1-c">Building connections,<br>one brick at a time</div>
+        <div class="sub-c">Transforming lives through the power of play.</div>
+        <div class="btns-c">
+          <button class="btn-fill-c">View Sessions</button>
+          <button class="btn-outline-c">Get in Touch</button>
+        </div>
+      </div>
+      <div class="band-c">
+        <div class="band-stat"><div class="stat-num">200+</div><div class="stat-label">Sessions</div></div>
+        <div class="band-stat"><div class="stat-num">50+</div><div class="stat-label">Families</div></div>
+        <div class="band-stat"><div class="stat-num">3</div><div class="stat-label">Programmes</div></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Warm Editorial</h3>
+      <p>Cream background, charcoal typography, pill buttons. Feels trustworthy and human — great for a therapeutic brand.</p>
+    </div>
+  </div>
+
+  <!-- D: Vibrant Gradient -->
+  <div class="card" data-choice="d" onclick="toggleSelect(this)">
+    <div class="preview preview-d">
+      <div class="nav-d">
+        <span class="nav-logo-d">BRICK ENGAGED</span>
+        <div class="nav-links-d">
+          <span class="nav-link-d">Sessions</span>
+          <span class="nav-link-d">Foundation</span>
+          <span class="nav-link-d">Contact</span>
+        </div>
+      </div>
+      <div class="hero-d">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="h1-d">Building connections,<br>one brick at a time</div>
+        <div class="sub-d">Transforming lives through the power of play.</div>
+        <div class="btns-d">
+          <button class="btn-white">View Sessions</button>
+          <button class="btn-transp">Get in Touch</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>D — Vibrant Gradient</h3>
+      <p>Full-bleed orange-to-sky gradient hero. Bold and joyful — highest energy, most visually playful.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleSelect(el) {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  if (window.recordChoice) window.recordChoice(el.dataset.choice, el.querySelector('h3').textContent);
+}
+</script>
+</body>
+</html>

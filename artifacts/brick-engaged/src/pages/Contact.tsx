@@ -5,6 +5,7 @@ import * as z from "zod";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { LegoButton } from "@/components/LegoButton";
 import {
   Form,
   FormControl,
@@ -45,7 +46,7 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
+            className="inline-block bg-lego-orange text-charcoal text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
           >
             Get in Touch
           </motion.div>
@@ -89,12 +90,12 @@ export default function Contact() {
           >
             <div>
               <h2 className="text-3xl font-black text-charcoal mb-1">Brick Engaged</h2>
-              <p className="text-xl font-bold text-lego-orange">Dan Mulholland</p>
+              <p className="text-xl font-bold text-slate-500">Dan Mulholland</p>
             </div>
 
             <div className="space-y-5 text-lg font-medium text-slate-700">
               <div className="flex items-center gap-4">
-                <div className="bg-lego-orange text-white p-3 rounded-lg shrink-0">
+                <div className="bg-lego-orange text-charcoal p-3 rounded-xl shrink-0">
                   <Phone size={22} />
                 </div>
                 <a
@@ -118,7 +119,7 @@ export default function Contact() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="bg-lego-orange text-white p-3 rounded-lg shrink-0">
+                <div className="bg-lego-orange text-charcoal p-3 rounded-xl shrink-0">
                   <MapPin size={22} />
                 </div>
                 <div>
@@ -144,22 +145,22 @@ export default function Contact() {
             <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
               {isSubmitted ? (
                 <div className="text-center py-16 space-y-4">
-                  <div className="w-20 h-20 bg-lego-orange text-white rounded-lg flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 bg-lego-orange text-charcoal rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <Send size={40} />
                   </div>
                   <h3 className="text-2xl font-black text-charcoal">Message Sent!</h3>
                   <p className="text-slate-600 font-medium">
                     Thank you for reaching out. We'll get back to you soon.
                   </p>
-                  <Button
-                    className="mt-6 bg-lego-orange hover:bg-charcoal rounded-lg font-bold text-white"
+                  <LegoButton
+                    variant="orange"
                     onClick={() => {
                       setIsSubmitted(false);
                       form.reset();
                     }}
                   >
                     Send another message
-                  </Button>
+                  </LegoButton>
                 </div>
               ) : (
                 <Form {...form}>
@@ -236,7 +237,7 @@ export default function Contact() {
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full bg-lego-orange hover:bg-charcoal text-white rounded-lg font-bold h-14 text-lg mt-4"
+                      className="w-full bg-lego-orange hover:bg-charcoal text-charcoal hover:text-white rounded-lg font-bold h-14 text-lg mt-4 transition-colors"
                     >
                       Submit <Send className="ml-2" size={18} />
                     </Button>

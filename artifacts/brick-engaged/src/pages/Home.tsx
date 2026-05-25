@@ -2,8 +2,9 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Puzzle, Heart, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import heroImg from "@assets/ChatGPT_Image_May_18,_2026,_01_27_36_PM_1779078714442.png";
+import { LegoButton } from "@/components/LegoButton";
+import { LegoCanvas } from "@/lego/LegoCanvas";
+import { LEGO_MODELS } from "@/lego/modelsData";
 import happyMinifigsImg from "@assets/lego_happy_minifigs.png";
 import minifigsImg from "@assets/lego_minifigs.png";
 import bricksImg from "@assets/lego_bricks_close.png";
@@ -22,72 +23,73 @@ const staggerContainer = {
 };
 
 export default function Home() {
+  // Castle builds once and stays — flags keep waving, no loop.
+  const activeModel = LEGO_MODELS[0]; // castle only
+
   return (
     <div className="flex flex-col w-full">
-      {/* Hero Section — full bleed so the fixed header overlaps it */}
-      <section className="relative overflow-hidden min-h-[620px] flex items-center">
-        <img
-          src={heroImg}
-          alt="Colorful LEGO bricks border"
-          className="absolute inset-0 w-full h-full object-cover"
-          data-testid="img-hero-lego"
+      {/* Hero — full viewport, canvas edge-to-edge, text + social overlaid */}
+      <section className="relative w-full h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-100">
+
+        {/* Full-bleed falling-LEGO canvas — builds once, flags keep waving */}
+        <LegoCanvas
+          key="castle"
+          activeModel={activeModel}
+          buildSpeed={1.35}
+          bounceForce={0.55}
+          gravity={0.65}
+          spawnStagger={260}
+          debugGrid={false}
+          isPlaying={true}
+          clickToPop={true}
+          onBrickDocked={() => {}}
         />
-        <div className="relative z-10 w-full flex items-center justify-center pt-28 pb-24 px-4">
+
+        {/* Subtle dark scrim at top so white header text stays readable */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/20 to-transparent z-[5]" />
+
+        <div className="relative z-10 w-full pt-28 pb-24 px-6 md:px-10">
           <motion.div
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
-            className="text-center max-w-3xl"
+            className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-end"
           >
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-col items-center gap-3 mb-10"
-            >
-              <div className="w-14 h-14 rounded-md bg-lego-orange flex items-center justify-center shadow-lg">
-                <div className="w-7 h-7 rounded-full bg-white/30"></div>
+            {/* Left column — heading + buttons */}
+            <motion.div variants={fadeInUp} className="flex flex-col gap-7">
+              <h1
+                className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] text-charcoal"
+                style={{ letterSpacing: '-0.01em' }}
+              >
+                Building connections.<br />
+                One brick at a time.
+              </h1>
+              <div className="flex flex-wrap gap-4 items-end">
+                <Link href="/sessions">
+                  <LegoButton variant="orange" data-testid="button-view-sessions">
+                    View Sessions
+                  </LegoButton>
+                </Link>
+                <Link href="/contact">
+                  <LegoButton variant="charcoal" data-testid="button-get-in-touch">
+                    Get in Touch
+                  </LegoButton>
+                </Link>
               </div>
-              <span className="font-display font-black text-3xl md:text-4xl tracking-tighter text-charcoal">
-                BRICK ENGAGED
-              </span>
             </motion.div>
-            <motion.h1
-              variants={fadeInUp}
-              className="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tighter text-charcoal drop-shadow-sm"
-            >
-              Building connections, one brick at a time
-            </motion.h1>
-            <motion.p
-              variants={fadeInUp}
-              className="text-xl md:text-2xl mb-10 font-bold text-slate-700 max-w-xl mx-auto leading-relaxed"
-            >
-              We believe in the transformative power of play and its ability to create positive,
-              lasting change in the lives of our clients.
-            </motion.p>
-            <motion.div variants={fadeInUp} className="flex flex-wrap gap-4 justify-center">
-              <Link href="/sessions">
-                <Button
-                  size="lg"
-                  data-testid="button-view-sessions"
-                  className="bg-lego-orange text-white hover:bg-charcoal text-lg h-14 px-8 rounded-lg font-bold shadow-lg"
-                >
-                  View Sessions
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  data-testid="button-get-in-touch"
-                  className="bg-charcoal text-white hover:bg-lego-orange text-lg h-14 px-8 rounded-lg font-bold shadow-lg"
-                >
-                  Get in Touch
-                </Button>
-              </Link>
+
+            {/* Right column — subtitle, right-aligned */}
+            <motion.div variants={fadeInUp} className="flex flex-col items-end">
+              <p className="text-xl md:text-2xl font-medium text-[#475569] leading-relaxed text-right">
+                We believe in the transformative power of play<br />
+                to create lasting positive change.
+              </p>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Image + text feature */}
+      {/* Text + image feature — text panel first (left), image right */}
       <section className="py-0 bg-white overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 min-h-[480px]">
           <motion.div
@@ -95,7 +97,35 @@ export default function Home() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative"
+            className="bg-charcoal text-white flex items-center px-10 md:px-16 py-16 order-2 md:order-1"
+          >
+            <div>
+              <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight leading-tight">
+                LEGO® as a tool for growth
+              </h2>
+              <p className="text-lg font-normal opacity-85 leading-relaxed mb-6">
+                Brick Engaged conducts Mindful LEGO® Building sessions for small groups in a safe,
+                welcoming and inclusive environment.
+              </p>
+              <p className="text-base font-normal opacity-65 leading-relaxed">
+                We focus on social skills, life skills, mental wellbeing and meaningful interactions
+                while building and playing with LEGO® bricks.
+              </p>
+              <div className="mt-8">
+                <Link href="/sessions">
+                  <LegoButton variant="orange">
+                    <span className="flex items-center gap-2">Explore Sessions <ArrowRight size={16} /></span>
+                  </LegoButton>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="relative order-1 md:order-2"
           >
             <img
               src={happyMinifigsImg}
@@ -103,32 +133,6 @@ export default function Home() {
               className="w-full h-full object-cover min-h-[320px]"
               data-testid="img-happy-minifigs"
             />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="bg-charcoal text-white flex items-center px-10 md:px-16 py-16"
-          >
-            <div>
-              <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tighter leading-tight">
-                LEGO® as a tool for growth
-              </h2>
-              <p className="text-xl font-medium opacity-90 leading-relaxed mb-6">
-                Brick Engaged conducts Mindful LEGO® Building sessions for small groups in a safe,
-                welcoming and inclusive environment.
-              </p>
-              <p className="text-lg font-medium opacity-70 leading-relaxed">
-                We focus on social skills, life skills, mental wellbeing and meaningful interactions
-                while building and playing with LEGO® bricks.
-              </p>
-              <Link href="/sessions">
-                <Button className="mt-8 bg-lego-orange hover:bg-white hover:text-charcoal text-white font-bold rounded-lg h-12 px-8 text-base">
-                  Explore Sessions <ArrowRight className="ml-2" size={18} />
-                </Button>
-              </Link>
-            </div>
           </motion.div>
         </div>
       </section>
@@ -143,10 +147,10 @@ export default function Home() {
             variants={fadeInUp}
             className="mb-16 text-center"
           >
-            <h2 className="text-4xl md:text-5xl font-black text-charcoal mb-4 tracking-tighter">
+            <h2 className="text-4xl md:text-5xl font-bold text-charcoal mb-4 tracking-tight">
               Who can benefit?
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg font-normal text-muted-foreground max-w-2xl mx-auto">
               Our programmes are designed for a wide range of individuals seeking growth and
               connection.
             </p>
@@ -168,7 +172,7 @@ export default function Home() {
                     <div className="bg-lego-orange/10 rounded-2xl p-3">
                       <Puzzle size={28} className="text-lego-orange" />
                     </div>
-                    <span className="text-xs font-black bg-lego-orange text-white px-3 py-1 rounded-lg">
+                    <span className="text-xs font-black bg-lego-orange text-charcoal px-3 py-1 rounded-lg">
                       Brick-by-Brick® Programme
                     </span>
                   </div>
@@ -183,7 +187,7 @@ export default function Home() {
                       "Finding their tribe",
                     ].map((item) => (
                       <li key={item} className="flex gap-2">
-                        <span className="text-lego-orange font-black text-lg leading-tight">•</span>
+                        <span className="text-charcoal/40 font-black text-lg leading-tight">•</span>
                         {item}
                       </li>
                     ))}
@@ -234,7 +238,7 @@ export default function Home() {
                     <div className="bg-lego-orange/10 rounded-2xl p-3">
                       <Heart size={28} className="text-lego-orange" />
                     </div>
-                    <span className="text-xs font-black bg-lego-orange text-white px-3 py-1 rounded-lg">
+                    <span className="text-xs font-black bg-lego-orange text-charcoal px-3 py-1 rounded-lg">
                       Therapeutic Use of LEGO®
                     </span>
                   </div>
@@ -249,7 +253,7 @@ export default function Home() {
                       "A reset for tough weeks",
                     ].map((item) => (
                       <li key={item} className="flex gap-2">
-                        <span className="text-lego-orange font-black text-lg leading-tight">•</span>
+                        <span className="text-charcoal/40 font-black text-lg leading-tight">•</span>
                         {item}
                       </li>
                     ))}
@@ -276,7 +280,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center text-white px-4"
           >
-            <p className="text-2xl md:text-4xl font-black tracking-tight">
+            <p className="text-2xl md:text-3xl font-semibold tracking-normal">
               Everyone deserves to feel like they belong.
             </p>
           </motion.div>
@@ -290,7 +294,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-black text-center text-charcoal mb-14 tracking-tighter"
+            className="text-4xl md:text-5xl font-bold text-center text-charcoal mb-14 tracking-tight"
           >
             Find your path
           </motion.h2>
@@ -316,7 +320,7 @@ export default function Home() {
                         groups and needs.
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 font-bold text-lego-orange">
+                    <div className="flex items-center gap-2 font-bold text-white">
                       <span>Learn more</span> <ArrowRight size={20} />
                     </div>
                   </div>
@@ -327,7 +331,7 @@ export default function Home() {
             <motion.div variants={fadeInUp}>
               <Link href="/foundation">
                 <div
-                  className="bg-lego-orange text-white rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:rotate-1 transition-transform duration-300 shadow-xl"
+                  className="bg-lego-orange text-charcoal rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:rotate-1 transition-transform duration-300 shadow-xl"
                   data-testid="link-foundation-card"
                 >
                   <img
@@ -343,7 +347,7 @@ export default function Home() {
                         children.
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 font-bold text-white/80">
+                    <div className="flex items-center gap-2 font-bold text-charcoal/70">
                       <span>Learn more</span> <ArrowRight size={20} />
                     </div>
                   </div>

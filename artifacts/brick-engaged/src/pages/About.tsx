@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import danImg from "@assets/Screenshot_2026-05-18_at_5.17.02_PM_1779081478608.png";
+import { Phone, Mail, MapPin } from "lucide-react";
+import danImg from "@assets/dan_headshot.png";
 
 export default function About() {
   return (
@@ -12,7 +13,7 @@ export default function About() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
+            className="inline-block bg-lego-orange text-charcoal text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
           >
             Facilitator
           </motion.div>
@@ -58,27 +59,36 @@ export default function About() {
               src={danImg}
               alt="Daniel Mulholland — Brick Engaged Facilitator"
               className="w-full h-80 md:h-full object-cover"
-              style={{ objectPosition: "50% 20%" }}
+              style={{ objectPosition: "50% 15%" }}
               data-testid="img-about-dan"
             />
           </div>
           <div className="bg-charcoal text-white rounded-3xl p-8 md:p-10 flex flex-col justify-center shadow-xl">
             <h2 className="text-3xl font-black mb-2 tracking-tight">Daniel Mulholland</h2>
             <p className="text-lego-orange font-bold text-lg mb-6">Facilitator · He/Him</p>
-            <div className="space-y-3 text-base font-medium text-white/80">
-              <p>
-                📞{" "}
+            <div className="space-y-4 text-base font-medium text-white/80">
+              <div className="flex items-center gap-3">
+                <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-lego-orange/20 text-lego-orange shrink-0">
+                  <Phone size={16} strokeWidth={2.5} />
+                </span>
                 <a href="tel:0212700301" className="text-white font-black hover:text-lego-orange transition-colors">
                   021 270 0301
                 </a>
-              </p>
-              <p>
-                ✉️{" "}
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-lego-orange/20 text-lego-orange shrink-0">
+                  <Mail size={16} strokeWidth={2.5} />
+                </span>
                 <a href="mailto:info@brickengaged.org" className="text-white font-black hover:text-lego-orange transition-colors">
                   info@brickengaged.org
                 </a>
-              </p>
-              <p>📍 Lane Park Business Centre, Upper Hutt</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-lego-orange/20 text-lego-orange shrink-0">
+                  <MapPin size={16} strokeWidth={2.5} />
+                </span>
+                <span className="text-white/80">Lane Park Business Centre, Upper Hutt</span>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -141,7 +151,7 @@ export default function About() {
               <div className="flex flex-wrap gap-3">
                 <Badge
                   variant="outline"
-                  className="text-sm py-2 px-4 border-lego-orange text-lego-orange bg-lego-orange/5 rounded-lg font-bold"
+                  className="text-sm py-2 px-4 border-lego-orange text-charcoal bg-lego-orange/15 rounded-lg font-bold"
                   data-testid="badge-lego-sp"
                 >
                   Certified Facilitator — LEGO® SERIOUS PLAY®
@@ -155,7 +165,7 @@ export default function About() {
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="text-sm py-2 px-4 border-lego-orange text-lego-orange bg-lego-orange/5 rounded-lg font-bold"
+                  className="text-sm py-2 px-4 border-lego-orange text-charcoal bg-lego-orange/15 rounded-lg font-bold"
                   data-testid="badge-bbk"
                 >
                   Brick-by-Brick® Programme Foundation Course

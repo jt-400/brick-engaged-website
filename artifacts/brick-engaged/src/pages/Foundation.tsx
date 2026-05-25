@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { LegoButton } from "@/components/LegoButton";
 import bricksImg from "@assets/lego_bricks_close.png";
 
 export default function Foundation() {
@@ -12,7 +12,7 @@ export default function Foundation() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
+            className="inline-block bg-lego-orange text-charcoal text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
           >
             Charitable Organisation
           </motion.div>
@@ -54,11 +54,11 @@ export default function Foundation() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="bg-lego-orange text-white flex items-center px-10 md:px-16 py-16"
+            className="bg-lego-orange text-charcoal flex items-center px-10 md:px-16 py-16"
           >
             <div className="space-y-5 text-lg font-medium leading-relaxed">
               <p>
-                <strong className="font-black text-white">Brick Engaged Foundation</strong> is a
+                <strong className="font-black text-charcoal">Brick Engaged Foundation</strong> is a
                 charitable organisation that conducts Mindful LEGO® Building sessions specifically
                 for neurodivergent children and children with mental health and/or mental
                 disability.
@@ -67,7 +67,7 @@ export default function Foundation() {
                 Sessions are conducted in small groups in a safe, welcoming and inclusive
                 environment.
               </p>
-              <div className="bg-white/15 border border-white/25 rounded-2xl p-5 font-bold">
+              <div className="bg-charcoal/10 border border-charcoal/15 rounded-2xl p-5 font-bold">
                 Sessions are paid for by the foundation. Some conditions apply — please get in
                 touch for details.
               </div>
@@ -111,13 +111,9 @@ export default function Foundation() {
               making a difference — together, let's build a brighter future.
             </p>
             <div className="mt-10">
-              <Button
-                size="lg"
-                className="bg-lego-orange hover:bg-charcoal text-white rounded-lg font-bold h-14 px-10 text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
-                data-testid="button-donate"
-              >
+              <LegoButton variant="orange" data-testid="button-donate">
                 Make a Donation
-              </Button>
+              </LegoButton>
             </div>
           </motion.div>
         </div>

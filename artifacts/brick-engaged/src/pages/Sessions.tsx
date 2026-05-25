@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LegoButton } from "@/components/LegoButton";
 import kidsImg from "@assets/lego_kids.png";
 import handsImg from "@assets/lego_hands.png";
 import therapyImg from "@assets/lego_therapy.png";
@@ -28,7 +28,7 @@ export default function Sessions() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block bg-lego-orange text-white text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
+            className="inline-block bg-lego-orange text-charcoal text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
           >
             Programmes
           </motion.div>
@@ -82,7 +82,7 @@ export default function Sessions() {
               />
               <div className="p-8 md:p-10">
                 <div className="flex items-center gap-3 mb-5">
-                  <span className="bg-lego-orange text-white text-xs font-black px-3 py-1.5 rounded-lg">
+                  <span className="bg-lego-orange text-charcoal text-xs font-black px-3 py-1.5 rounded-lg">
                     Ages 7–13
                   </span>
                 </div>
@@ -113,21 +113,12 @@ export default function Sessions() {
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <Button
-                    size="lg"
-                    className="bg-lego-orange hover:bg-charcoal text-white rounded-lg font-bold h-11 px-6"
-                    data-testid="button-enrol-bbk"
-                  >
+                  <LegoButton variant="orange" data-testid="button-enrol-bbk">
                     Enrolment Form
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-2 border-slate-300 text-charcoal rounded-lg font-bold h-11 px-6 hover:border-lego-orange hover:text-lego-orange"
-                    data-testid="button-email-bbk"
-                  >
-                    <Mail className="mr-2" size={16} /> Email Us
-                  </Button>
+                  </LegoButton>
+                  <LegoButton variant="charcoal" data-testid="button-email-bbk">
+                    <span className="flex items-center gap-2"><Mail size={14} /> Email Us</span>
+                  </LegoButton>
                 </div>
               </div>
             </div>
@@ -168,7 +159,7 @@ export default function Sessions() {
                     ].map((skill) => (
                       <span
                         key={skill}
-                        className="bg-lego-orange/10 text-lego-orange border border-lego-orange/30 rounded-lg text-xs font-bold px-3 py-1"
+                        className="bg-lego-orange/20 text-charcoal border border-lego-orange/50 rounded-lg text-xs font-bold px-3 py-1"
                       >
                         {skill}
                       </span>
@@ -185,21 +176,12 @@ export default function Sessions() {
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <Button
-                    size="lg"
-                    className="bg-lego-orange hover:bg-charcoal text-white rounded-lg font-bold h-11 px-6"
-                    data-testid="button-enrol-mindful"
-                  >
+                  <LegoButton variant="orange" data-testid="button-enrol-mindful">
                     Enrolment Form
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-2 border-slate-300 text-charcoal rounded-lg font-bold h-11 px-6 hover:border-lego-orange hover:text-lego-orange"
-                    data-testid="button-email-mindful"
-                  >
-                    <Mail className="mr-2" size={16} /> Email Us
-                  </Button>
+                  </LegoButton>
+                  <LegoButton variant="charcoal" data-testid="button-email-mindful">
+                    <span className="flex items-center gap-2"><Mail size={14} /> Email Us</span>
+                  </LegoButton>
                 </div>
               </div>
               <img
@@ -225,7 +207,7 @@ export default function Sessions() {
               />
               <div className="p-8 md:p-10">
                 <div className="flex items-center gap-3 mb-5">
-                  <span className="bg-lego-orange text-white text-xs font-black px-3 py-1.5 rounded-lg">
+                  <span className="bg-lego-orange text-charcoal text-xs font-black px-3 py-1.5 rounded-lg">
                     Ages 15+
                   </span>
                 </div>
@@ -248,21 +230,12 @@ export default function Sessions() {
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <Button
-                    size="lg"
-                    className="bg-lego-orange hover:bg-charcoal text-white rounded-lg font-bold h-11 px-6"
-                    data-testid="button-enrol-therapeutic"
-                  >
+                  <LegoButton variant="orange" data-testid="button-enrol-therapeutic">
                     Enrolment Form
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-2 border-slate-300 text-charcoal rounded-lg font-bold h-11 px-6 hover:border-lego-orange hover:text-lego-orange"
-                    data-testid="button-email-therapeutic"
-                  >
-                    <Mail className="mr-2" size={16} /> Email Us
-                  </Button>
+                  </LegoButton>
+                  <LegoButton variant="charcoal" data-testid="button-email-therapeutic">
+                    <span className="flex items-center gap-2"><Mail size={14} /> Email Us</span>
+                  </LegoButton>
                 </div>
               </div>
             </div>

@@ -1,0 +1,3 @@
+{"type":"server-started","port":54256,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:54256","screen_dir":"/Users/jordantuhura/Downloads/Brick Engaged/brick-engaged-website/.superpowers/brainstorm/50484-1779458102/content","state_dir":"/Users/jordantuhura/Downloads/Brick Engaged/brick-engaged-website/.superpowers/brainstorm/50484-1779458102/state"}
+{"type":"screen-added","file":"/Users/jordantuhura/Downloads/Brick Engaged/brick-engaged-website/.superpowers/brainstorm/50484-1779458102/content/design-direction.html"}
+{"type":"server-stopped","reason":"idle timeout"}

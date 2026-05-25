@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "brick-engaged",
+      "runtimeExecutable": "/opt/homebrew/opt/node@22/bin/node",
+      "runtimeArgs": ["/opt/homebrew/opt/node@22/bin/pnpm", "--filter", "@workspace/brick-engaged", "run", "dev", "--port", "4321"],
+      "port": 4321
+    }
+  ]
+}

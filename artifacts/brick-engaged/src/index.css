@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/gilroy-free');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -38,8 +40,8 @@
   --color-lego-blue: #0055BF;
   --color-lego-yellow: #F2CD00;
   --color-lego-green: #00852B;
-  --color-lego-orange: #F57C20;
-  --color-charcoal: #2D2D2D;
+  --color-lego-orange: #ffe527;
+  --color-charcoal: #1E293B;
 
   --font-sans: var(--app-font-sans);
   --font-serif: var(--app-font-serif);
@@ -76,7 +78,7 @@
   --secondary-foreground: 222.2 84% 4.9%;
 
   --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
+  --muted-foreground: 215 19% 35%; /* Slate Gray #475569 */
 
   --accent: 140 100% 26%; /* LEGO Green */
   --accent-foreground: 0 0% 100%;
@@ -84,8 +86,8 @@
   --destructive: 356 100% 45%; /* LEGO Red */
   --destructive-foreground: 0 0% 100%;
 
-  --app-font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
-  --app-font-display: "Bricolage Grotesque", "Plus Jakarta Sans", system-ui, sans-serif;
+  --app-font-sans: "Nunito", system-ui, sans-serif;
+  --app-font-display: "Gilroy", "Nunito", system-ui, sans-serif;
   --app-font-serif: Georgia, serif;
   --app-font-mono: Menlo, monospace;
 
@@ -125,8 +127,6 @@
 }
 
 @layer base {
-  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-  
   * {
     @apply border-border;
   }
