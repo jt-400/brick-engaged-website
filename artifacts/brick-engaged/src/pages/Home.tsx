@@ -120,7 +120,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.85, duration: 0.6 }}
-            className="font-sans text-center text-white/85 font-medium leading-relaxed max-w-[640px] mt-5 sm:mt-7 text-base sm:text-lg md:text-xl"
+            className="font-sans text-center text-white/85 font-medium leading-relaxed mt-5 sm:mt-7 text-sm sm:text-base md:text-lg md:whitespace-nowrap"
             style={{ fontFamily: 'var(--app-font-sans, Nunito), system-ui, sans-serif' }}
           >
             Using the transformative power of play to create positive, lasting change.
@@ -134,7 +134,7 @@ export default function Home() {
             className="mt-8 sm:mt-10"
           >
             <Link href="/sessions">
-              <LegoButton variant="orange" data-testid="hero-cta-primary">
+              <LegoButton variant="green" data-testid="hero-cta-primary">
                 View Sessions
               </LegoButton>
             </Link>

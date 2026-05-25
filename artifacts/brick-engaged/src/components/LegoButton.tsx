@@ -1,10 +1,11 @@
 import React from 'react';
 import darkBrickSrc from '@assets/lego-brick-dark.png';
 import yellowBrickSrc from '@assets/lego-brick-yellow.png';
+import greenBrickSrc from '@assets/lego-brick-green.png';
 
 interface LegoButtonProps {
   children: React.ReactNode;
-  variant?: 'orange' | 'charcoal' | 'white';
+  variant?: 'orange' | 'charcoal' | 'white' | 'green';
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
@@ -17,6 +18,7 @@ const TEXT_COLORS: Record<string, string> = {
   orange:   '#1E293B', // dark text on yellow brick
   charcoal: '#ffffff', // white text on dark brick
   white:    '#1E293B', // dark navy text on white block
+  green:    '#ffffff', // white text on green brick
 };
 
 /**
@@ -67,8 +69,11 @@ export function LegoButton({
     );
   }
 
-  // Orange / charcoal variants: real brick PNG background
-  const brickSrc = variant === 'orange' ? yellowBrickSrc : darkBrickSrc;
+  // Brick PNG variants
+  const brickSrc =
+    variant === 'orange' ? yellowBrickSrc :
+    variant === 'green'  ? greenBrickSrc  :
+    darkBrickSrc;
   const studPad = Math.round(h * 0.29);
 
   return (

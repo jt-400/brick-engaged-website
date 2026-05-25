@@ -118,14 +118,8 @@ function buildClassicCastle(): BrickTemplate[] {
 
   bricks.push({ id: makeId('c', 'c', 11, -4), type: 'rect', gridX: -4, gridY: 11, gridW: 8, gridH: 1, color: 'gray', anchor: 'center' });
 
+  // Center-tower top cap (was gridY 12) — kept short so green CTA button sits above it
   bricks.push({ id: makeId('c', 'c', 12, -4), type: 'rect', gridX: -4, gridY: 12, gridW: 8, gridH: 1, color: 'dark-gray', anchor: 'center' });
-
-  bricks.push({ id: makeId('c', 'c', 13, -4), type: 'parapet', gridX: -4, gridY: 13, gridW: 1, gridH: 1, color: 'dark-gray', anchor: 'center' });
-  bricks.push({ id: makeId('c', 'c', 13, -2), type: 'parapet', gridX: -2, gridY: 13, gridW: 1, gridH: 1, color: 'dark-gray', anchor: 'center' });
-  bricks.push({ id: makeId('c', 'c', 13, 1), type: 'parapet', gridX: 1, gridY: 13, gridW: 1, gridH: 1, color: 'dark-gray', anchor: 'center' });
-  bricks.push({ id: makeId('c', 'c', 13, 3), type: 'parapet', gridX: 3, gridY: 13, gridW: 1, gridH: 1, color: 'dark-gray', anchor: 'center' });
-
-  bricks.push({ id: makeId('c', 'c', 13, -1), type: 'rect', gridX: -1, gridY: 13, gridW: 2, gridH: 1, color: 'dark-gray', anchor: 'center' });
 
   return bricks;
 }
