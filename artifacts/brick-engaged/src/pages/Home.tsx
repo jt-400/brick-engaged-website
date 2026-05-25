@@ -29,35 +29,38 @@ export default function Home() {
   // Respect prefers-reduced-motion for the idle bob + entrance bounce
   const shouldReduceMotion = useReducedMotion();
 
-  // Skip the heavy LegoCanvas physics sim on mobile (battery + perf win).
-  // Mobile users still get a strong hero via bg-charcoal + pattern + glow + text.
-  const [isMobile, setIsMobile] = useState(false);
+  // Detect mobile on initial render (lazy init) so animations are skipped from frame 1.
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(max-width: 767px)').matches
+      : false
+  );
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)');
     const update = () => setIsMobile(mq.matches);
-    update();
     mq.addEventListener('change', update);
     return () => mq.removeEventListener('change', update);
   }, []);
 
-  // If the canvas isn't going to render, the button should appear after a short delay
+  // On mobile / reduced-motion: skip every hero animation. Button shows immediately.
+  const noAnim = isMobile || shouldReduceMotion;
+
   useEffect(() => {
-    if (isMobile || shouldReduceMotion) {
-      const t = setTimeout(() => setCastleComplete(true), 400);
-      return () => clearTimeout(t);
+    if (noAnim) {
+      setCastleComplete(true);
     }
-  }, [isMobile, shouldReduceMotion]);
+  }, [noAnim]);
 
   return (
     <div className="flex flex-col w-full">
       {/* Hero — full viewport, canvas edge-to-edge, text + social overlaid */}
       <section className="relative w-full h-screen overflow-hidden bg-charcoal">
 
-        {/* Atmospheric radial glow — adds depth, brings text forward, gently pulses */}
+        {/* Atmospheric radial glow — gentle pulse on desktop, static on mobile */}
         <motion.div
           aria-hidden
-          animate={{ opacity: [0.85, 1, 0.85] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+          animate={noAnim ? undefined : { opacity: [0.85, 1, 0.85] }}
+          transition={noAnim ? undefined : { duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute inset-0 pointer-events-none z-[1]"
           style={{
             background:
@@ -69,7 +72,7 @@ export default function Home() {
         <div aria-hidden className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none z-[1]"></div>
 
         {/* Full-bleed falling-LEGO canvas — desktop/tablet only (battery + perf on mobile) */}
-        {!isMobile && !shouldReduceMotion && (
+        {!noAnim && (
           <div className="absolute inset-0 opacity-90 md:opacity-95">
             <LegoCanvas
               key="castle"
@@ -100,6 +103,14 @@ export default function Home() {
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/30 to-transparent z-[5]" />
 
         <div className="relative z-10 w-full flex flex-col items-center px-5 sm:px-6 pt-[85px] sm:pt-[105px] md:pt-[129px]">
+          {noAnim ? (
+            <h1
+              className="font-black text-white leading-none tracking-tight text-center w-full max-w-[1200px] text-[34px] sm:text-[52px] md:text-[72px] lg:text-[88px] xl:text-[95px]"
+              style={{ letterSpacing: '-0.02em' }}
+            >
+              Building connections.<br />One brick at a time.
+            </h1>
+          ) : (
           <motion.h1
             initial="hidden"
             animate="visible"
@@ -154,12 +165,13 @@ export default function Home() {
               ))}
             </span>
           </motion.h1>
+          )}
 
           {/* Subheadline — body font, explains the mission */}
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.85, duration: 0.6 }}
+            initial={noAnim ? false : { opacity: 0, y: 16 }}
+            animate={noAnim ? undefined : { opacity: 1, y: 0 }}
+            transition={noAnim ? undefined : { delay: 0.85, duration: 0.6 }}
             className="font-sans text-center text-white/85 font-medium leading-relaxed mt-5 sm:mt-7 text-base sm:text-lg md:text-xl lg:text-2xl md:whitespace-nowrap"
             style={{ fontFamily: 'var(--app-font-sans, Nunito), system-ui, sans-serif' }}
           >
@@ -171,10 +183,10 @@ export default function Home() {
             <AnimatePresence>
               {castleComplete && (
                 <motion.div
-                  initial={shouldReduceMotion ? { opacity: 0 } : { y: -400, opacity: 0, rotate: -6 }}
+                  initial={noAnim ? false : { y: -400, opacity: 0, rotate: -6 }}
                   animate={
-                    shouldReduceMotion
-                      ? { opacity: 1 }
+                    noAnim
+                      ? undefined
                       : {
                           y: [-400, 0, -30, 0],
                           opacity: 1,
@@ -182,8 +194,8 @@ export default function Home() {
                         }
                   }
                   transition={
-                    shouldReduceMotion
-                      ? { duration: 0.3 }
+                    noAnim
+                      ? undefined
                       : {
                           duration: 0.85,
                           times: [0, 0.7, 0.85, 1],
@@ -192,17 +204,17 @@ export default function Home() {
                   }
                   style={{ transformOrigin: "50% 100%" }}
                 >
-                  {/* Idle bob: subtle 3px vertical pulse every 3.5s — disabled when reduced-motion */}
+                  {/* Idle bob: desktop only */}
                   <motion.div
-                    animate={shouldReduceMotion ? {} : { y: [0, -3, 0] }}
+                    animate={noAnim ? undefined : { y: [0, -3, 0] }}
                     transition={
-                      shouldReduceMotion
-                        ? {}
+                      noAnim
+                        ? undefined
                         : {
                             duration: 3.5,
                             repeat: Infinity,
                             ease: "easeInOut",
-                            delay: 1.3, // wait for entrance bounce to settle
+                            delay: 1.3,
                           }
                     }
                   >
@@ -222,20 +234,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Subtle scroll cue — secondary, low-emphasis */}
-        <motion.div
-          aria-hidden
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6, duration: 0.6 }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
-        >
-          <motion.div
-            animate={{ y: [0, 5, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-            className="w-[2px] h-5 bg-white/25 rounded-full"
-          />
-        </motion.div>
       </section>
 
       {/* Trust strip — impact stats */}
