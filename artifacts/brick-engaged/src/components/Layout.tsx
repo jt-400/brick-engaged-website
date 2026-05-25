@@ -138,19 +138,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-grow">{children}</main>
 
+      {/* LEGO brick divider — transparent so studs sit above the page, footer body starts below */}
+      <div
+        aria-hidden
+        className="w-full h-32 md:h-40 bg-no-repeat bg-transparent"
+        style={{
+          backgroundImage: `url(${footerBrickImg})`,
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+        }}
+      />
+
       {/* ── Footer ── */}
       <footer className="bg-charcoal text-white">
-        {/* LEGO brick divider — stretched as background across full screen */}
-        <div
-          aria-hidden
-          className="w-full h-32 md:h-40 bg-no-repeat"
-          style={{
-            backgroundImage: `url(${footerBrickImg})`,
-            backgroundSize: '100% 100%',
-            backgroundPosition: 'center',
-          }}
-        />
-
         <div className="container mx-auto px-4 py-14 text-center space-y-8">
           <div className="max-w-2xl mx-auto space-y-3">
             <p className="font-bold text-white">
