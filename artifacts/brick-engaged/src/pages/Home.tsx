@@ -48,17 +48,14 @@ export default function Home() {
         {/* Subtle dark scrim at top so white header text stays readable */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/20 to-transparent z-[5]" />
 
-        <div className="relative z-10 w-full flex justify-center px-4" style={{ paddingTop: '154px' }}>
+        <div className="relative z-10 w-full flex justify-center px-4 pt-[154px]">
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1
-              className="font-extrabold text-white"
-              style={{ fontSize: '95px', lineHeight: '1.0', letterSpacing: '-0.01em' }}
-            >
+            <h1 className="font-extrabold text-white text-[95px] leading-none tracking-tight">
               Building connections.<br />
               One brick at a time.
             </h1>
