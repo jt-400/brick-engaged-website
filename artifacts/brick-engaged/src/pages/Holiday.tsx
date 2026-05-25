@@ -4,7 +4,7 @@ import { LegoButton } from "@/components/LegoButton";
 
 export default function Holiday() {
   return (
-    <div className="flex flex-col w-full min-h-[calc(100vh-80px)] bg-charcoal text-white overflow-hidden relative pb-32 md:pb-40 -mb-32 md:-mb-40">
+    <div className="flex flex-col w-full min-h-[calc(100vh-80px)] bg-charcoal text-white overflow-hidden relative pb-20 md:pb-32 lg:pb-40 -mb-20 md:-mb-32 lg:-mb-40">
       <div className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none"></div>
 
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10 flex-grow flex items-center justify-center">
@@ -46,7 +46,7 @@ export default function Holiday() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="bg-white text-charcoal rounded-3xl p-8 md:p-10 shadow-2xl relative">
-              <div className="absolute -top-5 -right-5 bg-lego-orange text-charcoal w-24 h-24 rounded-2xl flex flex-col items-center justify-center font-black rotate-6 shadow-xl">
+              <div className="absolute -top-4 -right-4 md:-top-5 md:-right-5 bg-lego-orange text-charcoal w-20 h-20 md:w-24 md:h-24 rounded-2xl flex flex-col items-center justify-center font-black rotate-6 shadow-xl">
                 <span className="text-2xl">$110</span>
                 <span className="text-xs">per day</span>
               </div>

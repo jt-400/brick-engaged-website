@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { LegoButton } from "@/components/LegoButton";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
-import kidsImg from "@assets/lego_kids.png";
-import handsImg from "@assets/lego_hands.png";
-import therapyImg from "@assets/lego_therapy.png";
+import kidsImg from "@assets/lego_kids.webp";
+import handsImg from "@assets/lego_hands.webp";
+import therapyImg from "@assets/lego_therapy.webp";
 
 export default function Sessions() {
   return (
@@ -12,7 +12,7 @@ export default function Sessions() {
       {/* Hero */}
       <section className="bg-charcoal text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none"></div>
-        <div className="container mx-auto px-4 relative z-10 pt-28 pb-20 text-center max-w-4xl">
+        <div className="container mx-auto px-4 relative z-10 pt-20 pb-14 md:pt-28 md:pb-20 text-center max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -55,7 +55,9 @@ export default function Sessions() {
               <img
                 src={kidsImg}
                 alt="Children doing Brick-by-Brick programme"
-                className="w-full h-64 md:h-full object-cover"
+                className="w-full h-48 md:h-full object-cover"
+                loading="lazy"
+                decoding="async"
                 data-testid="img-brick-by-brick"
               />
               <div className="p-8 md:p-10">
@@ -165,7 +167,9 @@ export default function Sessions() {
               <img
                 src={handsImg}
                 alt="Child building with LEGO mindfully"
-                className="w-full h-64 md:h-full object-cover order-1 md:order-2"
+                className="w-full h-48 md:h-full object-cover order-1 md:order-2"
+                loading="lazy"
+                decoding="async"
                 data-testid="img-mindful-building"
               />
             </div>
@@ -180,7 +184,9 @@ export default function Sessions() {
               <img
                 src={therapyImg}
                 alt="Adult building LEGO therapeutically"
-                className="w-full h-64 md:h-full object-cover"
+                className="w-full h-48 md:h-full object-cover"
+                loading="lazy"
+                decoding="async"
                 data-testid="img-therapeutic"
               />
               <div className="p-8 md:p-10">

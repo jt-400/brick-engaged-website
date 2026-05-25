@@ -1,7 +1,7 @@
 import React from 'react';
-import darkBrickSrc from '@assets/lego-brick-dark.png';
-import yellowBrickSrc from '@assets/lego-brick-yellow.png';
-import greenBrickSrc from '@assets/lego-brick-green.png';
+import darkBrickSrc from '@assets/lego-brick-dark.webp';
+import yellowBrickSrc from '@assets/lego-brick-yellow.webp';
+import greenBrickSrc from '@assets/lego-brick-green.webp';
 
 interface LegoButtonProps {
   children: React.ReactNode;

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,9 +7,9 @@ import { LegoButton } from "@/components/LegoButton";
 import { LegoCanvas } from "@/lego/LegoCanvas";
 import { LEGO_MODELS } from "@/lego/modelsData";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
-import happyMinifigsImg from "@assets/lego_happy_minifigs.png";
-import minifigsImg from "@assets/lego_minifigs.png";
-import bricksImg from "@assets/lego_bricks_close.png";
+import happyMinifigsImg from "@assets/lego_happy_minifigs.webp";
+import minifigsImg from "@assets/lego_minifigs.webp";
+import bricksImg from "@assets/lego_bricks_close.webp";
 
 export default function Home() {
   // Castle builds once and stays — flags keep waving, no loop.
@@ -28,6 +28,25 @@ export default function Home() {
 
   // Respect prefers-reduced-motion for the idle bob + entrance bounce
   const shouldReduceMotion = useReducedMotion();
+
+  // Skip the heavy LegoCanvas physics sim on mobile (battery + perf win).
+  // Mobile users still get a strong hero via bg-charcoal + pattern + glow + text.
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  // If the canvas isn't going to render, the button should appear after a short delay
+  useEffect(() => {
+    if (isMobile || shouldReduceMotion) {
+      const t = setTimeout(() => setCastleComplete(true), 400);
+      return () => clearTimeout(t);
+    }
+  }, [isMobile, shouldReduceMotion]);
 
   return (
     <div className="flex flex-col w-full">
@@ -49,21 +68,23 @@ export default function Home() {
         {/* Subtle brick-dot pattern overlay (matches other pages) */}
         <div aria-hidden className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none z-[1]"></div>
 
-        {/* Full-bleed falling-LEGO canvas — builds once, flags keep waving */}
-        <div className="absolute inset-0 opacity-90 md:opacity-95">
-          <LegoCanvas
-            key="castle"
-            activeModel={activeModel}
-            buildSpeed={1.35}
-            bounceForce={0.55}
-            gravity={0.65}
-            spawnStagger={260}
-            debugGrid={false}
-            isPlaying={true}
-            clickToPop={true}
-            onBrickDocked={handleBrickDocked}
-          />
-        </div>
+        {/* Full-bleed falling-LEGO canvas — desktop/tablet only (battery + perf on mobile) */}
+        {!isMobile && !shouldReduceMotion && (
+          <div className="absolute inset-0 opacity-90 md:opacity-95">
+            <LegoCanvas
+              key="castle"
+              activeModel={activeModel}
+              buildSpeed={1.35}
+              bounceForce={0.55}
+              gravity={0.65}
+              spawnStagger={260}
+              debugGrid={false}
+              isPlaying={true}
+              clickToPop={true}
+              onBrickDocked={handleBrickDocked}
+            />
+          </div>
+        )}
 
         {/* Vignette: subtle darkening at edges adds atmospheric depth */}
         <div
@@ -261,7 +282,7 @@ export default function Home() {
 
       {/* Text + image feature — text panel first (left), image right */}
       <section className="py-0 bg-white overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-2 min-h-[480px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 min-h-[420px] md:min-h-[480px]">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -303,7 +324,9 @@ export default function Home() {
             <img
               src={happyMinifigsImg}
               alt="Two smiling LEGO minifigures against a brick wall"
-              className="w-full h-full object-cover min-h-[320px]"
+              className="w-full h-full object-cover min-h-[240px] md:min-h-[320px]"
+              loading="lazy"
+              decoding="async"
               data-testid="img-happy-minifigs"
             />
           </motion.div>
@@ -341,7 +364,7 @@ export default function Home() {
           >
             {/* Children */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.99] active:translate-y-0 transition-all duration-300">
                 <div className="bg-lego-orange h-2"></div>
                 <CardContent className="p-8">
                   <div className="flex mb-4">
@@ -371,7 +394,7 @@ export default function Home() {
 
             {/* Teens */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.99] active:translate-y-0 transition-all duration-300">
                 <div className="bg-charcoal h-2"></div>
                 <CardContent className="p-8">
                   <div className="flex mb-4">
@@ -401,7 +424,7 @@ export default function Home() {
 
             {/* Adults */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.99] active:translate-y-0 transition-all duration-300">
                 <div className="bg-lego-orange h-2"></div>
                 <CardContent className="p-8">
                   <div className="flex mb-4">
@@ -455,10 +478,10 @@ export default function Home() {
             <motion.div variants={fadeInUp}>
               <Link href="/sessions">
                 <div
-                  className="bg-charcoal text-white rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:-rotate-1 transition-transform duration-300 shadow-xl"
+                  className="bg-charcoal text-white rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:-rotate-1 active:scale-[1.02] transition-transform duration-300 shadow-xl"
                   data-testid="link-sessions-card"
                 >
-                  <img src={bricksImg} alt="LEGO bricks" className="w-full h-48 object-cover" />
+                  <img src={bricksImg} alt="LEGO bricks" className="w-full h-48 object-cover" loading="lazy" decoding="async" />
                   <div className="p-8 flex flex-col flex-1 justify-between">
                     <div>
                       <h3 className="text-3xl font-black mb-3">Brick Engaged Sessions</h3>
@@ -478,13 +501,15 @@ export default function Home() {
             <motion.div variants={fadeInUp}>
               <Link href="/foundation">
                 <div
-                  className="bg-lego-orange text-charcoal rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:rotate-1 transition-transform duration-300 shadow-xl"
+                  className="bg-lego-orange text-charcoal rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:rotate-1 active:scale-[1.02] transition-transform duration-300 shadow-xl"
                   data-testid="link-foundation-card"
                 >
                   <img
                     src={minifigsImg}
                     alt="LEGO minifigures"
                     className="w-full h-48 object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="p-8 flex flex-col flex-1 justify-between">
                     <div>

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { LegoButton } from "@/components/LegoButton";
-import bricksImg from "@assets/lego_bricks_close.png";
+import bricksImg from "@assets/lego_bricks_close.webp";
 
 export default function Foundation() {
   return (
@@ -8,7 +8,7 @@ export default function Foundation() {
       {/* Hero */}
       <section className="bg-charcoal text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none"></div>
-        <div className="container mx-auto px-4 relative z-10 pt-28 pb-20 text-center max-w-4xl">
+        <div className="container mx-auto px-4 relative z-10 pt-20 pb-14 md:pt-28 md:pb-20 text-center max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -73,7 +73,9 @@ export default function Foundation() {
             <img
               src={bricksImg}
               alt="Colorful LEGO bricks"
-              className="w-full h-full object-cover min-h-[300px]"
+              className="w-full h-full object-cover min-h-[220px] md:min-h-[300px]"
+              loading="lazy"
+              decoding="async"
               data-testid="img-foundation-bricks"
             />
           </motion.div>

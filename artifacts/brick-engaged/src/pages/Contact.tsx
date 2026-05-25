@@ -42,7 +42,7 @@ export default function Contact() {
       {/* Hero */}
       <section className="bg-charcoal text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none"></div>
-        <div className="container mx-auto px-4 relative z-10 pt-28 pb-20 text-center">
+        <div className="container mx-auto px-4 relative z-10 pt-20 pb-14 md:pt-28 md:pb-20 text-center">
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -216,7 +216,7 @@ export default function Contact() {
                           <FormControl>
                             <Textarea
                               placeholder="How can we help?"
-                              className="min-h-[150px] resize-none rounded-lg bg-slate-50 border-slate-200"
+                              className="min-h-[110px] md:min-h-[150px] resize-none rounded-lg bg-slate-50 border-slate-200"
                               {...field}
                             />
                           </FormControl>

@@ -143,6 +143,14 @@
   background-position: 0 0, 20px 20px;
 }
 
+/* Mobile: kill the default grey tap-highlight, use a subtle brand tint for tappable elements */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+button, a, [role="button"], [data-testid^="link-"], [data-testid^="button-"] {
+  -webkit-tap-highlight-color: rgba(255, 229, 39, 0.18);
+}
+
 /* Accessibility: respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

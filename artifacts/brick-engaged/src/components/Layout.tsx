@@ -3,7 +3,7 @@ import { Menu, X, Facebook, Instagram } from "lucide-react";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { LegoButton } from "@/components/LegoButton";
-import footerBrickImg from "@assets/footer-brick.png";
+import footerBrickImg from "@assets/footer-brick.webp";
 
 const NAV_LINKS = [
   { href: "/sessions", label: "Sessions" },
@@ -56,7 +56,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="w-3 h-3 bg-yellow-400" />
                 <div className="w-3 h-3 bg-emerald-500" />
               </div>
-              <span className={`font-display font-black text-lg tracking-tighter leading-none transition-colors duration-300 ${
+              <span className={`font-display font-black text-base sm:text-lg tracking-tighter leading-none transition-colors duration-300 ${
                 isTransparent ? 'text-white' : 'text-charcoal'
               }`}>
                 BRICK<br />ENGAGED
@@ -149,7 +149,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* LEGO brick divider — transparent so studs sit above the page, footer body starts below */}
       <div
         aria-hidden
-        className="w-screen h-32 md:h-40 bg-no-repeat bg-transparent overflow-hidden"
+        className="w-screen h-20 md:h-32 lg:h-40 bg-no-repeat bg-transparent overflow-hidden"
         style={{
           backgroundImage: `url(${footerBrickImg})`,
           backgroundSize: '102% 100%',
