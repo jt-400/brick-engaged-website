@@ -19,6 +19,16 @@ export default function Home() {
       {/* Hero — full viewport, canvas edge-to-edge, text + social overlaid */}
       <section className="relative w-full h-screen overflow-hidden bg-charcoal">
 
+        {/* Atmospheric radial glow — adds depth, brings text forward */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none z-[1]"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 50% 25%, rgba(255,229,39,0.08), transparent 65%)',
+          }}
+        />
+
         {/* Subtle brick-dot pattern overlay (matches other pages) */}
         <div aria-hidden className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none z-[1]"></div>
 
@@ -36,10 +46,20 @@ export default function Home() {
           onBrickDocked={() => {}}
         />
 
-        {/* Subtle dark scrim at top so white header text stays readable */}
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/20 to-transparent z-[5]" />
+        {/* Vignette: subtle darkening at edges adds atmospheric depth */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none z-[4]"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.35) 100%)',
+          }}
+        />
 
-        <div className="relative z-10 w-full flex justify-center px-5 sm:px-6 pt-[85px] sm:pt-[105px] md:pt-[129px]">
+        {/* Subtle dark scrim at top so white header text stays readable */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/30 to-transparent z-[5]" />
+
+        <div className="relative z-10 w-full flex flex-col items-center px-5 sm:px-6 pt-[85px] sm:pt-[105px] md:pt-[129px]">
           <motion.h1
             initial="hidden"
             animate="visible"
@@ -94,21 +114,45 @@ export default function Home() {
               ))}
             </span>
           </motion.h1>
+
+          {/* Subheadline — body font, explains the mission */}
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.85, duration: 0.6 }}
+            className="font-sans text-center text-white/85 font-medium leading-relaxed max-w-[640px] mt-5 sm:mt-7 text-base sm:text-lg md:text-xl"
+            style={{ fontFamily: 'var(--app-font-sans, Nunito), system-ui, sans-serif' }}
+          >
+            Using the transformative power of play to create positive, lasting change.
+          </motion.p>
+
+          {/* Primary CTA — highest visual priority in the hero */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.05, duration: 0.6 }}
+            className="mt-8 sm:mt-10"
+          >
+            <Link href="/sessions">
+              <LegoButton variant="orange" data-testid="hero-cta-primary">
+                View Sessions
+              </LegoButton>
+            </Link>
+          </motion.div>
         </div>
 
-        {/* Scroll cue */}
+        {/* Subtle scroll cue — secondary, low-emphasis */}
         <motion.div
           aria-hidden
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none"
+          transition={{ delay: 1.6, duration: 0.6 }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
         >
-          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/60">Scroll</span>
           <motion.div
-            animate={{ y: [0, 8, 0] }}
+            animate={{ y: [0, 5, 0] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-            className="w-[2px] h-8 bg-white/40 rounded-full"
+            className="w-[2px] h-5 bg-white/25 rounded-full"
           />
         </motion.div>
       </section>

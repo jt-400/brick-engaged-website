@@ -8,8 +8,8 @@ import footerBrickImg from "@assets/footer-brick.png";
 const NAV_LINKS = [
   { href: "/sessions", label: "Sessions" },
   { href: "/foundation", label: "Foundation" },
-  { href: "/about", label: "About" },
-  { href: "/holiday", label: "Holiday" },
+  { href: "/holiday", label: "Holidays" },
+  { href: "/about", label: "About Dan" },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -65,15 +65,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Link>
 
           {/* Nav links — hidden on mobile */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-7">
             {NAV_LINKS.map(({ href, label }) => (
               <Link key={href} href={href}>
-                <span className={`text-sm font-bold tracking-wide cursor-pointer transition-colors duration-300 ${
+                <span className={`text-base font-bold tracking-wide cursor-pointer transition-colors duration-300 ${
                   location === href
                     ? isTransparent ? 'text-lego-orange' : 'text-charcoal underline decoration-lego-orange decoration-2 underline-offset-4'
                     : isTransparent
-                      ? 'text-white/80 hover:text-white'
-                      : 'text-charcoal/70 hover:text-charcoal'
+                      ? 'text-white hover:text-lego-orange'
+                      : 'text-charcoal hover:text-lego-orange'
                 }`}>
                   {label}
                 </span>
@@ -95,7 +95,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <Instagram size={20} />
             </a>
             <Link href="/contact">
-              <LegoButton variant="orange" size="sm">Contact Us</LegoButton>
+              <LegoButton variant="white" size="sm">Contact Us</LegoButton>
             </Link>
           </div>
 
