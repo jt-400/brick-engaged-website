@@ -13,16 +13,18 @@ interface LegoButtonProps {
   size?: 'sm' | 'md';
 }
 
-// Text colour for each variant
 const TEXT_COLORS: Record<string, string> = {
-  orange:  '#1E293B', // dark text on yellow brick
+  orange:   '#1E293B', // dark text on yellow brick
   charcoal: '#ffffff', // white text on dark brick
-  white:   '#ffffff', // white text on dark brick (fallback)
+  white:    '#1E293B', // dark navy text on white block
 };
 
 /**
- * A button that uses real LEGO brick silhouette images.
- * Studs sit at the top of the image; text is centred in the body area.
+ * A button shaped like a LEGO brick.
+ * - orange / charcoal → real brick silhouette PNGs (yellow / dark navy)
+ * - white            → pure CSS white block (no brick PNG) with brick-style 3D shadow
+ *
+ * All variants share the same rise + tilt hover animation.
  */
 export function LegoButton({
   children,
@@ -33,19 +35,47 @@ export function LegoButton({
   disabled,
   ...props
 }: LegoButtonProps) {
-  const brickSrc = variant === 'orange' ? yellowBrickSrc : darkBrickSrc;
   const textColor = TEXT_COLORS[variant] ?? '#1E293B';
   const isSmall = size === 'sm';
-
-  // Overall brick height — stud area takes ~28% from top
   const h = isSmall ? 50 : 66;
-  const studPad = Math.round(h * 0.29); // push text below studs
+
+  const baseClass = `inline-flex items-center justify-center font-black tracking-wide cursor-pointer select-none whitespace-nowrap transition-transform duration-200 ease-out hover:-translate-y-1.5 hover:rotate-[-2.5deg] active:translate-y-0 active:rotate-0 active:scale-[0.97] ${disabled ? 'opacity-50 pointer-events-none' : ''} ${className}`;
+
+  // White variant: pure CSS block with brick-style depth shadow
+  if (variant === 'white') {
+    return (
+      <button
+        type={type}
+        disabled={disabled}
+        className={baseClass}
+        style={{
+          backgroundColor: '#ffffff',
+          color: textColor,
+          height: `${h}px`,
+          minWidth: isSmall ? '110px' : '148px',
+          padding: isSmall ? '0 18px' : '0 26px',
+          fontSize: isSmall ? '11px' : '13px',
+          letterSpacing: '0.05em',
+          border: 'none',
+          borderRadius: '6px',
+          boxShadow: '0 4px 0 rgba(0,0,0,0.18), 0 6px 14px rgba(0,0,0,0.12)',
+        }}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  }
+
+  // Orange / charcoal variants: real brick PNG background
+  const brickSrc = variant === 'orange' ? yellowBrickSrc : darkBrickSrc;
+  const studPad = Math.round(h * 0.29);
 
   return (
     <button
       type={type}
       disabled={disabled}
-      className={`inline-flex items-center justify-center font-black tracking-wide cursor-pointer select-none whitespace-nowrap transition-[transform,filter] duration-75 ease-out hover:brightness-105 hover:scale-[1.015] active:scale-[0.97] ${disabled ? 'opacity-50 pointer-events-none' : ''} ${className}`}
+      className={baseClass}
       style={{
         backgroundImage: `url(${brickSrc})`,
         backgroundSize: '100% 100%',

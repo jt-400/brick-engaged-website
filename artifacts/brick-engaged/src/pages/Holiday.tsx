@@ -4,7 +4,7 @@ import { LegoButton } from "@/components/LegoButton";
 
 export default function Holiday() {
   return (
-    <div className="flex flex-col w-full min-h-[calc(100vh-80px)] bg-charcoal text-white overflow-hidden relative">
+    <div className="flex flex-col w-full min-h-[calc(100vh-80px)] bg-charcoal text-white overflow-hidden relative pb-32 md:pb-40 -mb-32 md:-mb-40">
       <div className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none"></div>
 
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10 flex-grow flex items-center justify-center">
@@ -32,7 +32,7 @@ export default function Holiday() {
                 </LegoButton>
               </a>
               <a href="sms:0212700301">
-                <LegoButton variant="charcoal" data-testid="button-text-dan">
+                <LegoButton variant="white" data-testid="button-text-dan">
                   Text Dan
                 </LegoButton>
               </a>
