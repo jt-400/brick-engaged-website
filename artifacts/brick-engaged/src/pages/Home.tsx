@@ -5,22 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { LegoButton } from "@/components/LegoButton";
 import { LegoCanvas } from "@/lego/LegoCanvas";
 import { LEGO_MODELS } from "@/lego/modelsData";
+import { fadeInUp, staggerContainer } from "@/lib/motion";
 import happyMinifigsImg from "@assets/lego_happy_minifigs.png";
 import minifigsImg from "@assets/lego_minifigs.png";
 import bricksImg from "@assets/lego_bricks_close.png";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.2 },
-  },
-};
 
 export default function Home() {
   // Castle builds once and stays — flags keep waving, no loop.
@@ -204,7 +192,7 @@ export default function Home() {
           >
             {/* Children */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                 <div className="bg-lego-orange h-2"></div>
                 <CardContent className="p-8">
                   <div className="flex mb-4">
@@ -234,7 +222,7 @@ export default function Home() {
 
             {/* Teens */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                 <div className="bg-charcoal h-2"></div>
                 <CardContent className="p-8">
                   <div className="flex mb-4">
@@ -264,7 +252,7 @@ export default function Home() {
 
             {/* Adults */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                 <div className="bg-lego-orange h-2"></div>
                 <CardContent className="p-8">
                   <div className="flex mb-4">

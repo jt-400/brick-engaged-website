@@ -89,7 +89,12 @@ export default function About() {
           transition={{ delay: 0.3 }}
           className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100"
         >
-          <h3 className="text-3xl font-black text-charcoal mb-8 tracking-tight">A Bit About Me</h3>
+          <h3
+            className="text-3xl font-black text-charcoal mb-8 tracking-tight"
+            style={{ letterSpacing: '-0.02em' }}
+          >
+            A Bit About Me
+          </h3>
 
           <div className="space-y-6 text-lg text-slate-700 leading-relaxed font-medium">
             <p>
@@ -128,7 +133,12 @@ export default function About() {
             </p>
 
             <div className="mt-8 p-8 bg-charcoal text-white rounded-2xl">
-              <h4 className="text-2xl font-black mb-3">Our Mission</h4>
+              <h4
+                className="text-2xl font-black mb-3 tracking-tight"
+                style={{ letterSpacing: '-0.02em' }}
+              >
+                Our Mission
+              </h4>
               <p className="text-xl font-medium text-white/85">
                 Our mission is to facilitate fun, meaningful social interactions, learning and
                 support for Neurodivergent people through building with LEGO® Bricks in a safe and
@@ -137,7 +147,12 @@ export default function About() {
             </div>
 
             <div className="mt-8 pt-8 border-t border-slate-100">
-              <h4 className="text-xl font-bold text-charcoal mb-5">Credentials</h4>
+              <h4
+                className="text-xl font-black text-charcoal mb-5 tracking-tight"
+                style={{ letterSpacing: '-0.02em' }}
+              >
+                Credentials
+              </h4>
               <div className="flex flex-wrap gap-3">
                 <Badge
                   variant="outline"

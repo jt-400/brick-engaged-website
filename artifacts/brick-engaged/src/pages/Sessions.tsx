@@ -1,22 +1,10 @@
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { LegoButton } from "@/components/LegoButton";
+import { fadeInUp, staggerContainer } from "@/lib/motion";
 import kidsImg from "@assets/lego_kids.png";
 import handsImg from "@assets/lego_hands.png";
 import therapyImg from "@assets/lego_therapy.png";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.2 },
-  },
-};
 
 export default function Sessions() {
   return (
@@ -61,7 +49,7 @@ export default function Sessions() {
           {/* Programme 1 — Brick-by-Brick */}
           <motion.div
             variants={fadeInUp}
-            className="bg-white border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm"
+            className="bg-white border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             <div className="grid grid-cols-1 md:grid-cols-2">
               <img
@@ -117,7 +105,7 @@ export default function Sessions() {
           {/* Programme 2 — Mindful Building */}
           <motion.div
             variants={fadeInUp}
-            className="bg-white border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm"
+            className="bg-white border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             <div className="grid grid-cols-1 md:grid-cols-2">
               <div className="p-8 md:p-10 order-2 md:order-1">
@@ -149,7 +137,7 @@ export default function Sessions() {
                     ].map((skill) => (
                       <span
                         key={skill}
-                        className="bg-lego-orange/20 text-charcoal border border-lego-orange/50 rounded-lg text-xs font-bold px-3 py-1"
+                        className="bg-lego-orange/15 text-charcoal rounded-full text-xs font-bold px-3 py-1.5"
                       >
                         {skill}
                       </span>
@@ -186,7 +174,7 @@ export default function Sessions() {
           {/* Programme 3 — Therapeutic */}
           <motion.div
             variants={fadeInUp}
-            className="bg-white border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm"
+            className="bg-white border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             <div className="grid grid-cols-1 md:grid-cols-2">
               <img
