@@ -48,14 +48,17 @@ export default function Home() {
         {/* Subtle dark scrim at top so white header text stays readable */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/20 to-transparent z-[5]" />
 
-        <div className="relative z-10 w-full flex justify-center px-4 pt-[154px]">
+        <div className="relative z-10 w-full flex justify-center px-5 sm:px-6 pt-[110px] sm:pt-[130px] md:pt-[154px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center"
+            className="text-center w-full max-w-[1200px]"
           >
-            <h1 className="font-extrabold text-white text-[95px] leading-none tracking-tight">
+            <h1
+              className="font-extrabold text-white leading-none tracking-tight text-[34px] sm:text-[52px] md:text-[72px] lg:text-[88px] xl:text-[95px]"
+              style={{ letterSpacing: '-0.02em' }}
+            >
               Building connections.<br />
               One brick at a time.
             </h1>
