@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Puzzle, Heart, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import footerBrickImg from "@assets/footer-brick.png";
 import { Card, CardContent } from "@/components/ui/card";
 import { LegoButton } from "@/components/LegoButton";
 import { LegoCanvas } from "@/lego/LegoCanvas";
@@ -172,15 +173,12 @@ export default function Home() {
               <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="bg-lego-orange h-2"></div>
                 <CardContent className="p-8">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="bg-lego-orange/10 rounded-2xl p-3">
-                      <Puzzle size={28} className="text-lego-orange" />
-                    </div>
+                  <div className="flex mb-4">
                     <span className="text-xs font-black bg-lego-orange text-charcoal px-3 py-1 rounded-lg">
                       Brick-by-Brick® Programme
                     </span>
                   </div>
-                  <h3 className="text-2xl font-black text-charcoal mt-4 mb-4">Children 7–12</h3>
+                  <h3 className="text-2xl font-black text-charcoal mb-4">Children 7–12</h3>
                   <ul className="space-y-2 font-medium text-muted-foreground">
                     {[
                       "Neurodiverse kids (ADHD, Autistic)",
@@ -205,15 +203,12 @@ export default function Home() {
               <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="bg-charcoal h-2"></div>
                 <CardContent className="p-8">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="bg-charcoal/10 rounded-2xl p-3">
-                      <Users size={28} className="text-charcoal" />
-                    </div>
+                  <div className="flex mb-4">
                     <span className="text-xs font-black bg-charcoal text-white px-3 py-1 rounded-lg">
                       Mindful Building Sessions
                     </span>
                   </div>
-                  <h3 className="text-2xl font-black text-charcoal mt-4 mb-4">Teens 13–19</h3>
+                  <h3 className="text-2xl font-black text-charcoal mb-4">Teens 13–19</h3>
                   <ul className="space-y-2 font-medium text-muted-foreground">
                     {[
                       "Navigating anxiety or low mood",
@@ -238,15 +233,12 @@ export default function Home() {
               <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="bg-lego-orange h-2"></div>
                 <CardContent className="p-8">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="bg-lego-orange/10 rounded-2xl p-3">
-                      <Heart size={28} className="text-lego-orange" />
-                    </div>
+                  <div className="flex mb-4">
                     <span className="text-xs font-black bg-lego-orange text-charcoal px-3 py-1 rounded-lg">
                       Therapeutic Use of LEGO®
                     </span>
                   </div>
-                  <h3 className="text-2xl font-black text-charcoal mt-4 mb-4">Adults 20+</h3>
+                  <h3 className="text-2xl font-black text-charcoal mb-4">Adults 20+</h3>
                   <ul className="space-y-2 font-medium text-muted-foreground">
                     {[
                       "Respite from a busy mind",
@@ -269,26 +261,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Minifigs image band */}
-      <section className="relative h-72 overflow-hidden">
+      {/* Footer brick divider */}
+      <section className="w-full">
         <img
-          src={minifigsImg}
-          alt="LEGO minifigures"
-          className="w-full h-full object-cover"
-          data-testid="img-minifigs-band"
+          src={footerBrickImg}
+          alt=""
+          aria-hidden
+          className="w-full block"
         />
-        <div className="absolute inset-0 bg-charcoal/65 flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="text-center text-white px-4"
-          >
-            <p className="text-2xl md:text-3xl font-semibold tracking-normal">
-              Everyone deserves to feel like they belong.
-            </p>
-          </motion.div>
-        </div>
       </section>
 
       {/* Pathways */}
