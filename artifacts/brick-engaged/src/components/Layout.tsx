@@ -51,10 +51,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Link href="/">
             <span className="flex items-center gap-2 cursor-pointer select-none shrink-0">
               <div className="grid grid-cols-2 gap-0.5">
-                <div className="w-3 h-3 bg-red-500 rounded-sm" />
-                <div className="w-3 h-3 bg-blue-500 rounded-sm" />
-                <div className="w-3 h-3 bg-yellow-400 rounded-sm" />
-                <div className="w-3 h-3 bg-emerald-500 rounded-sm" />
+                <div className="w-3 h-3 bg-red-500" />
+                <div className="w-3 h-3 bg-blue-500" />
+                <div className="w-3 h-3 bg-yellow-400" />
+                <div className="w-3 h-3 bg-emerald-500" />
               </div>
               <span className={`font-display font-black text-lg tracking-tighter leading-none transition-colors duration-300 ${
                 isTransparent ? 'text-white' : 'text-charcoal'
