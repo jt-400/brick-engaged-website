@@ -48,7 +48,7 @@ export default function Home() {
         {/* Subtle dark scrim at top so white header text stays readable */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/20 to-transparent z-[5]" />
 
-        <div className="relative z-10 w-full flex justify-center px-5 sm:px-6 pt-[110px] sm:pt-[130px] md:pt-[154px]">
+        <div className="relative z-10 w-full flex justify-center px-5 sm:px-6 pt-[85px] sm:pt-[105px] md:pt-[129px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

@@ -141,11 +141,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* LEGO brick divider — transparent so studs sit above the page, footer body starts below */}
       <div
         aria-hidden
-        className="w-full h-32 md:h-40 bg-no-repeat bg-transparent"
+        className="w-screen h-32 md:h-40 bg-no-repeat bg-transparent overflow-hidden"
         style={{
           backgroundImage: `url(${footerBrickImg})`,
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
+          backgroundSize: '102% 100%',
+          backgroundPosition: 'left center',
         }}
       />
 
