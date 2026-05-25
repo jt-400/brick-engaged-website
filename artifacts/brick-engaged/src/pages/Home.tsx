@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import footerBrickImg from "@assets/footer-brick.png";
 import { Card, CardContent } from "@/components/ui/card";
+import { LegoButton } from "@/components/LegoButton";
 import { LegoCanvas } from "@/lego/LegoCanvas";
 import { LEGO_MODELS } from "@/lego/modelsData";
 import happyMinifigsImg from "@assets/lego_happy_minifigs.png";
