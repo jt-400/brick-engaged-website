@@ -116,10 +116,7 @@ function buildClassicCastle(): BrickTemplate[] {
   bricks.push({ id: makeId('c', 'c', 9, -2), type: 'rect', gridX: -2, gridY: 9, gridW: 4, gridH: 1, color: 'dark-gray', anchor: 'center' });
   bricks.push({ id: makeId('c', 'c', 10, -3), type: 'arch', gridX: -3, gridY: 10, gridW: 6, gridH: 1, color: 'gray', anchor: 'center' });
 
-  bricks.push({ id: makeId('c', 'c', 11, -4), type: 'rect', gridX: -4, gridY: 11, gridW: 8, gridH: 1, color: 'gray', anchor: 'center' });
-
-  // Center-tower top cap (was gridY 12) — kept short so green CTA button sits above it
-  bricks.push({ id: makeId('c', 'c', 12, -4), type: 'rect', gridX: -4, gridY: 12, gridW: 8, gridH: 1, color: 'dark-gray', anchor: 'center' });
+  // Center tower kept short (no gridY 11/12) so green CTA button drops onto the top
 
   return bricks;
 }

@@ -95,7 +95,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <Instagram size={20} />
             </a>
             <Link href="/contact">
-              <LegoButton variant="white" size="sm">Contact Us</LegoButton>
+              <button
+                className={`font-black text-xs uppercase tracking-wider px-3.5 py-2 rounded-md transition-colors duration-200 ${
+                  isTransparent
+                    ? 'bg-white/95 text-charcoal hover:bg-lego-orange hover:text-charcoal'
+                    : 'bg-charcoal text-white hover:bg-lego-orange hover:text-charcoal'
+                }`}
+              >
+                Contact Us
+              </button>
             </Link>
           </div>
 

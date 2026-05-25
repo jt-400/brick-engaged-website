@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useCallback } from "react";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,6 +14,17 @@ import bricksImg from "@assets/lego_bricks_close.png";
 export default function Home() {
   // Castle builds once and stays — flags keep waving, no loop.
   const activeModel = LEGO_MODELS[0]; // castle only
+
+  // Track when castle finishes so the CTA button can drop in as the final piece
+  const [castleComplete, setCastleComplete] = useState(false);
+  const handleBrickDocked = useCallback(
+    (totalDocked: number, totalModelBricks: number) => {
+      if (totalModelBricks > 0 && totalDocked >= totalModelBricks) {
+        setCastleComplete(true);
+      }
+    },
+    []
+  );
 
   return (
     <div className="flex flex-col w-full">
@@ -46,7 +58,7 @@ export default function Home() {
             debugGrid={false}
             isPlaying={true}
             clickToPop={true}
-            onBrickDocked={() => {}}
+            onBrickDocked={handleBrickDocked}
           />
         </div>
 
@@ -146,19 +158,33 @@ export default function Home() {
             Using the transformative power of play to create positive, lasting change.
           </motion.p>
 
-          {/* Primary CTA — highest visual priority in the hero */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.05, duration: 0.6 }}
-            className="mt-8 sm:mt-10"
-          >
-            <Link href="/sessions">
-              <LegoButton variant="green" data-testid="hero-cta-primary">
-                View Sessions
-              </LegoButton>
-            </Link>
-          </motion.div>
+          {/* Primary CTA — drops onto the castle as the LAST piece of the build */}
+          <div className="mt-8 sm:mt-10 min-h-[66px] flex items-start justify-center">
+            <AnimatePresence>
+              {castleComplete && (
+                <motion.div
+                  initial={{ y: -400, opacity: 0, rotate: -6 }}
+                  animate={{
+                    y: [-400, 0, -30, 0],
+                    opacity: 1,
+                    rotate: [-6, 0, -1.5, 0],
+                  }}
+                  transition={{
+                    duration: 0.85,
+                    times: [0, 0.7, 0.85, 1],
+                    ease: ["easeIn", "easeOut", "easeIn", "easeOut"],
+                  }}
+                  style={{ transformOrigin: "50% 100%" }}
+                >
+                  <Link href="/sessions">
+                    <LegoButton variant="green" data-testid="hero-cta-primary">
+                      View Sessions
+                    </LegoButton>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* Subtle scroll cue — secondary, low-emphasis */}
