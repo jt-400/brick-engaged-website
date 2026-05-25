@@ -127,9 +127,6 @@ function buildClassicCastle(): BrickTemplate[] {
 
   bricks.push({ id: makeId('c', 'c', 13, -1), type: 'rect', gridX: -1, gridY: 13, gridW: 2, gridH: 1, color: 'dark-gray', anchor: 'center' });
 
-  bricks.push({ id: makeId('c', 'c', 14, -1), type: 'rect', gridX: -1, gridY: 14, gridW: 2, gridH: 1, color: 'green', anchor: 'center' });
-  bricks.push({ id: makeId('c', 'c', 15, -1), type: 'flag', gridX: -1, gridY: 15, gridW: 2, gridH: 1, color: 'green', anchor: 'center' });
-
   return bricks;
 }
 
