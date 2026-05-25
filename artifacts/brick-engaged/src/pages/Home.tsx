@@ -19,9 +19,11 @@ export default function Home() {
       {/* Hero — full viewport, canvas edge-to-edge, text + social overlaid */}
       <section className="relative w-full h-screen overflow-hidden bg-charcoal">
 
-        {/* Atmospheric radial glow — adds depth, brings text forward */}
-        <div
+        {/* Atmospheric radial glow — adds depth, brings text forward, gently pulses */}
+        <motion.div
           aria-hidden
+          animate={{ opacity: [0.85, 1, 0.85] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute inset-0 pointer-events-none z-[1]"
           style={{
             background:
@@ -33,18 +35,20 @@ export default function Home() {
         <div aria-hidden className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none z-[1]"></div>
 
         {/* Full-bleed falling-LEGO canvas — builds once, flags keep waving */}
-        <LegoCanvas
-          key="castle"
-          activeModel={activeModel}
-          buildSpeed={1.35}
-          bounceForce={0.55}
-          gravity={0.65}
-          spawnStagger={260}
-          debugGrid={false}
-          isPlaying={true}
-          clickToPop={true}
-          onBrickDocked={() => {}}
-        />
+        <div className="absolute inset-0 opacity-90 md:opacity-95">
+          <LegoCanvas
+            key="castle"
+            activeModel={activeModel}
+            buildSpeed={1.35}
+            bounceForce={0.55}
+            gravity={0.65}
+            spawnStagger={260}
+            debugGrid={false}
+            isPlaying={true}
+            clickToPop={true}
+            onBrickDocked={() => {}}
+          />
+        </div>
 
         {/* Vignette: subtle darkening at edges adds atmospheric depth */}
         <div
@@ -55,6 +59,22 @@ export default function Home() {
               'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.35) 100%)',
           }}
         />
+
+        {/* Subtle off-axis brand accent (breaks symmetry, adds personality) */}
+        <motion.div
+          aria-hidden
+          initial={{ opacity: 0, scale: 0.6, rotate: -25 }}
+          animate={{ opacity: 0.8, scale: 1, rotate: -18 }}
+          transition={{ delay: 1.4, duration: 0.8, type: 'spring', damping: 16 }}
+          className="hidden md:block absolute top-[18%] right-[6%] z-[3] pointer-events-none"
+        >
+          <div className="grid grid-cols-2 gap-1">
+            <div className="w-3 h-3 bg-red-500 rounded-[2px]" />
+            <div className="w-3 h-3 bg-blue-500 rounded-[2px]" />
+            <div className="w-3 h-3 bg-lego-orange rounded-[2px]" />
+            <div className="w-3 h-3 bg-emerald-500 rounded-[2px]" />
+          </div>
+        </motion.div>
 
         {/* Subtle dark scrim at top so white header text stays readable */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/30 to-transparent z-[5]" />
@@ -155,6 +175,51 @@ export default function Home() {
             className="w-[2px] h-5 bg-white/25 rounded-full"
           />
         </motion.div>
+      </section>
+
+      {/* Trust strip — impact stats */}
+      <section className="bg-white border-b border-slate-100">
+        <div className="container mx-auto px-4 py-14 md:py-20">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
+            }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6"
+          >
+            {[
+              { value: "3", label: "Specialised programmes" },
+              { value: "12+", label: "Years of LEGO® experience" },
+              { value: "Since 2021", label: "Building brighter futures" },
+              { value: "Upper Hutt", label: "Lane Park Business Centre" },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+                }}
+                className="text-center md:text-left flex flex-col gap-2"
+              >
+                <div className="flex items-baseline justify-center md:justify-start gap-1">
+                  <span
+                    className="text-4xl md:text-5xl font-black text-charcoal tracking-tight leading-none"
+                    style={{ letterSpacing: '-0.02em' }}
+                  >
+                    {stat.value}
+                  </span>
+                  {i === 0 && <span className="text-lego-orange text-2xl md:text-3xl font-black leading-none">.</span>}
+                </div>
+                <p className="text-xs md:text-sm font-bold uppercase tracking-[0.15em] text-charcoal/55">
+                  {stat.label}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       {/* Text + image feature — text panel first (left), image right */}

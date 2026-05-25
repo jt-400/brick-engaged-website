@@ -1,5 +1,6 @@
 import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,19 +24,34 @@ import Contact from "@/pages/Contact";
 
 const queryClient = new QueryClient();
 
+// Wrap each page in a motion div for smooth fade between routes.
+const pageTransition = {
+  initial: { opacity: 0, y: 8 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -8 },
+  transition: { duration: 0.35, ease: "easeOut" },
+};
+
+function PageWrap({ children }: { children: React.ReactNode }) {
+  return <motion.div {...pageTransition}>{children}</motion.div>;
+}
+
 function Router() {
+  const [location] = useLocation();
   return (
     <Layout>
       <ScrollToTop />
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/sessions" component={Sessions} />
-        <Route path="/foundation" component={Foundation} />
-        <Route path="/holiday" component={Holiday} />
-        <Route path="/about" component={About} />
-        <Route path="/contact" component={Contact} />
-        <Route component={NotFound} />
-      </Switch>
+      <AnimatePresence mode="wait">
+        <Switch key={location} location={location}>
+          <Route path="/"><PageWrap><Home /></PageWrap></Route>
+          <Route path="/sessions"><PageWrap><Sessions /></PageWrap></Route>
+          <Route path="/foundation"><PageWrap><Foundation /></PageWrap></Route>
+          <Route path="/holiday"><PageWrap><Holiday /></PageWrap></Route>
+          <Route path="/about"><PageWrap><About /></PageWrap></Route>
+          <Route path="/contact"><PageWrap><Contact /></PageWrap></Route>
+          <Route><PageWrap><NotFound /></PageWrap></Route>
+        </Switch>
+      </AnimatePresence>
     </Layout>
   );
 }

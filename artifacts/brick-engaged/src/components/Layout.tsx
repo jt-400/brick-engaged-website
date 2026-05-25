@@ -64,8 +64,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
 
-          {/* Nav links — hidden on mobile */}
-          <nav className="hidden md:flex items-center gap-7">
+          {/* Nav links — hidden on mobile, surfaced earlier from lg breakpoint */}
+          <nav className="hidden lg:flex items-center gap-7">
             {NAV_LINKS.map(({ href, label }) => (
               <Link key={href} href={href}>
                 <span className={`text-base font-bold tracking-wide cursor-pointer transition-colors duration-300 ${
@@ -85,7 +85,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex-1" />
 
           {/* Right: social icons + Contact Us — hidden on mobile */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-4">
             <a href="https://facebook.com" target="_blank" rel="noreferrer"
               className={`transition-colors duration-300 ${isTransparent ? 'text-white/70 hover:text-white' : 'text-charcoal/60 hover:text-lego-orange'}`}>
               <Facebook size={20} />
@@ -101,7 +101,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2 text-charcoal hover:text-lego-orange transition-colors"
+            className="lg:hidden p-2 text-charcoal hover:text-lego-orange transition-colors ml-auto"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
