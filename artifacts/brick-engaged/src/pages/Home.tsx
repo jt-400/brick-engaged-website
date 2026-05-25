@@ -19,6 +19,9 @@ export default function Home() {
       {/* Hero — full viewport, canvas edge-to-edge, text + social overlaid */}
       <section className="relative w-full h-screen overflow-hidden bg-charcoal">
 
+        {/* Subtle brick-dot pattern overlay (matches other pages) */}
+        <div aria-hidden className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none z-[1]"></div>
+
         {/* Full-bleed falling-LEGO canvas — builds once, flags keep waving */}
         <LegoCanvas
           key="castle"
