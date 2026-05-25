@@ -42,14 +42,17 @@ export default function Home() {
     return () => mq.removeEventListener('change', update);
   }, []);
 
-  // On mobile / reduced-motion: skip every hero animation. Button shows immediately.
+  // noAnim = skip the "extra" entrance/idle motion (text drop, glow pulse, button bob).
+  // The CASTLE BUILD still runs on mobile because it IS the hero — just faster.
   const noAnim = isMobile || shouldReduceMotion;
 
+  // Under reduced-motion the castle doesn't render at all, so reveal CTA on a timer
   useEffect(() => {
-    if (noAnim) {
-      setCastleComplete(true);
+    if (shouldReduceMotion) {
+      const t = setTimeout(() => setCastleComplete(true), 400);
+      return () => clearTimeout(t);
     }
-  }, [noAnim]);
+  }, [shouldReduceMotion]);
 
   return (
     <div className="flex flex-col w-full">
@@ -71,19 +74,20 @@ export default function Home() {
         {/* Subtle brick-dot pattern overlay (matches other pages) */}
         <div aria-hidden className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none z-[1]"></div>
 
-        {/* Full-bleed falling-LEGO canvas — desktop/tablet only (battery + perf on mobile) */}
-        {!noAnim && (
+        {/* Full-bleed falling-LEGO castle — castle stays on mobile (it's the wow);
+            we just speed up the build so the sustained physics loop is short */}
+        {!shouldReduceMotion && (
           <div className="absolute inset-0 opacity-90 md:opacity-95">
             <LegoCanvas
               key="castle"
               activeModel={activeModel}
-              buildSpeed={1.35}
+              buildSpeed={isMobile ? 2.4 : 1.35}
               bounceForce={0.55}
               gravity={0.65}
-              spawnStagger={260}
+              spawnStagger={isMobile ? 120 : 260}
               debugGrid={false}
               isPlaying={true}
-              clickToPop={true}
+              clickToPop={!isMobile}
               onBrickDocked={handleBrickDocked}
             />
           </div>
@@ -183,9 +187,9 @@ export default function Home() {
             <AnimatePresence>
               {castleComplete && (
                 <motion.div
-                  initial={noAnim ? false : { y: -400, opacity: 0, rotate: -6 }}
+                  initial={shouldReduceMotion ? false : { y: -400, opacity: 0, rotate: -6 }}
                   animate={
-                    noAnim
+                    shouldReduceMotion
                       ? undefined
                       : {
                           y: [-400, 0, -30, 0],
@@ -194,7 +198,7 @@ export default function Home() {
                         }
                   }
                   transition={
-                    noAnim
+                    shouldReduceMotion
                       ? undefined
                       : {
                           duration: 0.85,
@@ -204,7 +208,7 @@ export default function Home() {
                   }
                   style={{ transformOrigin: "50% 100%" }}
                 >
-                  {/* Idle bob: desktop only */}
+                  {/* Idle bob: desktop only (skipped on mobile/reduced-motion) */}
                   <motion.div
                     animate={noAnim ? undefined : { y: [0, -3, 0] }}
                     transition={
