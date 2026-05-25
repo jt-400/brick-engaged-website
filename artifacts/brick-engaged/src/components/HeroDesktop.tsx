@@ -112,7 +112,7 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
           aria-label="Building connections. One brick at a time."
         >
           <span className="block">
-            {"Building connections.".split(" ").map((word, i) => (
+            {"Building connections.".split(" ").map((word, i, arr) => (
               <motion.span
                 key={`l1-${i}`}
                 variants={{
@@ -124,11 +124,10 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
                     transition: { type: "spring", damping: 14, stiffness: 220 },
                   },
                 }}
-                className="inline-block"
+                className={`inline-block ${i < arr.length - 1 ? "mr-[0.25em]" : ""}`}
                 style={{ transformOrigin: "50% 100%" }}
               >
                 {word}
-                {i < 1 && " "}
               </motion.span>
             ))}
           </span>
@@ -145,11 +144,10 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
                     transition: { type: "spring", damping: 14, stiffness: 220 },
                   },
                 }}
-                className="inline-block"
+                className={`inline-block ${i < arr.length - 1 ? "mr-[0.25em]" : ""}`}
                 style={{ transformOrigin: "50% 100%" }}
               >
                 {word}
-                {i < arr.length - 1 && " "}
               </motion.span>
             ))}
           </span>
