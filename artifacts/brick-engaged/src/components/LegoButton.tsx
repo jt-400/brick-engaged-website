@@ -65,7 +65,7 @@ export function LegoButton({
   // Shared interactive class (rest, hover, focus-visible, active)
   const baseClass = [
     'inline-flex items-center justify-center',
-    'font-black uppercase cursor-pointer select-none whitespace-nowrap',
+    'font-black uppercase cursor-pointer select-none whitespace-nowrap touch-manipulation',
     'transition-[transform,filter,box-shadow] duration-200 ease-out',
     'will-change-transform',
     // Resting raised position so a seam is visible

@@ -107,13 +107,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
 
-          {/* Mobile hamburger */}
+          {/* Mobile hamburger — contrast follows transparent/scrolled state, 48×48 tap target */}
           <button
-            className="lg:hidden p-2 text-charcoal hover:text-lego-orange transition-colors ml-auto"
+            className={`lg:hidden p-3 -m-1 transition-colors ml-auto ${
+              isTransparent
+                ? 'text-white hover:text-lego-orange'
+                : 'text-charcoal hover:text-lego-orange'
+            }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
           >
-            {isMobileMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
+            {isMobileMenuOpen ? <X size={26} strokeWidth={2.5} /> : <Menu size={26} strokeWidth={2.5} />}
           </button>
         </div>
       </header>

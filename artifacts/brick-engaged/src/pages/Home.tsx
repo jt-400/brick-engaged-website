@@ -1,5 +1,5 @@
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,7 +13,7 @@ import bricksImg from "@assets/lego_bricks_close.webp";
 
 export default function Home() {
   // Castle builds once and stays — flags keep waving, no loop.
-  const activeModel = LEGO_MODELS[0]; // castle only
+  const baseModel = LEGO_MODELS[0]; // castle
 
   // Track when castle finishes so the CTA button can drop in as the final piece
   const [castleComplete, setCastleComplete] = useState(false);
@@ -45,6 +45,16 @@ export default function Home() {
   // noAnim = skip the "extra" entrance/idle motion (text drop, glow pulse, button bob).
   // The CASTLE BUILD still runs on mobile because it IS the hero — just faster.
   const noAnim = isMobile || shouldReduceMotion;
+
+  // On mobile we crop to the central tower only — fills the empty lower half
+  // without trying to shoehorn the full-width castle into a phone viewport.
+  const activeModel = useMemo(() => {
+    if (!isMobile) return baseModel;
+    return {
+      ...baseModel,
+      bricks: baseModel.bricks.filter((b) => b.anchor === 'center'),
+    };
+  }, [baseModel, isMobile]);
 
   // Under reduced-motion the castle doesn't render at all, so reveal CTA on a timer
   useEffect(() => {
