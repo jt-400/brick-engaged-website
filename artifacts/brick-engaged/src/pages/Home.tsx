@@ -104,6 +104,22 @@ export default function Home() {
             </span>
           </motion.h1>
         </div>
+
+        {/* Scroll cue */}
+        <motion.div
+          aria-hidden
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none"
+        >
+          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/60">Scroll</span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            className="w-[2px] h-8 bg-white/40 rounded-full"
+          />
+        </motion.div>
       </section>
 
       {/* Text + image feature — text panel first (left), image right */}
@@ -117,7 +133,10 @@ export default function Home() {
             className="bg-charcoal text-white flex items-center px-10 md:px-16 py-16 order-2 md:order-1"
           >
             <div>
-              <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight leading-tight">
+              <h2
+                className="text-4xl md:text-5xl font-black mb-6 tracking-tight leading-tight"
+                style={{ letterSpacing: '-0.02em' }}
+              >
                 LEGO® as a tool for growth
               </h2>
               <p className="text-lg font-normal opacity-85 leading-relaxed mb-6">
@@ -164,7 +183,10 @@ export default function Home() {
             variants={fadeInUp}
             className="mb-16 text-center"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-charcoal mb-4 tracking-tight">
+            <h2
+              className="text-4xl md:text-5xl font-black text-charcoal mb-4 tracking-tight"
+              style={{ letterSpacing: '-0.02em' }}
+            >
               Who can benefit?
             </h2>
             <p className="text-lg font-normal text-muted-foreground max-w-2xl mx-auto">
@@ -281,7 +303,8 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-center text-charcoal mb-14 tracking-tight"
+            className="text-4xl md:text-5xl font-black text-center text-charcoal mb-14 tracking-tight"
+            style={{ letterSpacing: '-0.02em' }}
           >
             Find your path
           </motion.h2>

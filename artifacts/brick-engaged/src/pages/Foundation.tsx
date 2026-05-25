@@ -90,7 +90,10 @@ export default function Foundation() {
             className="text-center"
           >
             <div className="w-12 h-1 bg-lego-orange mx-auto mb-8 rounded-lg"></div>
-            <blockquote className="text-2xl md:text-3xl font-black text-charcoal leading-relaxed tracking-tight">
+            <blockquote
+              className="text-2xl md:text-3xl font-black text-charcoal leading-relaxed tracking-tight"
+              style={{ letterSpacing: '-0.015em' }}
+            >
               "The Brick Engaged Foundation's mission is to build connections, one brick at a time.
               We believe in the transformative power of play and its ability to create positive,
               lasting change in the lives of neurodivergent children."

@@ -24,7 +24,7 @@ export default function Sessions() {
       {/* Hero */}
       <section className="bg-charcoal text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none"></div>
-        <div className="container mx-auto px-4 relative z-10 pt-28 pb-20 text-center max-w-3xl">
+        <div className="container mx-auto px-4 relative z-10 pt-28 pb-20 text-center max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ export default function Sessions() {
                     Ages 7–13
                   </span>
                 </div>
-                <h2 className="text-3xl font-black text-charcoal mb-4 tracking-tight">
+                <h2 className="text-3xl font-black text-charcoal mb-4 tracking-tight" style={{ letterSpacing: '-0.02em' }}>
                   Brick-by-Brick® Programme
                 </h2>
                 <div className="space-y-3 text-base text-muted-foreground font-medium mb-6">
@@ -126,7 +126,7 @@ export default function Sessions() {
                     Ages 7–14
                   </span>
                 </div>
-                <h2 className="text-3xl font-black text-charcoal mb-4 tracking-tight">
+                <h2 className="text-3xl font-black text-charcoal mb-4 tracking-tight" style={{ letterSpacing: '-0.02em' }}>
                   Mindful Building Sessions
                 </h2>
                 <div className="space-y-3 text-base text-muted-foreground font-medium mb-4">
@@ -201,7 +201,7 @@ export default function Sessions() {
                     Ages 15+
                   </span>
                 </div>
-                <h2 className="text-3xl font-black text-charcoal mb-4 tracking-tight">
+                <h2 className="text-3xl font-black text-charcoal mb-4 tracking-tight" style={{ letterSpacing: '-0.02em' }}>
                   Therapeutic Use of LEGO®
                 </h2>
                 <div className="space-y-3 text-base text-muted-foreground font-medium mb-6">
