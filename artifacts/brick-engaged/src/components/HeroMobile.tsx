@@ -19,11 +19,19 @@ interface HeroMobileProps {
 export function HeroMobile({ className = "" }: HeroMobileProps) {
   const shouldReduceMotion = useReducedMotion();
 
-  // Central tower only (no red/blue side towers — they don't fit phone aspect)
+  // Central tower only, with gridX/gridW doubled so it natively spans the full
+  // 32-unit canvas width (instead of just 16 units in the middle).
+  // Canvas auto-anchors gridY=0 to its bottom edge — castle base sits at hero bottom.
   const portraitModel = useMemo(
     () => ({
       ...LEGO_MODELS[0],
-      bricks: LEGO_MODELS[0].bricks.filter((b) => b.anchor === "center"),
+      bricks: LEGO_MODELS[0].bricks
+        .filter((b) => b.anchor === "center")
+        .map((b) => ({
+          ...b,
+          gridX: b.gridX * 2,
+          gridW: b.gridW * 2,
+        })),
     }),
     []
   );
@@ -92,17 +100,9 @@ export function HeroMobile({ className = "" }: HeroMobileProps) {
         </p>
       </div>
 
-      {/* Castle area — central tower scaled to fill full width, CTA drops on top */}
-      <div className="relative z-[2] flex-1 min-h-[300px]">
-        {/* Scaled canvas wrapper — origin bottom-centre so tower stays anchored,
-            scale ~1.7x makes the central tower span full mobile width */}
-        <div
-          className="absolute inset-0"
-          style={{
-            transform: "scale(1.7)",
-            transformOrigin: "50% 100%",
-          }}
-        >
+      {/* Castle area — central tower spans full width (via grid scaling), CTA drops on top */}
+      <div className="relative z-[2] flex-1 min-h-[340px]">
+        <div className="absolute inset-0">
           <LegoCanvas
             key={`mobile-castle-${shouldReduceMotion ? "static" : "live"}`}
             activeModel={portraitModel}
@@ -117,19 +117,21 @@ export function HeroMobile({ className = "" }: HeroMobileProps) {
           />
         </div>
 
-        {/* CTA — lands on top of the castle as the final piece, smaller (sm) so it sits cleanly */}
-        <div className="absolute left-1/2 -translate-x-1/2 z-10" style={{ bottom: "52%" }}>
+        {/* CTA lands on top of the castle. Castle top is at gridY 12, base at gridY 0.
+            Castle is ~13 rows tall and canvas height ≈ flex-1 area; CTA sits roughly
+            at the visual top of the tower. */}
+        <div className="absolute left-1/2 -translate-x-1/2 z-10" style={{ top: "12%" }}>
           <AnimatePresence>
             {castleComplete && (
               <motion.div
                 initial={
-                  shouldReduceMotion ? false : { y: -260, opacity: 0, rotate: -5 }
+                  shouldReduceMotion ? false : { y: -240, opacity: 0, rotate: -5 }
                 }
                 animate={
                   shouldReduceMotion
                     ? undefined
                     : {
-                        y: [-260, 0, -18, 0],
+                        y: [-240, 0, -16, 0],
                         opacity: 1,
                         rotate: [-5, 0, -1, 0],
                       }
