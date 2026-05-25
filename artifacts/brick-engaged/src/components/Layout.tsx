@@ -3,6 +3,7 @@ import { Menu, X, Facebook, Instagram } from "lucide-react";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { LegoButton } from "@/components/LegoButton";
+import footerBrickImg from "@assets/footer-brick.png";
 
 const NAV_LINKS = [
   { href: "/sessions", label: "Sessions" },
@@ -139,6 +140,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* ── Footer ── */}
       <footer className="bg-charcoal text-white">
+        {/* LEGO brick divider — stretched as background across full screen */}
+        <div
+          aria-hidden
+          className="w-full h-32 md:h-40 bg-no-repeat"
+          style={{
+            backgroundImage: `url(${footerBrickImg})`,
+            backgroundSize: '100% 100%',
+            backgroundPosition: 'center',
+          }}
+        />
 
         <div className="container mx-auto px-4 py-14 text-center space-y-8">
           <div className="max-w-2xl mx-auto space-y-3">
