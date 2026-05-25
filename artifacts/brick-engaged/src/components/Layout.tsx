@@ -160,6 +160,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* ── Footer ── */}
       <footer className="bg-charcoal text-white">
         <div className="container mx-auto px-4 py-14 text-center space-y-8">
+          {/* Brick Engaged logo */}
+          <Link href="/">
+            <span className="inline-flex items-center gap-2.5 cursor-pointer select-none">
+              <span className="grid grid-cols-2 gap-0.5">
+                <span className="w-3 h-3 bg-red-500" />
+                <span className="w-3 h-3 bg-blue-500" />
+                <span className="w-3 h-3 bg-yellow-400" />
+                <span className="w-3 h-3 bg-emerald-500" />
+              </span>
+              <span className="font-display font-black text-lg tracking-tighter leading-none text-white">
+                BRICK<br />ENGAGED
+              </span>
+            </span>
+          </Link>
+
           <div className="max-w-2xl mx-auto space-y-3">
             <p className="font-bold text-white">
               © 2021 Brick Engaged, a subsidiary company of Between the Bricks Ltd.

@@ -72,22 +72,6 @@ export default function Home() {
           }}
         />
 
-        {/* Subtle off-axis brand accent (breaks symmetry, adds personality) */}
-        <motion.div
-          aria-hidden
-          initial={{ opacity: 0, scale: 0.6, rotate: -25 }}
-          animate={{ opacity: 0.8, scale: 1, rotate: -18 }}
-          transition={{ delay: 1.4, duration: 0.8, type: 'spring', damping: 16 }}
-          className="hidden md:block absolute top-[18%] right-[6%] z-[3] pointer-events-none"
-        >
-          <div className="grid grid-cols-2 gap-1">
-            <div className="w-3 h-3 bg-red-500 rounded-[2px]" />
-            <div className="w-3 h-3 bg-blue-500 rounded-[2px]" />
-            <div className="w-3 h-3 bg-lego-orange rounded-[2px]" />
-            <div className="w-3 h-3 bg-emerald-500 rounded-[2px]" />
-          </div>
-        </motion.div>
-
         {/* Subtle dark scrim at top so white header text stays readable */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/30 to-transparent z-[5]" />
 
@@ -152,7 +136,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.85, duration: 0.6 }}
-            className="font-sans text-center text-white/85 font-medium leading-relaxed mt-5 sm:mt-7 text-sm sm:text-base md:text-lg md:whitespace-nowrap"
+            className="font-sans text-center text-white/85 font-medium leading-relaxed mt-5 sm:mt-7 text-base sm:text-lg md:text-xl lg:text-2xl md:whitespace-nowrap"
             style={{ fontFamily: 'var(--app-font-sans, Nunito), system-ui, sans-serif' }}
           >
             Using the transformative power of play to create positive, lasting change.
@@ -221,24 +205,21 @@ export default function Home() {
               { value: "12+", label: "Years of LEGO® experience" },
               { value: "Since 2021", label: "Building brighter futures" },
               { value: "Upper Hutt", label: "Lane Park Business Centre" },
-            ].map((stat, i) => (
+            ].map((stat) => (
               <motion.div
                 key={stat.label}
                 variants={{
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
                 }}
-                className="text-center md:text-left flex flex-col gap-2"
+                className="text-center flex flex-col gap-2"
               >
-                <div className="flex items-baseline justify-center md:justify-start gap-1">
-                  <span
-                    className="text-4xl md:text-5xl font-black text-charcoal tracking-tight leading-none"
-                    style={{ letterSpacing: '-0.02em' }}
-                  >
-                    {stat.value}
-                  </span>
-                  {i === 0 && <span className="text-lego-orange text-2xl md:text-3xl font-black leading-none">.</span>}
-                </div>
+                <span
+                  className="text-4xl md:text-5xl font-black text-charcoal tracking-tight leading-none"
+                  style={{ letterSpacing: '-0.02em' }}
+                >
+                  {stat.value}
+                </span>
                 <p className="text-xs md:text-sm font-bold uppercase tracking-[0.15em] text-charcoal/55">
                   {stat.label}
                 </p>
