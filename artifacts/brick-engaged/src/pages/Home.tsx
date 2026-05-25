@@ -3,13 +3,11 @@ import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import footerBrickImg from "@assets/footer-brick.png";
 import { Card, CardContent } from "@/components/ui/card";
-import { LegoButton } from "@/components/LegoButton";
 import { LegoCanvas } from "@/lego/LegoCanvas";
 import { LEGO_MODELS } from "@/lego/modelsData";
 import happyMinifigsImg from "@assets/lego_happy_minifigs.png";
 import minifigsImg from "@assets/lego_minifigs.png";
 import bricksImg from "@assets/lego_bricks_close.png";
-import buttiImg from "@assets/butti.png";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -50,46 +48,20 @@ export default function Home() {
         {/* Subtle dark scrim at top so white header text stays readable */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/20 to-transparent z-[5]" />
 
-        <div className="relative z-10 w-full pt-28 pb-24 px-6 md:px-10">
+        <div className="relative z-10 w-full flex justify-center px-4" style={{ paddingTop: '154px' }}>
           <motion.div
             initial="hidden"
             animate="visible"
-            variants={staggerContainer}
-            className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-end"
+            variants={fadeInUp}
+            className="text-center"
           >
-            {/* Left column — heading + buttons */}
-            <motion.div variants={fadeInUp} className="flex flex-col gap-7">
-              <h1
-                className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] text-white"
-                style={{ letterSpacing: '-0.01em' }}
-              >
-                Building connections.<br />
-                One brick at a time.
-              </h1>
-              <div className="flex flex-wrap gap-4 items-end">
-                <Link href="/sessions">
-                  <LegoButton variant="orange" data-testid="button-view-sessions">
-                    View Sessions
-                  </LegoButton>
-                </Link>
-                <Link href="/contact">
-                  <img
-                    src={buttiImg}
-                    alt="Get in Touch"
-                    data-testid="button-get-in-touch"
-                    className="h-[66px] w-auto cursor-pointer hover:scale-[1.015] active:scale-[0.97] transition-transform duration-75"
-                  />
-                </Link>
-              </div>
-            </motion.div>
-
-            {/* Right column — subtitle, right-aligned */}
-            <motion.div variants={fadeInUp} className="flex flex-col items-end">
-              <p className="text-xl md:text-2xl font-medium text-white leading-relaxed text-right">
-                We believe in the transformative power of play<br />
-                to create lasting positive change.
-              </p>
-            </motion.div>
+            <h1
+              className="font-extrabold text-white"
+              style={{ fontSize: '95px', lineHeight: '1.0', letterSpacing: '-0.01em' }}
+            >
+              Building connections.<br />
+              One brick at a time.
+            </h1>
           </motion.div>
         </div>
       </section>
