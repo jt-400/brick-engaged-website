@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useState, useCallback } from "react";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
@@ -25,6 +25,9 @@ export default function Home() {
     },
     []
   );
+
+  // Respect prefers-reduced-motion for the idle bob + entrance bounce
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <div className="flex flex-col w-full">
@@ -147,24 +150,51 @@ export default function Home() {
             <AnimatePresence>
               {castleComplete && (
                 <motion.div
-                  initial={{ y: -400, opacity: 0, rotate: -6 }}
-                  animate={{
-                    y: [-400, 0, -30, 0],
-                    opacity: 1,
-                    rotate: [-6, 0, -1.5, 0],
-                  }}
-                  transition={{
-                    duration: 0.85,
-                    times: [0, 0.7, 0.85, 1],
-                    ease: ["easeIn", "easeOut", "easeIn", "easeOut"],
-                  }}
+                  initial={shouldReduceMotion ? { opacity: 0 } : { y: -400, opacity: 0, rotate: -6 }}
+                  animate={
+                    shouldReduceMotion
+                      ? { opacity: 1 }
+                      : {
+                          y: [-400, 0, -30, 0],
+                          opacity: 1,
+                          rotate: [-6, 0, -1.5, 0],
+                        }
+                  }
+                  transition={
+                    shouldReduceMotion
+                      ? { duration: 0.3 }
+                      : {
+                          duration: 0.85,
+                          times: [0, 0.7, 0.85, 1],
+                          ease: ["easeIn", "easeOut", "easeIn", "easeOut"],
+                        }
+                  }
                   style={{ transformOrigin: "50% 100%" }}
                 >
-                  <Link href="/sessions">
-                    <LegoButton variant="green" data-testid="hero-cta-primary">
-                      View Sessions
-                    </LegoButton>
-                  </Link>
+                  {/* Idle bob: subtle 3px vertical pulse every 3.5s — disabled when reduced-motion */}
+                  <motion.div
+                    animate={shouldReduceMotion ? {} : { y: [0, -3, 0] }}
+                    transition={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            duration: 3.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: 1.3, // wait for entrance bounce to settle
+                          }
+                    }
+                  >
+                    <Link href="/sessions">
+                      <LegoButton
+                        variant="green"
+                        data-testid="hero-cta-primary"
+                        aria-label="View our sessions"
+                      >
+                        View Sessions
+                      </LegoButton>
+                    </Link>
+                  </motion.div>
                 </motion.div>
               )}
             </AnimatePresence>
