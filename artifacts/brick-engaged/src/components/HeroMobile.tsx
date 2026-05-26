@@ -1,5 +1,5 @@
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { useMemo, useState, useCallback, useEffect } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useMemo } from "react";
 import { Link } from "wouter";
 import { LegoButton } from "@/components/LegoButton";
 import { LegoCanvas } from "@/lego/LegoCanvas";
@@ -10,28 +10,20 @@ interface HeroMobileProps {
   className?: string;
 }
 
-const HEADER_H = 64; // matches the fixed header height in Layout.tsx
-const CASTLE_H = 380; // canvas area height — castle lives here
-const CTA_TOP_FROM_CASTLE_BOTTOM = 285; // tuned: CTA bottom edge sits at tower peak
-
 /**
- * Mobile hero (< md).
+ * Mobile hero (< md). Tight top-to-bottom stack, then castle anchored to the base.
  *
- * Layout (top → bottom):
- *   [ header (fixed, 64px) ]
- *   [ text area — flex-1, vertically centred between header and castle ]
- *     headline
- *     subhead
- *   [ castle area — fixed height, taller central tower spans full width ]
- *     [CTA drops onto tower top as final piece]
- *   [ scroll cue ]
+ * Reading flow:
+ *   headline → subhead → CTA → (gap) → castle build → scroll cue
+ *
+ * The CTA sits in the text stack (not landing on the castle) — keeps the reading
+ * path linear and the CTA immediately available on page load.
  */
 export function HeroMobile({ className = "" }: HeroMobileProps) {
   const shouldReduceMotion = useReducedMotion();
 
   // Central tower only, gridX/gridW doubled to span full canvas width.
-  // PLUS extra wall rows on top so the tower is taller — gives the CTA a real
-  // "peak" to land on and fills more of the castle area.
+  // Plus 5 extra rows on top to give the tower a proper peak.
   const portraitModel = useMemo(() => {
     const centerBricks: BrickTemplate[] = LEGO_MODELS[0].bricks
       .filter((b) => b.anchor === "center")
@@ -46,14 +38,11 @@ export function HeroMobile({ className = "" }: HeroMobileProps) {
       0
     );
 
-    // Extension: 5 extra rows on top — alternating gray / dark-gray walls,
-    // capped with parapets so the silhouette stays "fortress-like".
     const extra: BrickTemplate[] = [
       { id: "mob-x-11", type: "rect", gridX: -8, gridY: maxGridY, gridW: 16, gridH: 1, color: "gray", anchor: "center" },
       { id: "mob-x-12", type: "rect", gridX: -8, gridY: maxGridY + 1, gridW: 16, gridH: 1, color: "dark-gray", anchor: "center" },
       { id: "mob-x-13", type: "rect", gridX: -8, gridY: maxGridY + 2, gridW: 16, gridH: 1, color: "gray", anchor: "center" },
       { id: "mob-x-14", type: "rect", gridX: -8, gridY: maxGridY + 3, gridW: 16, gridH: 1, color: "gray", anchor: "center" },
-      // Parapet cap row
       { id: "mob-x-15a", type: "parapet", gridX: -8, gridY: maxGridY + 4, gridW: 2, gridH: 1, color: "dark-gray", anchor: "center" },
       { id: "mob-x-15b", type: "parapet", gridX: -4, gridY: maxGridY + 4, gridW: 2, gridH: 1, color: "dark-gray", anchor: "center" },
       { id: "mob-x-15c", type: "parapet", gridX: 2, gridY: maxGridY + 4, gridW: 2, gridH: 1, color: "dark-gray", anchor: "center" },
@@ -65,25 +54,6 @@ export function HeroMobile({ className = "" }: HeroMobileProps) {
       bricks: [...centerBricks, ...extra],
     };
   }, []);
-
-  // CTA drops in when castle build completes (same UX as desktop)
-  const [castleComplete, setCastleComplete] = useState(false);
-  const handleBrickDocked = useCallback(
-    (totalDocked: number, totalModelBricks: number) => {
-      if (totalModelBricks > 0 && totalDocked >= totalModelBricks) {
-        setCastleComplete(true);
-      }
-    },
-    []
-  );
-
-  // Reduced-motion: skip the animation, show CTA after a tick
-  useEffect(() => {
-    if (shouldReduceMotion) {
-      const t = setTimeout(() => setCastleComplete(true), 400);
-      return () => clearTimeout(t);
-    }
-  }, [shouldReduceMotion]);
 
   return (
     <section
@@ -111,11 +81,8 @@ export function HeroMobile({ className = "" }: HeroMobileProps) {
         className="absolute inset-0 bg-brick-pattern opacity-[0.06] pointer-events-none z-[1]"
       />
 
-      {/* Text area — fills space between header and castle, vertically centred */}
-      <div
-        className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pb-4"
-        style={{ paddingTop: `${HEADER_H}px` }}
-      >
+      {/* Top content stack — sits right below the header, tight spacing */}
+      <div className="relative z-10 flex flex-col items-center px-6 pt-[88px]">
         <h1
           className="font-black text-white text-center leading-[1.04] tracking-tight text-[34px]"
           style={{ letterSpacing: "-0.025em" }}
@@ -126,18 +93,27 @@ export function HeroMobile({ className = "" }: HeroMobileProps) {
         </h1>
 
         <p
-          className="text-center text-white/90 font-medium leading-snug mt-4 max-w-[320px] text-[15px]"
+          className="text-center text-white/85 font-medium leading-snug mt-3 max-w-[320px] text-[15px]"
           style={{ fontFamily: "var(--app-font-sans, Nunito), system-ui, sans-serif" }}
         >
           Using the transformative power of play to create positive, lasting change.
         </p>
+
+        <div className="mt-5">
+          <Link href="/sessions">
+            <LegoButton
+              variant="green"
+              aria-label="View our sessions"
+              data-testid="hero-mobile-cta"
+            >
+              View Sessions
+            </LegoButton>
+          </Link>
+        </div>
       </div>
 
-      {/* Castle area — fixed height, taller central tower, CTA lands at peak */}
-      <div
-        className="relative z-[2] w-full"
-        style={{ height: `${CASTLE_H}px` }}
-      >
+      {/* Castle area — fills the remaining vertical space, base at section bottom */}
+      <div className="relative z-[2] flex-1 min-h-[260px]">
         <div className="absolute inset-0">
           <LegoCanvas
             key={`mobile-castle-${shouldReduceMotion ? "static" : "live"}`}
@@ -149,55 +125,8 @@ export function HeroMobile({ className = "" }: HeroMobileProps) {
             debugGrid={false}
             isPlaying={true}
             clickToPop={false}
-            onBrickDocked={handleBrickDocked}
+            onBrickDocked={() => {}}
           />
-        </div>
-
-        {/* CTA — drops onto the tower top as the final piece.
-            Positioned by 'bottom' so it sits ON the castle peak regardless of section height. */}
-        <div
-          className="absolute left-1/2 -translate-x-1/2 z-10"
-          style={{ bottom: `${CTA_TOP_FROM_CASTLE_BOTTOM}px` }}
-        >
-          <AnimatePresence>
-            {castleComplete && (
-              <motion.div
-                initial={
-                  shouldReduceMotion ? false : { y: -240, opacity: 0, rotate: -5 }
-                }
-                animate={
-                  shouldReduceMotion
-                    ? undefined
-                    : {
-                        y: [-240, 0, -16, 0],
-                        opacity: 1,
-                        rotate: [-5, 0, -1, 0],
-                      }
-                }
-                transition={
-                  shouldReduceMotion
-                    ? undefined
-                    : {
-                        duration: 0.75,
-                        times: [0, 0.7, 0.86, 1],
-                        ease: ["easeIn", "easeOut", "easeIn", "easeOut"],
-                      }
-                }
-                style={{ transformOrigin: "50% 100%" }}
-              >
-                <Link href="/sessions">
-                  <LegoButton
-                    variant="green"
-                    size="sm"
-                    aria-label="View our sessions"
-                    data-testid="hero-mobile-cta"
-                  >
-                    View Sessions
-                  </LegoButton>
-                </Link>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </div>
 
