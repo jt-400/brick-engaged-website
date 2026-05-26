@@ -81,8 +81,12 @@ export function HeroMobile({ className = "" }: HeroMobileProps) {
         className="absolute inset-0 bg-brick-pattern opacity-[0.06] pointer-events-none z-[1]"
       />
 
-      {/* Top content stack — sits right below the header, tight spacing */}
-      <div className="relative z-10 flex flex-col items-center px-6 pt-[88px]">
+      {/* Text area — flex-1 with pt clearing the header, content vertically centred
+          in the space between header bottom and castle top */}
+      <div
+        className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pb-2"
+        style={{ paddingTop: "64px" }}
+      >
         <h1
           className="font-black text-white text-center leading-[1.04] tracking-tight text-[34px]"
           style={{ letterSpacing: "-0.025em" }}
@@ -112,8 +116,8 @@ export function HeroMobile({ className = "" }: HeroMobileProps) {
         </div>
       </div>
 
-      {/* Castle area — fills the remaining vertical space, base at section bottom */}
-      <div className="relative z-[2] flex-1 min-h-[260px]">
+      {/* Castle area — fixed height anchored to bottom */}
+      <div className="relative z-[2] w-full h-[360px]">
         <div className="absolute inset-0">
           <LegoCanvas
             key={`mobile-castle-${shouldReduceMotion ? "static" : "live"}`}
