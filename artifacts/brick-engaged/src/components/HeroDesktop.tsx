@@ -1,7 +1,6 @@
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { useState, useCallback, useEffect } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "wouter";
-import { LegoButton } from "@/components/LegoButton";
+import { ArrowRight } from "lucide-react";
 import { LegoCanvas } from "@/lego/LegoCanvas";
 import { LEGO_MODELS } from "@/lego/modelsData";
 
@@ -9,216 +8,197 @@ interface HeroDesktopProps {
   className?: string;
 }
 
+// Minifigure colours for the ground strip — playful but restrained palette
+const MINIFIG_COLORS = [
+  "#34c08e", // green
+  "#f4c542", // yellow
+  "#d94f3d", // red
+  "#3a78c4", // blue
+  "#34c08e", // green
+  "#f4c542", // yellow
+];
+
 /**
- * Desktop / tablet hero (md+). Cinematic, immersive, full-canvas castle build.
- * Self-contained — owns all its motion + state. No mobile branching.
+ * Desktop / tablet hero (md+). Two-column asymmetric layout (≥900px),
+ * collapses to single column below 900px.
+ *
+ * Left: eyebrow + headline + subhead + primary/secondary CTA + meta
+ * Right: animated LEGO castle (unchanged, just repositioned)
+ * Bottom: full-width ground strip with minifigure decals tying both halves
  */
 export function HeroDesktop({ className = "" }: HeroDesktopProps) {
-  const activeModel = LEGO_MODELS[0]; // full castle
+  const activeModel = LEGO_MODELS[0];
   const shouldReduceMotion = useReducedMotion();
-
-  // CTA drops in as the final castle piece when build completes.
-  const [castleComplete, setCastleComplete] = useState(false);
-  const handleBrickDocked = useCallback(
-    (totalDocked: number, totalModelBricks: number) => {
-      if (totalModelBricks > 0 && totalDocked >= totalModelBricks) {
-        setCastleComplete(true);
-      }
-    },
-    []
-  );
-
-  // Under reduced-motion the canvas doesn't render — reveal CTA on a short timer
-  useEffect(() => {
-    if (shouldReduceMotion) {
-      const t = setTimeout(() => setCastleComplete(true), 400);
-      return () => clearTimeout(t);
-    }
-  }, [shouldReduceMotion]);
 
   return (
     <section
-      className={`relative w-full h-screen overflow-hidden bg-charcoal ${className}`}
+      className={`relative w-full min-h-screen flex flex-col overflow-hidden ${className}`}
+      style={{ backgroundColor: "#1b2731" }}
     >
-      {/* Atmospheric radial glow — gentle pulse */}
-      <motion.div
+      {/* Subtle brick-dot pattern */}
+      <div
         aria-hidden
-        animate={shouldReduceMotion ? undefined : { opacity: [0.85, 1, 0.85] }}
-        transition={
-          shouldReduceMotion
-            ? undefined
-            : { duration: 5, repeat: Infinity, ease: "easeInOut" }
-        }
+        className="absolute inset-0 bg-brick-pattern opacity-[0.07] pointer-events-none z-[1]"
+      />
+
+      {/* Soft warm glow weighted toward the castle side */}
+      <div
+        aria-hidden
         className="absolute inset-0 pointer-events-none z-[1]"
         style={{
           background:
-            "radial-gradient(ellipse 80% 50% at 50% 25%, rgba(255,229,39,0.08), transparent 65%)",
+            "radial-gradient(ellipse 55% 60% at 78% 55%, rgba(255,229,39,0.06), transparent 70%)",
         }}
       />
 
-      {/* Brick-dot pattern */}
+      {/* Main content area: 1 col → 2 col at 900px */}
       <div
-        aria-hidden
-        className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none z-[1]"
-      />
-
-      {/* Full-bleed falling-LEGO castle */}
-      {!shouldReduceMotion && (
-        <div className="absolute inset-0 opacity-95">
-          <LegoCanvas
-            key="castle-desktop"
-            activeModel={activeModel}
-            buildSpeed={1.35}
-            bounceForce={0.55}
-            gravity={0.65}
-            spawnStagger={260}
-            debugGrid={false}
-            isPlaying={true}
-            clickToPop={true}
-            onBrickDocked={handleBrickDocked}
-          />
-        </div>
-      )}
-
-      {/* Vignette — atmospheric depth */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none z-[4]"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.35) 100%)",
-        }}
-      />
-
-      {/* Top scrim — header legibility */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/30 to-transparent z-[5]"
-      />
-
-      {/* Content: H1 → subhead → CTA */}
-      <div className="relative z-10 w-full flex flex-col items-center px-6 pt-[129px]">
-        <motion.h1
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: {
-              transition: { staggerChildren: 0.06, delayChildren: 0.15 },
-            },
-          }}
-          className="font-black text-white leading-none tracking-tight text-center w-full max-w-[1200px] text-[72px] lg:text-[88px] xl:text-[95px]"
-          style={{ letterSpacing: "-0.02em" }}
-          aria-label="Building connections. One brick at a time."
+        className="relative z-10 flex-1 w-full max-w-[1280px] mx-auto px-6 lg:px-10 pt-24 lg:pt-28 pb-8 grid grid-cols-1 gap-10 min-[900px]:grid-cols-[1.12fr_0.88fr] min-[900px]:gap-8 min-[900px]:items-center"
+      >
+        {/* Left column: text content */}
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={
+            shouldReduceMotion ? undefined : { duration: 0.55, ease: "easeOut" }
+          }
+          className="flex flex-col"
         >
-          <span className="block">
-            {"Building connections.".split(" ").map((word, i, arr) => (
-              <motion.span
-                key={`l1-${i}`}
-                variants={{
-                  hidden: { opacity: 0, y: -60, rotate: -2 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    rotate: 0,
-                    transition: { type: "spring", damping: 14, stiffness: 220 },
-                  },
-                }}
-                className={`inline-block ${i < arr.length - 1 ? "mr-[0.25em]" : ""}`}
-                style={{ transformOrigin: "50% 100%" }}
-              >
-                {word}
-              </motion.span>
-            ))}
+          {/* Eyebrow pill */}
+          <span
+            className="inline-flex self-start items-center text-[11px] font-bold uppercase tracking-[0.13em] px-3 py-1.5 rounded-full mb-4"
+            style={{
+              backgroundColor: "rgba(52,192,142,0.16)",
+              color: "#5fd6aa",
+            }}
+          >
+            LEGO®-based sessions
           </span>
-          <span className="block">
-            {"One brick at a time.".split(" ").map((word, i, arr) => (
-              <motion.span
-                key={`l2-${i}`}
-                variants={{
-                  hidden: { opacity: 0, y: -60, rotate: 2 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    rotate: 0,
-                    transition: { type: "spring", damping: 14, stiffness: 220 },
-                  },
+
+          {/* Headline — left-aligned, much smaller, tight line-height */}
+          <h1
+            className="text-white font-black leading-[1.0] mb-4"
+            style={{
+              fontSize: "clamp(28px, 4vw, 40px)",
+              letterSpacing: "-0.01em",
+              fontFamily:
+                "var(--app-font-display, Outfit), system-ui, sans-serif",
+            }}
+          >
+            Building connections.
+            <br />
+            One brick at a time.
+          </h1>
+
+          {/* Subhead */}
+          <p
+            className="text-[15px] leading-[1.5] font-normal mb-6 max-w-[330px]"
+            style={{
+              color: "#9fb0bd",
+              fontFamily: "var(--app-font-sans, Nunito), system-ui, sans-serif",
+            }}
+          >
+            Using the transformative power of play to create positive, lasting
+            change.
+          </p>
+
+          {/* CTA row */}
+          <div className="flex gap-3 items-center flex-wrap">
+            {/* Primary — solid green brick-button */}
+            <Link href="/sessions">
+              <a
+                className="inline-flex items-center gap-2 font-semibold text-[14px] tracking-wide rounded-[9px] transition-all hover:brightness-110 active:translate-y-[2px] active:border-b-2"
+                style={{
+                  backgroundColor: "#34c08e",
+                  color: "#06281d",
+                  borderBottom: "4px solid #1f9c6f",
+                  padding: "13px 22px",
+                  letterSpacing: "0.04em",
+                  minHeight: "44px",
                 }}
-                className={`inline-block ${i < arr.length - 1 ? "mr-[0.25em]" : ""}`}
-                style={{ transformOrigin: "50% 100%" }}
+                data-testid="hero-cta-primary"
+                aria-label="View our sessions"
               >
-                {word}
-              </motion.span>
-            ))}
-          </span>
-        </motion.h1>
+                View Sessions
+                <ArrowRight size={16} strokeWidth={2.5} aria-hidden />
+              </a>
+            </Link>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.85, duration: 0.6 }}
-          className="font-sans text-center text-white/85 font-medium leading-relaxed mt-7 text-xl lg:text-2xl whitespace-nowrap"
-          style={{ fontFamily: "var(--app-font-sans, Nunito), system-ui, sans-serif" }}
-        >
-          Using the transformative power of play to create positive, lasting change.
-        </motion.p>
-
-        {/* CTA drops onto the castle as the LAST piece of the build */}
-        <div className="mt-10 min-h-[66px] flex items-start justify-center">
-          <AnimatePresence>
-            {castleComplete && (
-              <motion.div
-                initial={
-                  shouldReduceMotion ? false : { y: -400, opacity: 0, rotate: -6 }
-                }
-                animate={
-                  shouldReduceMotion
-                    ? undefined
-                    : {
-                        y: [-400, 0, -30, 0],
-                        opacity: 1,
-                        rotate: [-6, 0, -1.5, 0],
-                      }
-                }
-                transition={
-                  shouldReduceMotion
-                    ? undefined
-                    : {
-                        duration: 0.85,
-                        times: [0, 0.7, 0.85, 1],
-                        ease: ["easeIn", "easeOut", "easeIn", "easeOut"],
-                      }
-                }
-                style={{ transformOrigin: "50% 100%" }}
+            {/* Secondary — outlined ghost */}
+            <Link href="/holiday">
+              <a
+                className="inline-flex items-center gap-2 font-medium text-[14px] tracking-wide rounded-[9px] transition-colors hover:border-slate-400 hover:text-white"
+                style={{
+                  color: "#cdd8e0",
+                  border: "1.5px solid #38444f",
+                  padding: "11.5px 18px",
+                  letterSpacing: "0.04em",
+                  minHeight: "44px",
+                }}
+                data-testid="hero-cta-secondary"
               >
-                {/* Idle bob */}
-                <motion.div
-                  animate={shouldReduceMotion ? undefined : { y: [0, -3, 0] }}
-                  transition={
-                    shouldReduceMotion
-                      ? undefined
-                      : {
-                          duration: 3.5,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                          delay: 1.3,
-                        }
-                  }
-                >
-                  <Link href="/sessions">
-                    <LegoButton
-                      variant="green"
-                      data-testid="hero-cta-primary"
-                      aria-label="View our sessions"
-                    >
-                      View Sessions
-                    </LegoButton>
-                  </Link>
-                </motion.div>
-              </motion.div>
+                Book a holiday session
+              </a>
+            </Link>
+          </div>
+
+          {/* Meta line */}
+          <p
+            className="mt-5 text-[12px] uppercase font-medium"
+            style={{
+              color: "#6f7e89",
+              letterSpacing: "0.06em",
+            }}
+          >
+            Weekly Brick Club · school-holiday programmes
+          </p>
+        </motion.div>
+
+        {/* Right column: LEGO castle — anchored to bottom of column */}
+        <div className="relative w-full self-end min-h-[380px] min-[900px]:min-h-[460px]">
+          <div className="absolute inset-0">
+            {!shouldReduceMotion && (
+              <LegoCanvas
+                key="castle-desktop"
+                activeModel={activeModel}
+                buildSpeed={1.35}
+                bounceForce={0.55}
+                gravity={0.65}
+                spawnStagger={260}
+                debugGrid={false}
+                isPlaying={true}
+                clickToPop={true}
+                onBrickDocked={() => {}}
+              />
             )}
-          </AnimatePresence>
+          </div>
         </div>
+      </div>
+
+      {/* Ground strip with minifigure decals — ties left + right halves */}
+      <div
+        className="relative z-[3] w-full border-t flex justify-around items-end px-6 lg:px-12 py-3"
+        style={{
+          backgroundColor: "#16212a",
+          borderColor: "rgba(40,53,64,0.6)",
+        }}
+        aria-hidden
+      >
+        {MINIFIG_COLORS.map((color, i) => (
+          <div key={i} className="flex flex-col items-center gap-[1px]">
+            <span
+              className="block w-[14px] h-[14px] rounded-full"
+              style={{ backgroundColor: "#f4c542" }}
+            />
+            <span
+              className="block w-[18px] h-[18px]"
+              style={{
+                backgroundColor: color,
+                borderRadius: "4px 4px 3px 3px",
+              }}
+            />
+          </div>
+        ))}
       </div>
     </section>
   );
