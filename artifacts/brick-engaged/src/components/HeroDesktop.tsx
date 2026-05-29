@@ -26,28 +26,12 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
 
   return (
     <section
-      className={`relative w-full min-h-screen flex flex-col overflow-hidden ${className}`}
+      className={`relative w-full min-h-[88vh] flex flex-col overflow-hidden ${className}`}
       style={{ backgroundColor: "#1b2731" }}
     >
-      {/* Subtle brick-dot pattern */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-brick-pattern opacity-[0.07] pointer-events-none z-[1]"
-      />
-
-      {/* Soft warm glow weighted toward the castle side */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none z-[1]"
-        style={{
-          background:
-            "radial-gradient(ellipse 55% 60% at 78% 55%, rgba(255,229,39,0.07), transparent 70%)",
-        }}
-      />
-
       {/* Main content area: 1 col → 2 col at 900px */}
       <div
-        className="relative z-10 flex-1 w-full max-w-[1440px] mx-auto px-6 lg:px-14 pt-28 lg:pt-36 pb-12 grid grid-cols-1 gap-12 min-[900px]:grid-cols-[1.05fr_0.95fr] min-[900px]:gap-12 min-[900px]:items-center"
+        className="relative z-10 flex-1 w-full max-w-[1440px] mx-auto px-6 lg:px-14 pt-20 lg:pt-24 pb-6 grid grid-cols-1 gap-10 min-[900px]:grid-cols-[1.05fr_0.95fr] min-[900px]:gap-12 min-[900px]:items-center"
       >
         {/* Left column: text content */}
         <motion.div
@@ -69,12 +53,12 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
             LEGO®-based sessions
           </span>
 
-          {/* Headline — left-aligned, scaled up substantially */}
+          {/* Headline — left-aligned, big */}
           <h1
-            className="text-white font-black leading-[1.0] mb-6"
+            className="text-white font-black leading-[0.98] mb-6"
             style={{
-              fontSize: "clamp(36px, 5.5vw, 68px)",
-              letterSpacing: "-0.02em",
+              fontSize: "clamp(40px, 6vw, 80px)",
+              letterSpacing: "-0.025em",
               fontFamily:
                 "var(--app-font-display, Outfit), system-ui, sans-serif",
             }}
@@ -89,8 +73,8 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
             className="leading-[1.5] font-normal mb-8"
             style={{
               color: "#9fb0bd",
-              fontSize: "clamp(15px, 1.2vw, 18px)",
-              maxWidth: "440px",
+              fontSize: "clamp(16px, 1.3vw, 20px)",
+              maxWidth: "480px",
               fontFamily: "var(--app-font-sans, Nunito), system-ui, sans-serif",
             }}
           >
@@ -98,7 +82,7 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
             change.
           </p>
 
-          {/* CTA row — chunkier, more presence */}
+          {/* CTA row — chunky, properly tappable */}
           <div className="flex gap-4 items-center flex-wrap">
             {/* Primary — solid green brick-button */}
             <Link href="/sessions">
@@ -108,16 +92,16 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
                   backgroundColor: "#34c08e",
                   color: "#06281d",
                   borderBottom: "4px solid #1f9c6f",
-                  padding: "16px 28px",
-                  fontSize: "16px",
+                  padding: "18px 32px",
+                  fontSize: "17px",
                   letterSpacing: "0.04em",
-                  minHeight: "52px",
+                  minHeight: "56px",
                 }}
                 data-testid="hero-cta-primary"
                 aria-label="View our sessions"
               >
                 View Sessions
-                <ArrowRight size={18} strokeWidth={2.5} aria-hidden />
+                <ArrowRight size={20} strokeWidth={2.5} aria-hidden />
               </a>
             </Link>
 
@@ -128,10 +112,10 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
                 style={{
                   color: "#cdd8e0",
                   border: "1.5px solid #38444f",
-                  padding: "14px 24px",
-                  fontSize: "16px",
+                  padding: "16px 28px",
+                  fontSize: "17px",
                   letterSpacing: "0.04em",
-                  minHeight: "52px",
+                  minHeight: "56px",
                 }}
                 data-testid="hero-cta-secondary"
               >
@@ -152,8 +136,8 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
           </p>
         </motion.div>
 
-        {/* Right column: LEGO castle — anchored to bottom, larger min-height */}
-        <div className="relative w-full self-end min-h-[480px] min-[900px]:min-h-[600px] lg:min-h-[640px]">
+        {/* Right column: LEGO castle — anchored to bottom; trimmed so ground strip stays in viewport */}
+        <div className="relative w-full self-end min-h-[420px] min-[900px]:min-h-[500px] lg:min-h-[560px]">
           <div className="absolute inset-0">
             {!shouldReduceMotion && (
               <LegoCanvas
