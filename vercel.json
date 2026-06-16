@@ -3,5 +3,9 @@
   "installCommand": "pnpm install",
   "buildCommand": "pnpm --filter @workspace/brick-engaged run build",
   "outputDirectory": "artifacts/brick-engaged/dist/public",
-  "framework": null
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)", "destination": "/" }
+  ]
 }
