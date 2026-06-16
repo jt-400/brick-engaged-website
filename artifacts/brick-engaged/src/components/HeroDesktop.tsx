@@ -31,7 +31,7 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
     >
       {/* Main content area: 1 col → 2 col at 900px */}
       <div
-        className="relative z-10 flex-1 w-full max-w-[1440px] mx-auto px-6 lg:px-14 pt-20 lg:pt-24 pb-6 grid grid-cols-1 gap-10 min-[900px]:grid-cols-[1.05fr_0.95fr] min-[900px]:gap-12 min-[900px]:items-center"
+        className="relative z-10 flex-1 w-full max-w-[1440px] mx-auto px-6 lg:px-14 pt-20 lg:pt-24 pb-6 grid grid-cols-1 gap-10 min-[900px]:grid-cols-[1.05fr_0.95fr] min-[900px]:gap-12 min-[900px]:items-end"
       >
         {/* Left column: text content */}
         <motion.div
@@ -105,14 +105,15 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
               </a>
             </Link>
 
-            {/* Secondary — outlined ghost */}
+            {/* Secondary — yellow brick-button */}
             <Link href="/holiday">
               <a
-                className="inline-flex items-center gap-2 font-medium rounded-[10px] transition-colors hover:border-slate-400 hover:text-white cursor-pointer"
+                className="inline-flex items-center gap-2.5 font-semibold rounded-[10px] transition-all hover:brightness-110 active:translate-y-[2px] active:border-b-2 cursor-pointer"
                 style={{
-                  color: "#cdd8e0",
-                  border: "1.5px solid #38444f",
-                  padding: "16px 28px",
+                  backgroundColor: "#f4c542",
+                  color: "#3a2a06",
+                  borderBottom: "4px solid #c69a1c",
+                  padding: "18px 32px",
                   fontSize: "17px",
                   letterSpacing: "0.04em",
                   minHeight: "56px",
@@ -132,13 +133,16 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
               letterSpacing: "0.07em",
             }}
           >
-            Weekly Brick Club · school-holiday programmes
+            Weekly Brick Club · school-holiday programmes · peer-to-peer support sessions
           </p>
         </motion.div>
 
-        {/* Right column: LEGO castle — anchored to bottom; trimmed so ground strip stays in viewport */}
-        <div className="relative w-full self-end min-h-[420px] min-[900px]:min-h-[500px] lg:min-h-[560px]">
-          <div className="absolute inset-0">
+        {/* Right column: LEGO castle — bottom-aligned with left column meta line, scaled via CSS transform */}
+        <div className="relative w-full self-end overflow-hidden min-h-[360px] min-[900px]:min-h-[420px] lg:min-h-[480px]">
+          <div
+            className="absolute inset-0"
+            style={{ transform: 'scale(1.45)', transformOrigin: 'center bottom' }}
+          >
             {!shouldReduceMotion && (
               <LegoCanvas
                 key="castle-desktop"

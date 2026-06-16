@@ -113,7 +113,7 @@ export default function Contact() {
                   <MapPin size={22} />
                 </div>
                 <div>
-                  <p>Downstairs in the Lane Park Business Centre</p>
+                  <p>Upstairs in the Lane Park Business Centre</p>
                   <p className="text-slate-500 text-base">16–22 Lane St, Upper Hutt</p>
                 </div>
               </div>

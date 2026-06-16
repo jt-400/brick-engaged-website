@@ -86,11 +86,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Right: social icons + Contact Us — hidden on mobile */}
           <div className="hidden lg:flex items-center gap-4">
-            <a href="https://facebook.com" target="_blank" rel="noreferrer"
+            <a href="https://www.facebook.com/brickengaged" target="_blank" rel="noreferrer"
               className={`transition-colors duration-300 ${isTransparent ? 'text-white/70 hover:text-white' : 'text-charcoal/60 hover:text-lego-orange'}`}>
               <Facebook size={20} />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer"
+            <a href="https://www.instagram.com/brickengaged/" target="_blank" rel="noreferrer"
               className={`transition-colors duration-300 ${isTransparent ? 'text-white/70 hover:text-white' : 'text-charcoal/60 hover:text-lego-orange'}`}>
               <Instagram size={20} />
             </a>

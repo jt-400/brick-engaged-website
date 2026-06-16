@@ -67,7 +67,7 @@ export default function Sessions() {
                   </span>
                 </div>
                 <h2 className="text-3xl font-black text-charcoal mb-4 tracking-tight" style={{ letterSpacing: '-0.02em' }}>
-                  Brick-by-Brick® Programme
+                  Brick Club
                 </h2>
                 <div className="space-y-3 text-base text-muted-foreground font-medium mb-6">
                   <p>
@@ -79,26 +79,52 @@ export default function Sessions() {
                     perfect mix for confident, connected kids.
                   </p>
                 </div>
+                <div className="mb-5">
+                  <p className="font-bold text-sm text-charcoal mb-2">Skills developed:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      "ADHD",
+                      "Autistic",
+                      "Communication",
+                      "Life skills",
+                      "Social Skills",
+                    ].map((skill) => (
+                      <span
+                        key={skill}
+                        className="bg-lego-orange/15 text-charcoal rounded-full text-xs font-bold px-3 py-1.5"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
                 <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-sm space-y-1.5 mb-6 font-medium">
                   <p>
                     <span className="font-bold text-charcoal">Location:</span> Lane Park Business
-                    Centre or your school
+                    Centre
                   </p>
                   <p>
-                    <span className="font-bold text-charcoal">Group size:</span> Min 2, optimal in
-                    groups of 3
+                    <span className="font-bold text-charcoal">Group size:</span> Up to Ten
                   </p>
                   <p>
-                    <span className="font-bold text-charcoal">Price:</span> $250 per term
+                    <span className="font-bold text-charcoal">Price:</span> $299 per 10 week term
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <LegoButton variant="orange" data-testid="button-enrol-bbk">
-                    Enrolment Form
-                  </LegoButton>
-                  <LegoButton variant="charcoal" data-testid="button-email-bbk">
-                    <span className="flex items-center gap-2"><Mail size={14} /> Email Us</span>
-                  </LegoButton>
+                  <a
+                    href="https://forms.gle/cD8ZQ5oT7Pzq1djG9"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <LegoButton variant="orange" data-testid="button-enrol-bbk">
+                      Enrolment Form
+                    </LegoButton>
+                  </a>
+                  <a href="mailto:info@brickengaged.org">
+                    <LegoButton variant="charcoal" data-testid="button-email-bbk">
+                      <span className="flex items-center gap-2"><Mail size={14} /> Email Us</span>
+                    </LegoButton>
+                  </a>
                 </div>
               </div>
             </div>
@@ -117,25 +143,27 @@ export default function Sessions() {
                   </span>
                 </div>
                 <h2 className="text-3xl font-black text-charcoal mb-4 tracking-tight" style={{ letterSpacing: '-0.02em' }}>
-                  Mindful Building Sessions
+                  Home schoolers sessions
                 </h2>
                 <div className="space-y-3 text-base text-muted-foreground font-medium mb-4">
                   <p>
-                    Small groups up to five participants. Free building from a pile of bricks or
-                    LEGO® sets.
+                    Home school groups explore and learn by building and observing. This course
+                    targets curriculum areas such as Maths, Physics, Arts and Environment, while
+                    nurturing all the fundamental life and social skills.
                   </p>
                 </div>
                 <div className="mb-5">
                   <p className="font-bold text-sm text-charcoal mb-2">Skills developed:</p>
                   <div className="flex flex-wrap gap-2">
                     {[
-                      "Fine motor skills",
-                      "Problem solving",
+                      "Maths",
+                      "Science",
+                      "Physics",
+                      "STEAM",
+                      "Home-school",
                       "Communication",
                       "Teamwork",
-                      "Creativity",
-                      "Self-Confidence",
-                      "Lowering Anxiety",
+                      "Problem solving",
                     ].map((skill) => (
                       <span
                         key={skill}
@@ -149,19 +177,30 @@ export default function Sessions() {
                 <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-sm space-y-1.5 mb-6 font-medium">
                   <p>
                     <span className="font-bold text-charcoal">Location:</span> Lane Park Business
-                    Centre or your school
+                    Centre
                   </p>
                   <p>
-                    <span className="font-bold text-charcoal">Price:</span> $250 per term
+                    <span className="font-bold text-charcoal">Group size:</span> Min 5, Max 12
+                  </p>
+                  <p>
+                    <span className="font-bold text-charcoal">Price:</span> $150 per 10 week term
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <LegoButton variant="orange" data-testid="button-enrol-mindful">
-                    Enrolment Form
-                  </LegoButton>
-                  <LegoButton variant="charcoal" data-testid="button-email-mindful">
-                    <span className="flex items-center gap-2"><Mail size={14} /> Email Us</span>
-                  </LegoButton>
+                  <a
+                    href="https://forms.gle/cD8ZQ5oT7Pzq1djG9"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <LegoButton variant="orange" data-testid="button-enrol-mindful">
+                      Enrolment Form
+                    </LegoButton>
+                  </a>
+                  <a href="mailto:info@brickengaged.org">
+                    <LegoButton variant="charcoal" data-testid="button-email-mindful">
+                      <span className="flex items-center gap-2"><Mail size={14} /> Email Us</span>
+                    </LegoButton>
+                  </a>
                 </div>
               </div>
               <img
@@ -203,23 +242,34 @@ export default function Sessions() {
                     Same methods as Mindful Building but tailored for teenagers and adults, with a
                     focus on respite, mental health and peer to peer support.
                   </p>
-                  <p>Available in small groups (max 5) or one-to-one sessions.</p>
                 </div>
                 <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-sm space-y-1.5 mb-6 font-medium">
                   <p>
-                    <span className="font-bold text-charcoal">Single session:</span> $25
+                    <span className="font-bold text-charcoal">Location:</span> Lane Park Business
+                    Centre
                   </p>
                   <p>
-                    <span className="font-bold text-charcoal">Ten trip:</span> $225
+                    <span className="font-bold text-charcoal">Group size:</span> Max 10
+                  </p>
+                  <p>
+                    <span className="font-bold text-charcoal">Price:</span> Donation (recommended $10)
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <LegoButton variant="orange" data-testid="button-enrol-therapeutic">
-                    Enrolment Form
-                  </LegoButton>
-                  <LegoButton variant="charcoal" data-testid="button-email-therapeutic">
-                    <span className="flex items-center gap-2"><Mail size={14} /> Email Us</span>
-                  </LegoButton>
+                  <a
+                    href="https://forms.gle/cD8ZQ5oT7Pzq1djG9"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <LegoButton variant="orange" data-testid="button-enrol-therapeutic">
+                      Enrolment Form
+                    </LegoButton>
+                  </a>
+                  <a href="mailto:info@brickengaged.org">
+                    <LegoButton variant="charcoal" data-testid="button-email-therapeutic">
+                      <span className="flex items-center gap-2"><Mail size={14} /> Email Us</span>
+                    </LegoButton>
+                  </a>
                 </div>
               </div>
             </div>

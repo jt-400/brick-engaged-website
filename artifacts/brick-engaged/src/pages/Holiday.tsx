@@ -1,13 +1,16 @@
 import { motion } from "framer-motion";
-import { Calendar, Clock, MapPin, Phone } from "lucide-react";
+import { Calendar, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { LegoButton } from "@/components/LegoButton";
+import { CalendarGrid } from "@/components/booking/CalendarGrid";
 
 export default function Holiday() {
   return (
-    <div className="flex flex-col w-full min-h-[calc(100vh-80px)] bg-charcoal text-white overflow-hidden relative pb-20 md:pb-32 lg:pb-40 -mb-20 md:-mb-32 lg:-mb-40">
+    <div className="flex flex-col w-full">
+      {/* Hero */}
+      <section className="bg-charcoal text-white overflow-hidden relative">
       <div className="absolute inset-0 bg-brick-pattern opacity-10 pointer-events-none"></div>
 
-      <div className="container mx-auto px-4 py-16 md:py-24 relative z-10 flex-grow flex items-center justify-center">
+      <div className="container mx-auto px-4 py-16 md:py-24 relative z-10 flex items-center justify-center">
         <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
           <motion.div
@@ -26,9 +29,23 @@ export default function Holiday() {
             </p>
 
             <div className="flex flex-wrap gap-3">
+              <a
+                href="https://forms.gle/cD8ZQ5oT7Pzq1djG9"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <LegoButton variant="orange" data-testid="button-enrol-holiday">
+                  Enrolment Form
+                </LegoButton>
+              </a>
               <a href="tel:0212700301">
-                <LegoButton variant="orange" data-testid="button-call-dan">
+                <LegoButton variant="white" data-testid="button-call-dan">
                   <span className="flex items-center gap-2"><Phone size={14} /> Call 021 270 0301</span>
+                </LegoButton>
+              </a>
+              <a href="mailto:info@brickengaged.org">
+                <LegoButton variant="charcoal" data-testid="button-email-holiday">
+                  <span className="flex items-center gap-2"><Mail size={14} /> Email Us</span>
                 </LegoButton>
               </a>
               <a href="sms:0212700301">
@@ -37,7 +54,7 @@ export default function Holiday() {
                 </LegoButton>
               </a>
             </div>
-            <p className="mt-6 text-sm font-medium text-white/70">Limited to four kids per day! Register for as many days as you like.</p>
+            <p className="mt-6 text-sm font-medium text-white/70">Limited to 10 kids per day! Register for as many days as you like.</p>
           </motion.div>
 
           <motion.div
@@ -47,7 +64,7 @@ export default function Holiday() {
           >
             <div className="bg-white text-charcoal rounded-3xl p-8 md:p-10 shadow-2xl relative">
               <div className="absolute -top-4 -right-4 md:-top-5 md:-right-5 bg-lego-orange text-charcoal w-20 h-20 md:w-24 md:h-24 rounded-2xl flex flex-col items-center justify-center font-black rotate-6 shadow-xl">
-                <span className="text-2xl">$110</span>
+                <span className="text-2xl">$115</span>
                 <span className="text-xs">per day</span>
               </div>
 
@@ -93,6 +110,39 @@ export default function Holiday() {
 
         </div>
       </div>
+      </section>
+
+      {/* Availability calendar (Phase 1: read-only) */}
+      <section className="bg-slate-50 py-16 md:py-24">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+            className="mb-8 text-center"
+          >
+            <div className="inline-block bg-lego-orange text-charcoal text-xs font-black px-4 py-1.5 rounded-lg mb-4 tracking-widest uppercase">
+              Live availability
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-charcoal tracking-tight mb-3" style={{ letterSpacing: '-0.02em' }}>
+              See which days are open
+            </h2>
+            <p className="text-base md:text-lg text-slate-500 font-medium">
+              Booking goes live in the next update. For now, pick a day to call or email about.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <CalendarGrid programme="holiday" monthsAhead={3} />
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }
