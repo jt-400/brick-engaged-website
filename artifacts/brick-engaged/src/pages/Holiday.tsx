@@ -1,9 +1,24 @@
 import { motion } from "framer-motion";
 import { Calendar, Clock, Mail, MapPin, Phone } from "lucide-react";
+import { useState } from "react";
 import { LegoButton } from "@/components/LegoButton";
-import { CalendarGrid } from "@/components/booking/CalendarGrid";
+import { CalendarGrid, type AvailabilitySlot } from "@/components/booking/CalendarGrid";
+import { BookingForm } from "@/components/booking/BookingForm";
 
 export default function Holiday() {
+  const [selectedSlot, setSelectedSlot] = useState<AvailabilitySlot | null>(
+    null,
+  );
+
+  const handleBookingComplete = (url: string) => {
+    // Redirect to Stripe Checkout
+    window.location.href = url;
+  };
+
+  const handleClearSelection = () => {
+    setSelectedSlot(null);
+  };
+
   return (
     <div className="flex flex-col w-full">
       {/* Hero */}
@@ -129,7 +144,7 @@ export default function Holiday() {
               See which days are open
             </h2>
             <p className="text-base md:text-lg text-slate-500 font-medium">
-              Booking goes live in the next update. For now, pick a day to call or email about.
+              Pick an open day below to book online.
             </p>
           </motion.div>
 
@@ -139,8 +154,45 @@ export default function Holiday() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <CalendarGrid programme="holiday" monthsAhead={3} />
+            <CalendarGrid
+              programme="holiday"
+              monthsAhead={3}
+              onSelect={setSelectedSlot}
+              selectedSlotId={selectedSlot?.slot_id ?? null}
+            />
           </motion.div>
+
+          {selectedSlot && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <BookingForm
+                slotId={selectedSlot.slot_id}
+                date={new Date(selectedSlot.starts_at).toLocaleDateString(
+                  "en-NZ",
+                  {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  },
+                )}
+                priceCents={11500}
+                onComplete={handleBookingComplete}
+              />
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={handleClearSelection}
+                  className="text-sm font-bold text-slate-400 hover:text-slate-600 underline underline-offset-2"
+                >
+                  Cancel — pick a different day
+                </button>
+              </div>
+            </motion.div>
+          )}
         </div>
       </section>
     </div>

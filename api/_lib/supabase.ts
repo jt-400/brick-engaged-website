@@ -53,3 +53,12 @@ export function sbRpc<T = unknown>(fnName: string, args: Record<string, unknown>
     service: opts.service,
   });
 }
+
+/** PATCH a resource (e.g. update a booking row). */
+export function sbPatch(path: string, body: Record<string, unknown>) {
+  return sbFetch<undefined>(path, {
+    method: "PATCH",
+    body,
+    service: true,
+  });
+}

@@ -27,6 +27,8 @@ interface CalendarGridProps {
   onSelect?: (slot: AvailabilitySlot) => void;
   /** Number of months to look ahead. Defaults to 3 — enough to cover one school holiday block. */
   monthsAhead?: number;
+  /** Currently selected slot id (for highlighting). */
+  selectedSlotId?: string | null;
 }
 
 /**

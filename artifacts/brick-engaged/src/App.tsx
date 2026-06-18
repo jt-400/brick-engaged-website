@@ -21,6 +21,7 @@ import Foundation from "@/pages/Foundation";
 import Holiday from "@/pages/Holiday";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import Confirmation from "@/pages/book/Confirmation";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ function Router() {
           <Route path="/holiday"><PageWrap><Holiday /></PageWrap></Route>
           <Route path="/about"><PageWrap><About /></PageWrap></Route>
           <Route path="/contact"><PageWrap><Contact /></PageWrap></Route>
+          <Route path="/book/confirmation/:bookingId"><PageWrap><Confirmation /></PageWrap></Route>
           <Route><PageWrap><NotFound /></PageWrap></Route>
         </Switch>
       </AnimatePresence>

@@ -1,15 +1,12 @@
--- Brick Engaged booking system — initial schema
--- Run this once in the Supabase SQL editor (or via the CLI) after creating the project.
+-- Brick Engaged booking system — initial schema (idempotent — safe to re-run).
+-- Run this in the Supabase SQL editor after creating the project.
 
--- ─────────────────────────────────────────────────────────────────────────────
--- Extensions
--- ─────────────────────────────────────────────────────────────────────────────
 create extension if not exists "pgcrypto";
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- programmes
 -- ─────────────────────────────────────────────────────────────────────────────
-create table public.programmes (
+create table if not exists public.programmes (
   id                uuid primary key default gen_random_uuid(),
   slug              text not null unique,
   type              text not null check (type in ('holiday', 'term', 'therapeutic')),
@@ -25,7 +22,7 @@ create table public.programmes (
 -- ─────────────────────────────────────────────────────────────────────────────
 -- slots — one row per bookable date (or term)
 -- ─────────────────────────────────────────────────────────────────────────────
-create table public.slots (
+create table if not exists public.slots (
   id                  uuid primary key default gen_random_uuid(),
   programme_id        uuid not null references public.programmes(id) on delete cascade,
   starts_at           timestamptz not null,
@@ -37,12 +34,12 @@ create table public.slots (
   unique (programme_id, starts_at)
 );
 
-create index slots_programme_starts_idx on public.slots (programme_id, starts_at);
+create index if not exists slots_programme_starts_idx on public.slots (programme_id, starts_at);
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- bookings
 -- ─────────────────────────────────────────────────────────────────────────────
-create table public.bookings (
+create table if not exists public.bookings (
   id                      uuid primary key default gen_random_uuid(),
   slot_id                 uuid references public.slots(id) on delete set null,
   programme_id            uuid not null references public.programmes(id) on delete restrict,
@@ -62,14 +59,14 @@ create table public.bookings (
   created_at              timestamptz not null default now()
 );
 
-create index bookings_slot_status_idx on public.bookings (slot_id, status);
-create index bookings_programme_idx   on public.bookings (programme_id);
-create index bookings_created_idx     on public.bookings (created_at desc);
+create index if not exists bookings_slot_status_idx on public.bookings (slot_id, status);
+create index if not exists bookings_programme_idx   on public.bookings (programme_id);
+create index if not exists bookings_created_idx     on public.bookings (created_at desc);
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- admins allowlist — emails permitted to access /admin via Supabase magic link
 -- ─────────────────────────────────────────────────────────────────────────────
-create table public.admins (
+create table if not exists public.admins (
   email       text primary key,
   created_at  timestamptz not null default now()
 );
@@ -148,7 +145,6 @@ declare
   v_amount_cents  integer;
   v_booking_id    uuid;
 begin
-  -- Lock the slot row to serialise concurrent bookings
   select s.programme_id,
          coalesce(s.capacity_override, p.default_capacity),
          p.price_cents
@@ -194,37 +190,33 @@ $$;
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- Row Level Security — deny-by-default; explicit policies follow.
--- The anon key may only call the SECURITY DEFINER RPCs above and read
--- programmes (public marketing data). Service-role key bypasses RLS for the
--- serverless functions that need direct table access.
 -- ─────────────────────────────────────────────────────────────────────────────
 alter table public.programmes enable row level security;
 alter table public.slots      enable row level security;
 alter table public.bookings   enable row level security;
 alter table public.admins     enable row level security;
 
--- Programmes: public read of active rows (for the marketing site)
+drop policy if exists "programmes_public_read" on public.programmes;
 create policy "programmes_public_read"
   on public.programmes
   for select
   using (active = true);
 
--- Slots, bookings, admins: no anon access. The serverless functions use the
--- service-role key (which bypasses RLS) for any direct reads/writes.
-
--- Authenticated admins can read everything (used by /admin once Supabase auth lands)
+drop policy if exists "admins_read_programmes" on public.programmes;
 create policy "admins_read_programmes"
   on public.programmes
   for select
   to authenticated
   using (exists (select 1 from public.admins a where a.email = auth.email()));
 
+drop policy if exists "admins_read_slots" on public.slots;
 create policy "admins_read_slots"
   on public.slots
   for select
   to authenticated
   using (exists (select 1 from public.admins a where a.email = auth.email()));
 
+drop policy if exists "admins_read_bookings" on public.bookings;
 create policy "admins_read_bookings"
   on public.bookings
   for select
@@ -232,7 +224,7 @@ create policy "admins_read_bookings"
   using (exists (select 1 from public.admins a where a.email = auth.email()));
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Seed: the three programmes from the existing site copy
+-- Seed: the four programmes from the existing site copy
 -- ─────────────────────────────────────────────────────────────────────────────
 insert into public.programmes (slug, type, title, description, price_cents, default_capacity, location)
 values
