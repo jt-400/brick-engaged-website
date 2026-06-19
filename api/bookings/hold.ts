@@ -94,7 +94,8 @@ export default async function handler(req: ReqLike, res: ResLike) {
     };
   } catch (err) {
     console.error("[bookings/hold] slot lookup failed", err);
-    return res.status(500).json({ error: "lookup_failed" });
+    const msg = err instanceof Error ? err.message : String(err);
+    return res.status(500).json({ error: "lookup_failed", detail: msg.slice(0, 300) });
   }
 
   // 2. Atomic capacity check + insert pending booking.
