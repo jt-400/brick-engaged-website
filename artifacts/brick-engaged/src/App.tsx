@@ -27,6 +27,10 @@ import BrickClub from "@/pages/sessions/BrickClub";
 import HomeSchoolers from "@/pages/sessions/HomeSchoolers";
 import PeerToPeer from "@/pages/sessions/PeerToPeer";
 import OneToOne from "@/pages/sessions/OneToOne";
+import AccountLogin from "@/pages/account/Login";
+import AccountDashboard from "@/pages/account/Dashboard";
+import AccountBookings from "@/pages/account/Bookings";
+import AccountProfile from "@/pages/account/Profile";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +66,10 @@ function Router() {
           <Route path="/contact"><PageWrap><Contact /></PageWrap></Route>
           <Route path="/book/holiday"><PageWrap><BookHoliday /></PageWrap></Route>
           <Route path="/book/confirmation/:bookingId"><PageWrap><Confirmation /></PageWrap></Route>
+          <Route path="/account/login"><PageWrap><AccountLogin /></PageWrap></Route>
+          <Route path="/account"><PageWrap><AccountDashboard /></PageWrap></Route>
+          <Route path="/account/bookings"><PageWrap><AccountBookings /></PageWrap></Route>
+          <Route path="/account/profile"><PageWrap><AccountProfile /></PageWrap></Route>
           <Route><PageWrap><NotFound /></PageWrap></Route>
         </Switch>
       </AnimatePresence>

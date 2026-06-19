@@ -10,7 +10,21 @@ const NAV_LINKS = [
   { href: "/foundation", label: "Foundation" },
   { href: "/holiday", label: "Holidays" },
   { href: "/about", label: "About Dan" },
+  { href: "/account", label: "My Account" },
 ];
+
+function MobileNavLink({ href, label, onClick }: { href: string; label: string; onClick: () => void }) {
+  return (
+    <Link href={href}>
+      <span
+        onClick={onClick}
+        className="cursor-pointer block px-4 py-3 rounded-lg font-bold text-base text-white hover:bg-white/10 transition-colors"
+      >
+        {label}
+      </span>
+    </Link>
+  );
+}
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -135,14 +149,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           >
             <nav className="flex flex-col gap-1 p-4 pt-6">
               {[...NAV_LINKS, { href: "/contact", label: "Contact Us" }].map(({ href, label }) => (
-                <Link key={href} href={href}>
-                  <span
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="cursor-pointer block px-4 py-3 rounded-lg font-bold text-base text-white hover:bg-white/10 transition-colors"
-                  >
-                    {label}
-                  </span>
-                </Link>
+                <MobileNavLink key={href} href={href} label={label} onClick={() => setIsMobileMenuOpen(false)} />
               ))}
             </nav>
           </motion.aside>
