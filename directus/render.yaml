@@ -1,0 +1,42 @@
+# Brick Engaged Admin CMS — Directus
+# One-click deploy to Render or Railway
+#
+# Connects to the existing Supabase Postgres database.
+# After deploying:
+#   1. Open the app URL and create the admin account
+#   2. Go to Settings → Database → configure collections to mirror
+#      your Supabase tables (programmes, slots, bookings, profiles, children)
+#   3. Set up user roles: Admin (Dan) with full access
+
+services:
+  # Directus CMS backend
+  - type: web
+    name: brick-engaged-admin
+    env: docker
+    dockerfilePath: ./directus/Dockerfile
+    repo: https://github.com/jt-400/brick-engaged-website
+    branch: main
+    healthCheckPath: /server/health
+    envVars:
+      - key: KEY
+        value: brick-engaged-directus-key-change-me
+      - key: SECRET
+        value: brick-engaged-directus-secret-change-me
+      - key: DB_CLIENT
+        value: pg
+      - key: DB_HOST
+        value: ${SUPABASE_DB_HOST}
+      - key: DB_PORT
+        value: "6543"
+      - key: DB_DATABASE
+        value: postgres
+      - key: DB_USER
+        value: postgres
+      - key: DB_PASSWORD
+        value: ${SUPABASE_DB_PASSWORD}
+      - key: PUBLIC_URL
+        value: https://brick-engaged-admin.onrender.com
+      - key: ADMIN_EMAIL
+        value: dan@brickengaged.org
+      - key: ADMIN_PASSWORD
+        value: ${DIRECTUS_ADMIN_PASSWORD}

@@ -1,0 +1,37 @@
+# Directus admin CMS for Brick Engaged
+# Connects to the existing Supabase Postgres database
+#
+# Usage:
+#   1. Copy .env.example to .env and fill in your Supabase credentials
+#   2. docker compose up -d
+#   3. Open http://localhost:8055 and create your admin account
+#   4. Configure the collections to mirror your Supabase tables
+
+version: "3.8"
+
+services:
+  directus:
+    image: directus/directus:11
+    ports:
+      - "8055:8055"
+    volumes:
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+    environment:
+      KEY: "brick-engaged-directus-key-change-me"
+      SECRET: "brick-engaged-directus-secret-change-me"
+
+      # Connect to your existing Supabase Postgres
+      DB_CLIENT: "pg"
+      DB_HOST: "${SUPABASE_DB_HOST}"
+      DB_PORT: "6543"
+      DB_DATABASE: "postgres"
+      DB_USER: "postgres"
+      DB_PASSWORD: "${SUPABASE_DB_PASSWORD}"
+
+      # Directus defaults
+      PUBLIC_URL: "http://localhost:8055"
+      ADMIN_EMAIL: "dan@brickengaged.org"
+      ADMIN_PASSWORD: "${DIRECTUS_ADMIN_PASSWORD}"
+
+    restart: unless-stopped
