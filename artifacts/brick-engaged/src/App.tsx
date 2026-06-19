@@ -25,7 +25,8 @@ import BookHoliday from "@/pages/book/Holiday";
 import Confirmation from "@/pages/book/Confirmation";
 import BrickClub from "@/pages/sessions/BrickClub";
 import HomeSchoolers from "@/pages/sessions/HomeSchoolers";
-import Therapeutic from "@/pages/sessions/Therapeutic";
+import PeerToPeer from "@/pages/sessions/PeerToPeer";
+import OneToOne from "@/pages/sessions/OneToOne";
 
 const queryClient = new QueryClient();
 
@@ -52,7 +53,9 @@ function Router() {
           <Route path="/sessions"><PageWrap><Sessions /></PageWrap></Route>
           <Route path="/sessions/brick-club"><PageWrap><BrickClub /></PageWrap></Route>
           <Route path="/sessions/home-schoolers"><PageWrap><HomeSchoolers /></PageWrap></Route>
-          <Route path="/sessions/therapeutic"><PageWrap><Therapeutic /></PageWrap></Route>
+          <Route path="/sessions/peer-to-peer"><PageWrap><PeerToPeer /></PageWrap></Route>
+          <Route path="/sessions/therapeutic"><PageWrap><PeerToPeer /></PageWrap></Route>
+          <Route path="/sessions/one-to-one"><PageWrap><OneToOne /></PageWrap></Route>
           <Route path="/foundation"><PageWrap><Foundation /></PageWrap></Route>
           <Route path="/holiday"><PageWrap><Holiday /></PageWrap></Route>
           <Route path="/about"><PageWrap><About /></PageWrap></Route>

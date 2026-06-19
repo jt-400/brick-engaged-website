@@ -14,6 +14,9 @@
 
 import { sbFetch, sbPatch, sbRpc } from "../_lib/supabase";
 import { createCheckoutSession } from "../_lib/stripe";
+import { sendBookingConfirmation } from "../_lib/email";
+
+const SITE_URL = process.env.PUBLIC_SITE_URL ?? "";
 
 interface ReqLike {
   method?: string;
@@ -94,8 +97,7 @@ export default async function handler(req: ReqLike, res: ResLike) {
     };
   } catch (err) {
     console.error("[bookings/hold] slot lookup failed", err);
-    const msg = err instanceof Error ? err.message : String(err);
-    return res.status(500).json({ error: "lookup_failed", detail: msg.slice(0, 300) });
+    return res.status(500).json({ error: "lookup_failed" });
   }
 
   // 2. Atomic capacity check + insert pending booking.
@@ -123,7 +125,42 @@ export default async function handler(req: ReqLike, res: ResLike) {
     return res.status(500).json({ error: "book_failed" });
   }
 
-  // 3. Stripe Checkout session.
+  // 3a. $0 fast path — peer-to-peer / donation programmes where booking is
+  // registration only and any koha is paid in person. Skip Stripe entirely,
+  // mark the booking paid, send the confirmation email, and hand the client
+  // a direct link to the confirmation page.
+  if (slot.programmes.price_cents === 0) {
+    try {
+      await sbPatch(`/rest/v1/bookings?id=eq.${bookingId}`, {
+        status: "paid",
+        paid_at: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("[bookings/hold] failed to mark $0 booking paid", err);
+    }
+
+    try {
+      await sendBookingConfirmation({
+        to: payload.caregiver_email,
+        bookingId,
+        caregiverName: payload.caregiver_name,
+        childName: payload.child_name,
+        programmeTitle: slot.programmes.title,
+        slotLabel: formatSlotLabel(slot.starts_at, slot.ends_at),
+        amountCents: 0,
+        location: slot.programmes.location ?? "Lane Park Business Centre, Upper Hutt",
+      });
+    } catch (err) {
+      console.error("[bookings/hold] $0 confirmation email failed (booking still saved)", err);
+    }
+
+    return res.status(200).json({
+      booking_id: bookingId,
+      checkout_url: `${SITE_URL}/book/confirmation/${bookingId}`,
+    });
+  }
+
+  // 3b. Stripe Checkout session for paid programmes.
   let session: { id: string; url: string };
   try {
     session = await createCheckoutSession({

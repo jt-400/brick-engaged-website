@@ -5,17 +5,18 @@ import { fadeInUp, staggerContainer } from "@/lib/motion";
 import kidsImg from "@assets/lego_kids.webp";
 import handsImg from "@assets/lego_hands.webp";
 import therapyImg from "@assets/lego_therapy.webp";
+import bricksImg from "@assets/lego_bricks_close.webp";
 
 const PROGRAMMES = [
   {
     href: "/sessions/brick-club",
     image: kidsImg,
     alt: "Children doing Brick Club",
-    chip: { label: "Ages 7–13", bg: "bg-emerald-100", text: "text-emerald-900" },
+    chip: { label: "Ages 7–18", bg: "bg-emerald-100", text: "text-emerald-900" },
     title: "Brick Club",
     summary:
-      "Weekly group for kids building friendships, focus, and confidence. Designed for ADHD, autistic, and neurodivergent kids — works for everyone.",
-    facts: ["10-week term", "$299", "Up to 10 kids"],
+      "Afterschool programme where kids build, learn, and create their own mini masterpieces. Particularly well suited to neurodivergent kids who love LEGO®.",
+    facts: ["10-week term", "$299", "Max 8–10 kids"],
   },
   {
     href: "/sessions/home-schoolers",
@@ -24,18 +25,28 @@ const PROGRAMMES = [
     chip: { label: "Mixed ages", bg: "bg-amber-100", text: "text-amber-900" },
     title: "Home schoolers sessions",
     summary:
-      "STEAM-themed weekly group for home-schooled kids. Maths, physics, environment, arts — built, not lectured.",
-    facts: ["10-week term", "$150", "Min 5 · Max 12"],
+      "Explore learning through the practical application of LEGO® building and play. Maths, sciences, arts, environment — built, shared, refined.",
+    facts: ["10-week term · 2 hours weekly", "$150", "Min 5 · Max 12"],
   },
   {
-    href: "/sessions/therapeutic",
+    href: "/sessions/peer-to-peer",
     image: therapyImg,
-    alt: "Adult building LEGO mindfully",
-    chip: { label: "Ages 15+", bg: "bg-sky-100", text: "text-sky-900" },
-    title: "Therapeutic Use of LEGO®",
+    alt: "Adults building LEGO together",
+    chip: { label: "18+", bg: "bg-sky-100", text: "text-sky-900" },
+    title: "Peer-to-Peer Support",
     summary:
-      "Drop-in mindful-building hour for teens and adults. Quiet room, low demand, optional connection. Donation-based.",
-    facts: ["60 min · drop-in", "Koha (~$10)", "Max 10"],
+      "A casual way to relax and be mindful while building with LEGO® and talking with other like-minded people about whatever comes up.",
+    facts: ["3 weekly groups · 2 hours", "Koha ($10 suggested)", "Max 10"],
+  },
+  {
+    href: "/sessions/one-to-one",
+    image: bricksImg,
+    alt: "LEGO bricks close-up",
+    chip: { label: "All ages", bg: "bg-rose-100", text: "text-rose-900" },
+    title: "One-to-One",
+    summary:
+      "The best way to get all the attention you need. Chat-and-build, learn techniques from a LEGO® Master, or finish a project — you have it all to yourself.",
+    facts: ["1-hour booked timeslot", "By appointment", "Adults & kids"],
   },
 ];
 
@@ -59,7 +70,7 @@ export default function Sessions() {
             className="text-5xl md:text-6xl font-black mb-6 tracking-tight"
             style={{ letterSpacing: "-0.02em" }}
           >
-            Three programmes. One brick-built rhythm.
+            Four programmes. One brick-built rhythm.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -75,12 +86,12 @@ export default function Sessions() {
       </section>
 
       {/* Chooser */}
-      <section className="container mx-auto max-w-5xl px-4 mt-12 md:mt-16">
+      <section className="container mx-auto max-w-6xl px-4 mt-12 md:mt-16">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6"
         >
           {PROGRAMMES.map((p) => (
             <motion.div key={p.href} variants={fadeInUp}>
