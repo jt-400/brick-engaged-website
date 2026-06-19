@@ -9,6 +9,49 @@ import { fadeInUp, staggerContainer } from "@/lib/motion";
 import happyMinifigsImg from "@assets/lego_happy_minifigs.webp";
 import minifigsImg from "@assets/lego_minifigs.webp";
 import bricksImg from "@assets/lego_bricks_close.webp";
+import kidsImg from "@assets/lego_kids.webp";
+
+const PATHWAYS = [
+  {
+    href: "/sessions",
+    testId: "link-sessions-card",
+    image: bricksImg,
+    alt: "LEGO bricks close-up",
+    kicker: "Weekly sessions",
+    accentBg: "bg-emerald-100",
+    accentText: "text-emerald-900",
+    title: "Brick Club, Home schoolers & Therapeutic",
+    blurb:
+      "Term-long groups for kids, teens and home-schooled families building friendships, focus, and confidence — one brick at a time.",
+    chips: ["10-week terms", "From $150", "Ages 7–18"],
+  },
+  {
+    href: "/holiday",
+    testId: "link-holiday-card",
+    image: kidsImg,
+    alt: "Children playing with LEGO",
+    kicker: "School holidays",
+    accentBg: "bg-amber-100",
+    accentText: "text-amber-900",
+    title: "Holiday Programme",
+    blurb:
+      "Full-day school holiday sessions, 9am–4pm. Massive LEGO® selection, small groups, safe and inclusive environment.",
+    chips: ["Ages 8–14", "$115 / day", "Book online"],
+  },
+  {
+    href: "/foundation",
+    testId: "link-foundation-card",
+    image: minifigsImg,
+    alt: "LEGO minifigures",
+    kicker: "Charity arm",
+    accentBg: "bg-sky-100",
+    accentText: "text-sky-900",
+    title: "Brick Engaged Foundation",
+    blurb:
+      "Fully-funded sessions for neurodivergent tamariki whose whānau couldn't otherwise access them. Apply for a place or donate.",
+    chips: ["Funded sessions", "Apply or refer", "Donate"],
+  },
+];
 
 export default function Home() {
   return (
@@ -234,76 +277,75 @@ export default function Home() {
       </section>
 
 
-      {/* Pathways */}
+      {/* Pathways — 3 routes into the programme */}
       <section className="bg-white py-24 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <motion.h2
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-black text-center text-charcoal mb-14 tracking-tight"
-            style={{ letterSpacing: '-0.02em' }}
+            className="mb-14 text-center"
           >
-            Find your path
-          </motion.h2>
+            <h2
+              className="text-4xl md:text-5xl font-black text-charcoal tracking-tight mb-3"
+              style={{ letterSpacing: "-0.02em" }}
+            >
+              Find your path
+            </h2>
+            <p className="text-base md:text-lg font-medium text-slate-500 max-w-xl mx-auto">
+              Three ways into Brick Engaged. Tap one to see how it works and what's available.
+            </p>
+          </motion.div>
+
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto"
           >
-            <motion.div variants={fadeInUp}>
-              <Link href="/sessions">
-                <div
-                  className="bg-charcoal text-white rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:-rotate-1 active:scale-[1.02] transition-transform duration-300 shadow-xl"
-                  data-testid="link-sessions-card"
-                >
-                  <img src={bricksImg} alt="LEGO bricks" className="w-full h-48 object-cover" loading="lazy" decoding="async" />
-                  <div className="p-8 flex flex-col flex-1 justify-between">
-                    <div>
-                      <h3 className="text-3xl font-black mb-3">Brick Engaged Sessions</h3>
-                      <p className="text-lg opacity-80 mb-6 font-medium">
-                        Discover our specialised LEGO-based programmes tailored for different age
-                        groups and needs.
-                      </p>
+            {PATHWAYS.map((p) => (
+              <motion.div key={p.href} variants={fadeInUp}>
+                <Link href={p.href}>
+                  <div
+                    className="group h-full overflow-hidden rounded-3xl bg-white border-2 border-slate-200 cursor-pointer shadow-sm hover:shadow-2xl hover:-translate-y-1 active:translate-y-0 transition-all duration-300 flex flex-col"
+                    data-testid={p.testId}
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={p.image}
+                        alt={p.alt}
+                        className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className={`absolute top-4 left-4 ${p.accentBg} ${p.accentText} text-[10px] font-black uppercase tracking-[0.14em] px-2.5 py-1 rounded`}>
+                        {p.kicker}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 font-bold text-white">
-                      <span>Learn more</span> <ArrowRight size={20} />
+                    <div className="p-7 flex flex-col flex-1">
+                      <h3 className="text-2xl font-black text-charcoal mb-3 tracking-tight" style={{ letterSpacing: "-0.01em" }}>
+                        {p.title}
+                      </h3>
+                      <p className="text-[15px] leading-relaxed font-medium text-slate-600 mb-5">
+                        {p.blurb}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 mb-6">
+                        {p.chips.map((c) => (
+                          <span key={c} className="text-[11px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">
+                            {c}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="mt-auto flex items-center gap-2 font-black text-charcoal text-sm uppercase tracking-[0.12em]">
+                        <span>Learn more</span>
+                        <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </motion.div>
-
-            <motion.div variants={fadeInUp}>
-              <Link href="/foundation">
-                <div
-                  className="bg-lego-orange text-charcoal rounded-3xl overflow-hidden h-full flex flex-col cursor-pointer hover:scale-105 hover:rotate-1 active:scale-[1.02] transition-transform duration-300 shadow-xl"
-                  data-testid="link-foundation-card"
-                >
-                  <img
-                    src={minifigsImg}
-                    alt="LEGO minifigures"
-                    className="w-full h-48 object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div className="p-8 flex flex-col flex-1 justify-between">
-                    <div>
-                      <h3 className="text-3xl font-black mb-3">Brick Engaged Foundation</h3>
-                      <p className="text-lg opacity-90 mb-6 font-medium">
-                        Our charitable arm providing fully-funded sessions to neurodivergent
-                        children.
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 font-bold text-charcoal/70">
-                      <span>Learn more</span> <ArrowRight size={20} />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
+                </Link>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>

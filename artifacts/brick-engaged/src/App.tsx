@@ -21,7 +21,11 @@ import Foundation from "@/pages/Foundation";
 import Holiday from "@/pages/Holiday";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import BookHoliday from "@/pages/book/Holiday";
 import Confirmation from "@/pages/book/Confirmation";
+import BrickClub from "@/pages/sessions/BrickClub";
+import HomeSchoolers from "@/pages/sessions/HomeSchoolers";
+import Therapeutic from "@/pages/sessions/Therapeutic";
 
 const queryClient = new QueryClient();
 
@@ -46,10 +50,14 @@ function Router() {
         <Switch key={location} location={location}>
           <Route path="/"><PageWrap><Home /></PageWrap></Route>
           <Route path="/sessions"><PageWrap><Sessions /></PageWrap></Route>
+          <Route path="/sessions/brick-club"><PageWrap><BrickClub /></PageWrap></Route>
+          <Route path="/sessions/home-schoolers"><PageWrap><HomeSchoolers /></PageWrap></Route>
+          <Route path="/sessions/therapeutic"><PageWrap><Therapeutic /></PageWrap></Route>
           <Route path="/foundation"><PageWrap><Foundation /></PageWrap></Route>
           <Route path="/holiday"><PageWrap><Holiday /></PageWrap></Route>
           <Route path="/about"><PageWrap><About /></PageWrap></Route>
           <Route path="/contact"><PageWrap><Contact /></PageWrap></Route>
+          <Route path="/book/holiday"><PageWrap><BookHoliday /></PageWrap></Route>
           <Route path="/book/confirmation/:bookingId"><PageWrap><Confirmation /></PageWrap></Route>
           <Route><PageWrap><NotFound /></PageWrap></Route>
         </Switch>

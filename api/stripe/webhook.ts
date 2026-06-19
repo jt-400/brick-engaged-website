@@ -1,7 +1,22 @@
 // POST /api/stripe/webhook
-// Stripe sends checkout.session.completed events here.
-// Vercel needs raw body parsing for signature verification.
+//
+// Stripe posts checkout.session.completed events here. We:
+//   1. Read the RAW request body (bodyParser disabled — Stripe signs the
+//      exact bytes Stripe sent us, so re-serialising parsed JSON would break
+//      signature verification).
+//   2. Verify the Stripe-Signature header against the raw body.
+//   3. On `checkout.session.completed`, mark the matching booking `paid` and
+//      send the caregiver a confirmation email via Resend.
+//
+// We always respond 200 to a verified webhook even if our downstream work
+// errors — Stripe retries 4xx/5xx, and the booking can be repaired manually
+// from the admin panel.
 
+import { sbFetch, sbPatch } from "../_lib/supabase";
+import { verifyWebhookSignature } from "../_lib/stripe";
+import { sendBookingConfirmation } from "../_lib/email";
+
+// Vercel: disable JSON body parser so we can verify the raw signed payload.
 export const config = {
   api: {
     bodyParser: false,
@@ -17,7 +32,22 @@ type IncomingMessage = {
 type ServerResponse = {
   status: (c: number) => ServerResponse;
   json: (b: unknown) => ServerResponse;
-  end: (s?: string) => void;
+};
+
+type BookingRow = {
+  id: string;
+  caregiver_name: string;
+  caregiver_email: string;
+  child_name: string;
+  amount_cents: number;
+  slot: {
+    starts_at: string;
+    ends_at: string;
+    programmes: {
+      title: string;
+      location: string | null;
+    };
+  } | null;
 };
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
@@ -25,114 +55,118 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return res.status(405).json({ error: "method_not_allowed" });
   }
 
-  if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
-    console.error("[webhook] Stripe not configured");
-    return res.status(500).json({ error: "stripe_not_configured" });
+  // 1. Read raw body
+  let raw: string;
+  try {
+    raw = await readRawBody(req);
+  } catch (err) {
+    console.error("[webhook] read body failed", err);
+    return res.status(400).json({ error: "read_failed" });
   }
 
-  const Stripe = (await import("stripe")).default;
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2025-02-24.acacia",
-  });
+  // 2. Verify signature
+  const sigHeader = req.headers["stripe-signature"];
+  const sig = Array.isArray(sigHeader) ? sigHeader[0] : sigHeader;
 
-  // Read raw body
-  const raw = await new Promise<string>((resolve, reject) => {
-    const chunks: Buffer[] = [];
-    req.on("data", (chunk: Buffer) => chunks.push(chunk));
-    req.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
-    // Safety timeout
-    setTimeout(() => reject(new Error("timeout")), 10_000);
-  });
-
-  const sig = (req.headers["stripe-signature"] as string) ?? "";
-
-  let event: Stripe.Event;
+  let event;
   try {
-    event = stripe.webhooks.constructEvent(raw, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    event = verifyWebhookSignature(raw, sig);
   } catch (err) {
     console.error("[webhook] signature verification failed", err);
     return res.status(400).json({ error: "invalid_signature" });
   }
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-    const bookingId = session.metadata?.booking_id;
+  // 3. We only care about successful checkouts for now.
+  if (event.type !== "checkout.session.completed") {
+    return res.status(200).json({ received: true, ignored: event.type });
+  }
 
-    if (!bookingId) {
-      return res.status(200).json({ received: true });
-    }
+  const session = event.data.object as {
+    id?: string;
+    payment_intent?: string;
+    metadata?: { booking_id?: string };
+    customer_email?: string;
+  };
 
-    // Mark booking as paid
-    const { sbPatch, sbFetch } = await import("../_lib/supabase");
+  const bookingId = session.metadata?.booking_id;
+  if (!bookingId) {
+    console.warn("[webhook] checkout.session.completed missing booking_id metadata", session.id);
+    return res.status(200).json({ received: true, warning: "no_booking_id" });
+  }
 
+  // 4. Mark booking paid.
+  try {
     await sbPatch(`/rest/v1/bookings?id=eq.${bookingId}`, {
       status: "paid",
       paid_at: new Date().toISOString(),
-      stripe_payment_intent:
-        typeof session.payment_intent === "string" ? session.payment_intent : null,
+      stripe_payment_intent: typeof session.payment_intent === "string" ? session.payment_intent : null,
     });
+  } catch (err) {
+    console.error("[webhook] failed to mark booking paid", err);
+    // Don't 5xx — Stripe would retry. We've recorded the warning;
+    // admin can reconcile manually if needed.
+    return res.status(200).json({ received: true, warning: "patch_failed" });
+  }
 
-    // Send confirmation email
-    if (process.env.RESEND_API_KEY) {
-      try {
-        const bookingData = await sbFetch<any[]>(
-          `/rest/v1/bookings?id=eq.${bookingId}&select=*,slot:slot_id(starts_at,ends_at)`,
-          { service: true }
-        );
-
-        const booking = Array.isArray(bookingData) ? bookingData[0] : bookingData;
-
-        if (booking?.caregiver_email) {
-          const { Resend } = await import("resend");
-          const resend = new Resend(process.env.RESEND_API_KEY);
-
-          const slotDate = booking.slot?.starts_at
-            ? new Date(booking.slot.starts_at).toLocaleDateString("en-NZ", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                timeZone: "Pacific/Auckland",
-              })
-            : "See your booking";
-
-          await resend.emails.send({
-            from: "Brick Engaged <bookings@resend.dev>",
-            to: booking.caregiver_email,
-            subject: "Booking confirmed — Brick Engaged",
-            html: `
-              <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto;">
-                <div style="background: #f4c542; padding: 24px; border-radius: 12px 12px 0 0;">
-                  <h1 style="margin:0; color:#1E293B;">Booking Confirmed!</h1>
-                </div>
-                <div style="background: #fff; padding: 24px; border: 1px solid #e2e8f0; border-radius: 0 0 12px 12px;">
-                  <p>Hi <strong>${booking.caregiver_name}</strong>,</p>
-                  <p>Your holiday session for <strong>${booking.child_name}</strong> is confirmed.</p>
-                  <table style="width:100%; border-collapse: collapse; margin: 20px 0;">
-                    <tr><td style="padding: 8px; font-weight: bold; color: #475569;">When</td>
-                        <td style="padding: 8px;">${slotDate}</td></tr>
-                    <tr><td style="padding: 8px; font-weight: bold; color: #475569;">Time</td>
-                        <td style="padding: 8px;">9:00am – 4:00pm</td></tr>
-                    <tr><td style="padding: 8px; font-weight: bold; color: #475569;">Location</td>
-                        <td style="padding: 8px;">Lane Park Business Centre, Upper Hutt</td></tr>
-                    <tr><td style="padding: 8px; font-weight: bold; color: #475569;">Reference</td>
-                        <td style="padding: 8px; font-family: monospace;">${bookingId.slice(0, 8)}</td></tr>
-                  </table>
-                  <p style="color: #64748b; font-size: 14px;">
-                    If you have any questions, contact Dan at <strong>021 270 0301</strong> or
-                    <a href="mailto:info@brickengaged.org">info@brickengaged.org</a>.
-                  </p>
-                  <p style="color: #64748b; font-size: 14px;">See you there! 🧱</p>
-                </div>
-              </div>
-            `,
-          });
-        }
-      } catch (emailErr) {
-        console.error("[webhook] email send failed", emailErr);
-      }
+  // 5. Fetch booking + slot + programme for the confirmation email.
+  try {
+    const rows = await sbFetch<BookingRow[]>(
+      `/rest/v1/bookings?id=eq.${bookingId}&select=id,caregiver_name,caregiver_email,child_name,amount_cents,slot:slot_id(starts_at,ends_at,programmes(title,location))`,
+      { service: true },
+    );
+    const booking = rows?.[0];
+    if (booking?.caregiver_email && booking.slot) {
+      await sendBookingConfirmation({
+        to: booking.caregiver_email,
+        bookingId: booking.id,
+        caregiverName: booking.caregiver_name,
+        childName: booking.child_name,
+        programmeTitle: booking.slot.programmes.title,
+        slotLabel: formatSlotLabel(booking.slot.starts_at, booking.slot.ends_at),
+        amountCents: booking.amount_cents,
+        location: booking.slot.programmes.location ?? "Lane Park Business Centre, Upper Hutt",
+      });
+    } else {
+      console.warn("[webhook] missing booking details for confirmation email", bookingId);
     }
+  } catch (err) {
+    console.error("[webhook] confirmation email failed (booking still paid)", err);
+    // Email failure is non-fatal — booking is marked paid, admin can resend.
   }
 
   return res.status(200).json({ received: true });
+}
+
+async function readRawBody(req: IncomingMessage): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    const timer = setTimeout(() => reject(new Error("timeout")), 9_000);
+    req.on("data", (chunk) => chunks.push(chunk));
+    req.on("end", () => {
+      clearTimeout(timer);
+      resolve(Buffer.concat(chunks).toString("utf8"));
+    });
+    req.on("error" as never, (err: unknown) => {
+      clearTimeout(timer);
+      reject(err);
+    });
+  });
+}
+
+function formatSlotLabel(startsAt: string, endsAt: string): string {
+  const s = new Date(startsAt);
+  const e = new Date(endsAt);
+  const date = s.toLocaleDateString("en-NZ", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    timeZone: "Pacific/Auckland",
+  });
+  const time = (d: Date) =>
+    d.toLocaleTimeString("en-NZ", {
+      hour: "numeric",
+      hour12: true,
+      timeZone: "Pacific/Auckland",
+    });
+  return `${date} · ${time(s)}–${time(e)}`;
 }
