@@ -63,17 +63,35 @@ export default async function handler(req: ReqLike, res: ResLike) {
   }
 
   // 1. Look up slot + programme so we can build the Stripe line item.
-  //    Uses the service-role key so RLS doesn't block `slots`.
+  //    Uses a two-step fetch instead of PostgREST embeds (which may not be
+  //    available depending on Supabase project config).
   let slot: SlotRow;
   try {
-    const rows = await sbFetch<SlotRow[]>(
-      `/rest/v1/slots?id=eq.${payload.slot_id}&select=id,starts_at,ends_at,programmes(slug,title,price_cents,location)`,
+    // Step A — fetch the slot row
+    const slotRows = await sbFetch<Array<{ id: string; starts_at: string; ends_at: string; programme_id: string }>>(
+      `/rest/v1/slots?id=eq.${payload.slot_id}&select=id,starts_at,ends_at,programme_id`,
       { service: true },
     );
-    if (!rows || rows.length === 0) {
+    if (!slotRows || slotRows.length === 0) {
       return res.status(404).json({ error: "slot_not_found" });
     }
-    slot = rows[0];
+    const sr = slotRows[0];
+
+    // Step B — fetch the programme
+    const progRows = await sbFetch<Array<{ slug: string; title: string; price_cents: number; location: string | null }>>(
+      `/rest/v1/programmes?id=eq.${sr.programme_id}&select=slug,title,price_cents,location`,
+      { service: true },
+    );
+    if (!progRows || progRows.length === 0) {
+      return res.status(500).json({ error: "programme_not_found" });
+    }
+
+    slot = {
+      id: sr.id,
+      starts_at: sr.starts_at,
+      ends_at: sr.ends_at,
+      programmes: progRows[0],
+    };
   } catch (err) {
     console.error("[bookings/hold] slot lookup failed", err);
     return res.status(500).json({ error: "lookup_failed" });
