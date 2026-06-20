@@ -4,6 +4,19 @@
   "buildCommand": "pnpm --filter @workspace/brick-engaged run build",
   "outputDirectory": "artifacts/brick-engaged/dist/public",
   "framework": null,
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.brickengaged.org"
+        }
+      ],
+      "destination": "https://brickengaged.org/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/" }
