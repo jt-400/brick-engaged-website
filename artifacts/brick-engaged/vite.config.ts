@@ -9,12 +9,17 @@ const basePath = process.env.BASE_PATH || "/";
 export default defineConfig({
   base: basePath,
   plugins: [react(), tailwindcss()],
+  // Sanity Studio's runtime references process.env at module load. Vite is
+  // strict-ESM so we polyfill an empty object to avoid ReferenceError.
+  define: {
+    "process.env": {},
+  },
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
       "@assets": path.resolve(import.meta.dirname, "..", "..", "attached_assets"),
     },
-    dedupe: ["react", "react-dom"],
+    dedupe: ["react", "react-dom", "styled-components"],
   },
   root: path.resolve(import.meta.dirname),
   build: {

@@ -2,8 +2,40 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Phone, Mail, MapPin } from "lucide-react";
 import danImg from "@assets/dan_headshot.webp";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { ABOUT_QUERY } from "@/lib/sanityQueries";
+
+interface AboutBlock {
+  _key?: string;
+  _type?: string;
+  style?: string;
+  children?: Array<{ _type?: string; text?: string }>;
+}
+interface AboutData {
+  kicker?: string;
+  title?: string;
+  subtitle?: string;
+  danBio?: AboutBlock[];
+  missionHeading?: string;
+  missionStatement?: string;
+  credentialsHeading?: string;
+  credentials?: Array<{ text: string; accent: "orange" | "charcoal" }>;
+}
+
+function renderBlock(block: AboutBlock, fallbackKey: string) {
+  const text = (block.children ?? []).map((c) => c.text ?? "").join("");
+  if (block.style === "blockquote") {
+    return (
+      <div key={block._key ?? fallbackKey} className="bg-lego-orange/8 border-l-4 border-lego-orange p-6 rounded-r-2xl text-slate-800 my-8">
+        <p>{text}</p>
+      </div>
+    );
+  }
+  return <p key={block._key ?? fallbackKey}>{text}</p>;
+}
 
 export default function About() {
+  const { data } = useSanityDoc<AboutData>("aboutPage", ABOUT_QUERY);
   return (
     <div className="flex flex-col w-full bg-slate-50 min-h-screen">
       {/* Hero */}
@@ -15,7 +47,7 @@ export default function About() {
             animate={{ opacity: 1, y: 0 }}
             className="inline-block bg-lego-orange text-charcoal text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
           >
-            Facilitator
+            {data?.kicker ?? "Facilitator"}
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -23,7 +55,7 @@ export default function About() {
             className="text-5xl md:text-6xl font-black mb-4 tracking-tight"
             style={{ letterSpacing: '-0.02em' }}
           >
-            About Dan
+            {data?.title ?? "About Dan"}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -31,7 +63,7 @@ export default function About() {
             transition={{ delay: 0.2 }}
             className="text-xl font-medium text-white/80"
           >
-            Daniel Mulholland — Facilitator (He/Him)
+            {data?.subtitle ?? "Daniel Mulholland — Facilitator (He/Him)"}
           </motion.p>
         </div>
       </section>
@@ -99,52 +131,53 @@ export default function About() {
           </h3>
 
           <div className="space-y-6 text-lg text-slate-700 leading-relaxed font-medium">
-            <p>
-              I joined the NZ Army as a Medic at 17. When I left the Army, I traveled overseas with
-              my wife before finally settling in Upper Hutt where we started our family and raised
-              our three children. I worked in Emergency Services (Paramedic) and Allied Health
-              (Laboratory) for nearly 20 years. I have gained vast experience in life and social
-              skills, managing people, developing education and communication.
-            </p>
-
-            <p>
-              LEGO became an important part of my life again in 2014. My passion for LEGO and
-              sharing the experience of LEGO Play has provided me with many opportunities. I started
-              a LEGO User Group (LUG) in Wellington which is still thriving today (Well-LUG). After
-              five years as the LUG's President, I stepped down to pursue another direction, Content
-              Creation which went on to become New Zealand's only Recognized LEGO Fan Media (RLFM)
-              with Between the Bricks.
-            </p>
-
-            <div className="bg-lego-orange/8 border-l-4 border-lego-orange p-6 rounded-r-2xl text-slate-800 my-8">
-              <p>
-                Around the same time as starting Between the Bricks, I had a Mental Health Crisis
-                and was diagnosed with PTSD. LEGO now became part of my therapy and recovery
-                playing a very important role in my rehabilitation. This experience has shaped me
-                and who I am today and the direction I wish to take for the rest of my life.
-              </p>
-            </div>
-
-            <p>
-              I started working on the Brick Engaged concept in mid 2021, completing training in
-              LEGO Serious Play®, LEGO-Based Therapy then furthering this in 2022 with
-              Brick-by-Brick® facilitator training. In 2023, to ensure we remain accessible to all
-              children and families no matter their financial situation I formed Brick Engaged
-              Foundation a charity whose sole aim is to seek funding that will enable more children
-              to have access to the service.
-            </p>
+            {data?.danBio?.length ? (
+              data.danBio.map((block, i) => renderBlock(block, `bio-${i}`))
+            ) : (
+              <>
+                <p>
+                  I joined the NZ Army as a Medic at 17. When I left the Army, I traveled overseas with
+                  my wife before finally settling in Upper Hutt where we started our family and raised
+                  our three children. I worked in Emergency Services (Paramedic) and Allied Health
+                  (Laboratory) for nearly 20 years. I have gained vast experience in life and social
+                  skills, managing people, developing education and communication.
+                </p>
+                <p>
+                  LEGO became an important part of my life again in 2014. My passion for LEGO and
+                  sharing the experience of LEGO Play has provided me with many opportunities. I started
+                  a LEGO User Group (LUG) in Wellington which is still thriving today (Well-LUG). After
+                  five years as the LUG's President, I stepped down to pursue another direction, Content
+                  Creation which went on to become New Zealand's only Recognized LEGO Fan Media (RLFM)
+                  with Between the Bricks.
+                </p>
+                <div className="bg-lego-orange/8 border-l-4 border-lego-orange p-6 rounded-r-2xl text-slate-800 my-8">
+                  <p>
+                    Around the same time as starting Between the Bricks, I had a Mental Health Crisis
+                    and was diagnosed with PTSD. LEGO now became part of my therapy and recovery
+                    playing a very important role in my rehabilitation. This experience has shaped me
+                    and who I am today and the direction I wish to take for the rest of my life.
+                  </p>
+                </div>
+                <p>
+                  I started working on the Brick Engaged concept in mid 2021, completing training in
+                  LEGO Serious Play®, LEGO-Based Therapy then furthering this in 2022 with
+                  Brick-by-Brick® facilitator training. In 2023, to ensure we remain accessible to all
+                  children and families no matter their financial situation I formed Brick Engaged
+                  Foundation a charity whose sole aim is to seek funding that will enable more children
+                  to have access to the service.
+                </p>
+              </>
+            )}
 
             <div className="mt-8 p-8 bg-charcoal text-white rounded-2xl">
               <h4
                 className="text-2xl font-black mb-3 tracking-tight"
                 style={{ letterSpacing: '-0.02em' }}
               >
-                Our Mission
+                {data?.missionHeading ?? "Our Mission"}
               </h4>
               <p className="text-xl font-medium text-white/85">
-                Our mission is to facilitate fun, meaningful social interactions, learning and
-                support for Neurodivergent people through building with LEGO® Bricks in a safe and
-                inclusive environment.
+                {data?.missionStatement ?? "Our mission is to facilitate fun, meaningful social interactions, learning and support for Neurodivergent people through building with LEGO® Bricks in a safe and inclusive environment."}
               </p>
             </div>
 
@@ -153,30 +186,24 @@ export default function About() {
                 className="text-xl font-black text-charcoal mb-5 tracking-tight"
                 style={{ letterSpacing: '-0.02em' }}
               >
-                Credentials
+                {data?.credentialsHeading ?? "Credentials"}
               </h4>
               <div className="flex flex-wrap gap-3">
-                <Badge
-                  variant="outline"
-                  className="text-sm py-2 px-4 border-lego-orange text-charcoal bg-lego-orange/15 rounded-lg font-bold"
-                  data-testid="badge-lego-sp"
-                >
-                  Certified Facilitator — LEGO® SERIOUS PLAY®
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className="text-sm py-2 px-4 border-charcoal text-charcoal bg-charcoal/5 rounded-lg font-bold"
-                  data-testid="badge-lego-therapy"
-                >
-                  LEGO-Based Therapy Facilitator Training
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className="text-sm py-2 px-4 border-lego-orange text-charcoal bg-lego-orange/15 rounded-lg font-bold"
-                  data-testid="badge-bbk"
-                >
-                  Brick-by-Brick® Programme Foundation Course
-                </Badge>
+                {(data?.credentials?.length ? data.credentials : [
+                  { text: "Certified Facilitator — LEGO® SERIOUS PLAY®", accent: "orange" as const },
+                  { text: "LEGO-Based Therapy Facilitator Training", accent: "charcoal" as const },
+                  { text: "Brick-by-Brick® Programme Foundation Course", accent: "orange" as const },
+                ]).map((cred) => (
+                  <Badge
+                    key={cred.text}
+                    variant="outline"
+                    className={cred.accent === "charcoal"
+                      ? "text-sm py-2 px-4 border-charcoal text-charcoal bg-charcoal/5 rounded-lg font-bold"
+                      : "text-sm py-2 px-4 border-lego-orange text-charcoal bg-lego-orange/15 rounded-lg font-bold"}
+                  >
+                    {cred.text}
+                  </Badge>
+                ))}
               </div>
             </div>
           </div>

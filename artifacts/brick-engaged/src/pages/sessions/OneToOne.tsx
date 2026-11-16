@@ -6,6 +6,18 @@ import { CategoryHero } from "@/components/category/CategoryHero";
 import { TrustStrip } from "@/components/category/TrustStrip";
 import { FAQ } from "@/components/category/FAQ";
 import { CategoryCta } from "@/components/category/CategoryCta";
+import { OneToOneBooking } from "@/components/booking/OneToOneBooking";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { PROGRAMME_QUERY } from "@/lib/sanityQueries";
+
+interface ProgrammeData {
+  kicker?: string; title?: string; subtitle?: string;
+  heroPrice?: string; heroPriceCadence?: string;
+  heroFacts?: Array<{ label: string; value: string }>;
+  trustStripKicker?: string;
+  trustStripStats?: Array<{ value: string; label: string }>;
+  faqs?: Array<{ q: string; a: string }>;
+}
 
 const PERFECT_FOR = [
   {
@@ -29,20 +41,23 @@ const PERFECT_FOR = [
 ];
 
 export default function OneToOne() {
+  const { data } = useSanityDoc<ProgrammeData>("programme-one-to-one", PROGRAMME_QUERY, { slug: "one-to-one" });
   return (
     <div className="flex flex-col w-full">
       <CategoryHero
-        kicker="By appointment · 1-hour timeslot"
-        title="One-to-One"
-        tagline="The best way to get all the attention you need. Whether you just want to chat while building, or learn new techniques from LEGO® Masters NZ Finalist Dan, you have it all to yourself."
-        facts={[
+        kicker={data?.kicker ?? "By appointment · 1-hour timeslot"}
+        title={data?.title ?? "One-to-One"}
+        tagline={data?.subtitle ?? "The best way to get all the attention you need. Whether you just want to chat while building, or learn new techniques from LEGO® Masters NZ Finalist Dan, you have it all to yourself."}
+        facts={data?.heroFacts?.length ? data.heroFacts : [
           { label: "Ages", value: "All ages" },
           { label: "Format", value: "1-hour booked slot" },
+          { label: "Price", value: "$45 per session" },
           { label: "With", value: "Dan Mulholland — LEGO® Masters NZ S1 Finalist" },
-          { label: "Access to", value: "Thousands of sets · tens of thousands of bricks" },
           { label: "Location", value: "Lane Park Business Centre, Upper Hutt" },
         ]}
-        primaryCta={{ label: "Send an enquiry", href: "/contact" }}
+        price={data?.heroPrice ?? "$45"}
+        priceCadence={data?.heroPriceCadence ?? "per session"}
+        primaryCta={{ label: "Book a session", anchor: "book" }}
         secondaryCta={{ label: "Email Dan", href: "mailto:info@brickengaged.org", external: true }}
       />
 
@@ -119,8 +134,8 @@ export default function OneToOne() {
       </section>
 
       <TrustStrip
-        kicker="With"
-        stats={[
+        kicker={data?.trustStripKicker ?? "With"}
+        stats={data?.trustStripStats?.length ? data.trustStripStats : [
           { value: "LMNZ S1", label: "LEGO® Masters NZ Finalist" },
           { value: "12+ yrs", label: "Of LEGO® experience" },
           { value: "1 hour", label: "Booked timeslot" },
@@ -129,14 +144,14 @@ export default function OneToOne() {
       />
 
       <FAQ
-        items={[
+        items={data?.faqs?.length ? data.faqs : [
           {
             q: "How long are the sessions?",
-            a: "Sessions are booked for a one-hour timeslot. See the calendar (coming next) for available days and times — or send Dan a message to discuss the slot you're after.",
+            a: "Sessions are booked for a one-hour timeslot. Use the calendar below to pick a time that works for you.",
           },
           {
             q: "What does it cost?",
-            a: "Pricing depends on the type of session — chat-and-build, tutoring, or project work. Send a quick note about what you're after and Dan will confirm the cost.",
+            a: "$45 per session. Payment is taken securely via Stripe at the time of booking — same as any other paid session on the site.",
           },
           {
             q: "Can I bring my own set or project to work on?",
@@ -147,15 +162,21 @@ export default function OneToOne() {
             a: "No — all ages. Plenty of kids book One-to-One sessions to level up their building, learn techniques, or work on something specific. Parents are welcome to stay or step out.",
           },
           {
+            q: "Available days?",
+            a: "Mondays, Tuesdays, and Wednesdays only for now. Thursdays and Fridays are closed. The booking calendar below shows every open time over the next 12 weeks.",
+          },
+          {
             q: "How do I book?",
-            a: "Send Dan a quick message with what you'd like to do and roughly when. The booking calendar for One-to-One is coming in the next update.",
+            a: "Pick a day and time below, fill in your details, and pay $45 via Stripe. You'll get a confirmation email straight away.",
           },
         ]}
       />
 
+      <OneToOneBooking priceCents={4500} />
+
       <CategoryCta
-        heading="Tell Dan what you're after"
-        body="A chat-and-build, a tutoring session, or help finishing a project — drop a quick note with the rough shape and timing and Dan will sort the details."
+        heading="Need a different time?"
+        body="Thursday and Friday are closed for now. If none of the open times work, send Dan a note with what you're after and we'll figure it out."
         primary={{ label: "Send an enquiry", href: "/contact" }}
         secondary={{ label: "Back to sessions", href: "/sessions" }}
       />

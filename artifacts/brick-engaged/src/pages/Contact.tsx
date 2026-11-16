@@ -17,6 +17,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { CONTACT_QUERY } from "@/lib/sanityQueries";
+
+interface ContactData { title?: string; subtitle?: string; introCopy?: string }
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -27,14 +31,35 @@ const formSchema = z.object({
 
 export default function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const { data } = useSanityDoc<ContactData>("contactPage", CONTACT_QUERY);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { name: "", email: "", subject: "", message: "" },
   });
 
-  function onSubmit(_values: z.infer<typeof formSchema>) {
-    setIsSubmitted(true);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error ?? `HTTP ${res.status}`);
+      }
+      setIsSubmitted(true);
+      form.reset();
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Something went wrong — please try again or email info@brickengaged.org directly.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -56,7 +81,7 @@ export default function Contact() {
             className="text-5xl md:text-6xl font-black mb-4 tracking-tight"
             style={{ letterSpacing: '-0.02em' }}
           >
-            Let's talk
+            {data?.title ?? "Let's talk"}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -64,7 +89,7 @@ export default function Contact() {
             transition={{ delay: 0.2 }}
             className="text-xl font-medium text-white/80"
           >
-            We'd love to hear from you
+            {data?.subtitle ?? "We'd love to hear from you"}
           </motion.p>
         </div>
       </section>
@@ -224,12 +249,18 @@ export default function Contact() {
                         </FormItem>
                       )}
                     />
+                    {submitError && (
+                      <div className="rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm font-medium p-3">
+                        {submitError}
+                      </div>
+                    )}
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full bg-lego-orange hover:bg-charcoal text-charcoal hover:text-white rounded-lg font-bold h-14 text-lg mt-4 transition-colors"
+                      disabled={submitting}
+                      className="w-full bg-lego-orange hover:bg-charcoal text-charcoal hover:text-white rounded-lg font-bold h-14 text-lg mt-4 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                      Submit <Send className="ml-2" size={18} />
+                      {submitting ? "Sending…" : (<>Submit <Send className="ml-2" size={18} /></>)}
                     </Button>
                   </form>
                 </Form>

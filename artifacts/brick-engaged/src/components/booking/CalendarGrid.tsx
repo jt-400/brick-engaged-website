@@ -11,6 +11,8 @@ export type AvailabilitySlot = {
   capacity: number;
   remaining: number;
   status: "open" | "closed" | "full";
+  /** Human-readable label written by admin — e.g. "T3 2026 · Mondays 4–5:30pm · 7–11 yrs". */
+  notes?: string | null;
 };
 
 type AvailabilityResponse = {

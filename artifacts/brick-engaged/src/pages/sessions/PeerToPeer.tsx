@@ -8,6 +8,22 @@ import { TrustStrip } from "@/components/category/TrustStrip";
 import { FAQ } from "@/components/category/FAQ";
 import { CategoryCta } from "@/components/category/CategoryCta";
 import { PeerToPeerBooking } from "@/components/booking/PeerToPeerBooking";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { PROGRAMME_QUERY } from "@/lib/sanityQueries";
+
+interface ProgrammeData {
+  kicker?: string; title?: string; subtitle?: string;
+  heroPrice?: string; heroPriceCadence?: string;
+  heroFacts?: Array<{ label: string; value: string }>;
+  trustStripKicker?: string;
+  trustStripStats?: Array<{ value: string; label: string }>;
+  groupsByDayHeading?: string;
+  groupsByDayIntro?: string;
+  groupsByDay?: Array<{ day: string; name: string; kicker?: string; description?: string }>;
+  outcomesHeading?: string; outcomesIntro?: string;
+  outcomes?: Array<{ title: string; body: string }>;
+  faqs?: Array<{ q: string; a: string }>;
+}
 
 const GROUPS = [
   {
@@ -49,13 +65,14 @@ const PARTICIPATION_OPTIONS = [
 ];
 
 export default function PeerToPeer() {
+  const { data } = useSanityDoc<ProgrammeData>("programme-peer-to-peer", PROGRAMME_QUERY, { slug: "peer-to-peer" });
   return (
     <div className="flex flex-col w-full">
       <CategoryHero
-        kicker="Drop-in · 2-hour sessions"
-        title="Peer-to-Peer Support"
-        tagline="A casual way to relax and be mindful while building with LEGO® and talking with other like-minded people about whatever comes up."
-        facts={[
+        kicker={data?.kicker ?? "Drop-in · 2-hour sessions"}
+        title={data?.title ?? "Peer-to-Peer Support"}
+        tagline={data?.subtitle ?? "A casual way to relax and be mindful while building with LEGO® and talking with other like-minded people about whatever comes up."}
+        facts={data?.heroFacts?.length ? data.heroFacts : [
           { label: "Ages", value: "18+" },
           { label: "Group size", value: "Max 10" },
           { label: "Format", value: "Drop-in · 2 hours · weekly" },
@@ -113,11 +130,10 @@ export default function PeerToPeer() {
               className="text-3xl md:text-4xl font-black text-charcoal tracking-tight mb-3"
               style={{ letterSpacing: "-0.02em" }}
             >
-              Three groups, three nights
+              {data?.groupsByDayHeading ?? "Three groups, three nights"}
             </h2>
             <p className="text-base md:text-lg font-medium text-slate-500 leading-relaxed">
-              All three groups run weekly during term time. Drop in for the full two hours or
-              just part of it — but please book or let us know, as group size is limited.
+              {data?.groupsByDayIntro ?? "All three groups run weekly during term time. Drop in for the full two hours or just part of it — but please book or let us know, as group size is limited."}
             </p>
           </motion.div>
           <motion.div
@@ -127,7 +143,22 @@ export default function PeerToPeer() {
             variants={staggerContainer}
             className="grid grid-cols-1 md:grid-cols-3 gap-5"
           >
-            {GROUPS.map((g) => (
+            {(data?.groupsByDay?.length
+              ? data.groupsByDay.map((g, i) => ({
+                  day: g.day,
+                  name: g.name,
+                  time: g.kicker ?? "",
+                  description: g.description ?? "Max 10 people. Drop in for some or all of the two hours. Booking required so we know to expect you.",
+                  accent: GROUPS[i % GROUPS.length]?.accent ?? "bg-sky-100 text-sky-900",
+                }))
+              : GROUPS.map((g) => ({
+                  day: g.day,
+                  name: g.name,
+                  time: g.time,
+                  description: "Max 10 people. Drop in for some or all of the two hours. Booking required so we know to expect you.",
+                  accent: g.accent,
+                }))
+            ).map((g) => (
               <motion.div
                 key={g.name}
                 variants={fadeInUp}
@@ -144,8 +175,7 @@ export default function PeerToPeer() {
                 </h3>
                 <p className="text-sm font-bold text-slate-500 mb-4">{g.time}</p>
                 <p className="text-[15px] font-medium text-slate-600 leading-relaxed">
-                  Max 10 people. Drop in for some or all of the two hours. Booking required so
-                  we know to expect you.
+                  {g.description}
                 </p>
               </motion.div>
             ))}
@@ -242,9 +272,9 @@ export default function PeerToPeer() {
 
       {/* Outcomes */}
       <OutcomeGrid
-        heading="What people come for"
-        intro="Most attendees aren't here for the LEGO® specifically — they're here for what an evening of focused, low-pressure hand-work does to a busy mind, in a room with like-minded people."
-        outcomes={[
+        heading={data?.outcomesHeading ?? "What people come for"}
+        intro={data?.outcomesIntro ?? "Most attendees aren't here for the LEGO® specifically — they're here for what an evening of focused, low-pressure hand-work does to a busy mind, in a room with like-minded people."}
+        outcomes={data?.outcomes?.length ? data.outcomes : [
           {
             title: "A genuine break from the noise",
             body: "Two hours where you don't have to be productive, articulate, or 'on'. Your hands work and your mind quiets — many people describe it as their only real downtime that week.",
@@ -265,8 +295,8 @@ export default function PeerToPeer() {
       />
 
       <TrustStrip
-        kicker="The format that works"
-        stats={[
+        kicker={data?.trustStripKicker ?? "The format that works"}
+        stats={data?.trustStripStats?.length ? data.trustStripStats : [
           { value: "Max 10", label: "Per session" },
           { value: "2 hrs", label: "Drop in any time" },
           { value: "$10 koha", label: "Suggested · pay what you can" },
@@ -275,7 +305,7 @@ export default function PeerToPeer() {
       />
 
       <FAQ
-        items={[
+        items={data?.faqs?.length ? data.faqs : [
           {
             q: "Is this therapy or counselling?",
             a: "No. Dan is a LEGO® Master and group facilitator, not a clinician. These sessions are therapeutic in their effect — calming, regulating, connecting — but they're not a substitute for therapy. They sit alongside it well.",

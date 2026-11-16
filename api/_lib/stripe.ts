@@ -52,20 +52,40 @@ export type CheckoutSession = {
   metadata?: Record<string, string>;
 };
 
-interface CreateCheckoutArgs {
-  bookingId: string;
-  programmeTitle: string;
-  slotLabel: string; // e.g. "Mon 16 Jun · 9am–4pm"
+export interface CheckoutLineItem {
+  productName: string;
+  description: string;
   amountCents: number;
+}
+
+interface CreateCheckoutArgs {
+  /**
+   * Every booking row this checkout covers. Comma-joined into Stripe metadata
+   * so the webhook can mark all of them paid on `checkout.session.completed`.
+   * One booking → single-slot path. Many → multi-day path (e.g. Holiday).
+   */
+  bookingIds: string[];
   customerEmail: string;
-  /** Where Stripe redirects on success — booking id is appended via `{CHECKOUT_SESSION_ID}` placeholder. */
-  successPath?: string; // default "/book/confirmation/{BOOKING_ID}"
-  cancelPath?: string;  // default "/book/holiday"
+  /** One line item per booking — Stripe renders each on the receipt. */
+  lineItems: CheckoutLineItem[];
+  /** Where Stripe redirects on success. Defaults to /book/confirmation/<first-booking-id>. */
+  successPath?: string;
+  cancelPath?: string;
 }
 
 export async function createCheckoutSession(args: CreateCheckoutArgs): Promise<CheckoutSession> {
-  const successPath = args.successPath ?? `/book/confirmation/${args.bookingId}`;
+  if (args.bookingIds.length === 0) {
+    throw new Error("createCheckoutSession: bookingIds must not be empty");
+  }
+  if (args.lineItems.length === 0) {
+    throw new Error("createCheckoutSession: lineItems must not be empty");
+  }
+
+  const successPath = args.successPath ?? `/book/confirmation/${args.bookingIds[0]}`;
   const cancelPath = args.cancelPath ?? `/book/holiday`;
+  // Comma-joined IDs are well under Stripe's 500-char metadata-value limit
+  // (8 UUIDs × 37 chars ≈ 296). Webhook splits on "," to mark them paid.
+  const bookingIdsCsv = args.bookingIds.join(",");
 
   const params: Record<string, unknown> = {
     mode: "payment",
@@ -75,24 +95,26 @@ export async function createCheckoutSession(args: CreateCheckoutArgs): Promise<C
     cancel_url: `${SITE_URL}${cancelPath}`,
     expires_at: Math.floor(Date.now() / 1000) + 30 * 60, // 30 min hold (Stripe minimum)
     metadata: {
-      booking_id: args.bookingId,
+      booking_ids: bookingIdsCsv,
+      // Legacy single-booking key kept for compatibility with older webhook
+      // logic; webhook prefers booking_ids when present.
+      booking_id: args.bookingIds[0],
     },
-    line_items: [
-      {
-        quantity: 1,
-        price_data: {
-          currency: "nzd",
-          unit_amount: args.amountCents,
-          product_data: {
-            name: args.programmeTitle,
-            description: args.slotLabel,
-          },
+    line_items: args.lineItems.map((li) => ({
+      quantity: 1,
+      price_data: {
+        currency: "nzd",
+        unit_amount: li.amountCents,
+        product_data: {
+          name: li.productName,
+          description: li.description,
         },
       },
-    ],
+    })),
     payment_intent_data: {
       metadata: {
-        booking_id: args.bookingId,
+        booking_ids: bookingIdsCsv,
+        booking_id: args.bookingIds[0],
       },
     },
   };

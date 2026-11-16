@@ -1,22 +1,24 @@
 // POST /api/bookings/hold
 //
-// 1. Validate the booking form payload.
-// 2. Look up the slot + its programme (for price + title on the Stripe line item).
-// 3. Atomically reserve a seat via the `book_slot` SQL function (SELECT FOR
-//    UPDATE on the slot row, capacity check, insert pending booking).
-// 4. Create a Stripe Checkout session for the slot's price.
-// 5. Persist `stripe_session_id` on the booking so the webhook can find it.
-// 6. Return `{ booking_id, checkout_url }` for the client to redirect.
-//
-// If anything after the booking insert fails we leave the booking as `pending`;
-// the 10-minute availability filter sweeps it automatically and the seat
-// becomes bookable again.
+// 1. Validate the booking payload — supports either a single `slot_id` or
+//    an array of `slot_ids` (for multi-day Holiday bookings).
+// 2. Look up every requested slot (must all belong to the same programme).
+// 3. Atomically reserve seats via the `book_slots` SQL RPC — locks each slot
+//    in deterministic order, checks capacity, inserts a pending booking per
+//    slot. If any slot is full the whole transaction rolls back.
+// 4a. $0 programmes (peer-to-peer koha) — skip Stripe, mark all bookings paid,
+//     send the confirmation email immediately.
+// 4b. Paid programmes — create one Stripe Checkout session with a line item
+//     per slot. Store the session id on every booking row.
+// 5. Return `{ booking_id, booking_ids, checkout_url }` for the client to
+//    redirect.
 
 import { sbFetch, sbPatch, sbRpc } from "../_lib/supabase";
-import { createCheckoutSession } from "../_lib/stripe";
-import { sendBookingConfirmation } from "../_lib/email";
+import { createCheckoutSession, type CheckoutLineItem } from "../_lib/stripe";
+import { sendBookingConfirmation, sendAdminBookingNotification } from "../_lib/email";
 
 const SITE_URL = process.env.PUBLIC_SITE_URL ?? "";
+const MAX_SLOTS_PER_BOOKING = 14;
 
 interface ReqLike {
   method?: string;
@@ -29,7 +31,7 @@ interface ResLike {
 }
 
 type BookingPayload = {
-  slot_id: string;
+  slot_ids: string[];
   child_name: string;
   child_age?: number;
   caregiver_name: string;
@@ -43,12 +45,14 @@ type SlotRow = {
   id: string;
   starts_at: string;
   ends_at: string;
-  programmes: {
-    slug: string;
-    title: string;
-    price_cents: number;
-    location: string | null;
-  };
+  programme_id: string;
+};
+
+type ProgrammeRow = {
+  slug: string;
+  title: string;
+  price_cents: number;
+  location: string | null;
 };
 
 export default async function handler(req: ReqLike, res: ResLike) {
@@ -57,56 +61,64 @@ export default async function handler(req: ReqLike, res: ResLike) {
     return res.status(405).json({ error: "method_not_allowed" });
   }
 
-  // Vercel auto-parses JSON when Content-Type is application/json; if a client
-  // sent a raw string we tolerate that too.
   const raw = typeof req.body === "string" ? safeJson(req.body) : req.body;
   const payload = parsePayload(raw);
   if (!payload) {
     return res.status(400).json({ error: "invalid_payload" });
   }
 
-  // 1. Look up slot + programme so we can build the Stripe line item.
-  //    Uses a two-step fetch instead of PostgREST embeds (which may not be
-  //    available depending on Supabase project config).
-  let slot: SlotRow;
+  // ───────────────────────────────────────────────────────────────────────────
+  // 1. Look up every slot + the shared programme.
+  // ───────────────────────────────────────────────────────────────────────────
+  let slots: SlotRow[];
+  let programme: ProgrammeRow;
   try {
-    // Step A — fetch the slot row
-    const slotRows = await sbFetch<Array<{ id: string; starts_at: string; ends_at: string; programme_id: string }>>(
-      `/rest/v1/slots?id=eq.${payload.slot_id}&select=id,starts_at,ends_at,programme_id`,
+    const idList = payload.slot_ids.map((id) => encodeURIComponent(id)).join(",");
+    const slotRows = await sbFetch<SlotRow[]>(
+      `/rest/v1/slots?id=in.(${idList})&select=id,starts_at,ends_at,programme_id`,
       { service: true },
     );
     if (!slotRows || slotRows.length === 0) {
       return res.status(404).json({ error: "slot_not_found" });
     }
-    const sr = slotRows[0];
+    if (slotRows.length !== payload.slot_ids.length) {
+      return res.status(404).json({ error: "slot_not_found" });
+    }
 
-    // Step B — fetch the programme
-    const progRows = await sbFetch<Array<{ slug: string; title: string; price_cents: number; location: string | null }>>(
-      `/rest/v1/programmes?id=eq.${sr.programme_id}&select=slug,title,price_cents,location`,
+    const programmeIds = new Set(slotRows.map((s) => s.programme_id));
+    if (programmeIds.size !== 1) {
+      // All slots in one booking must belong to the same programme — keeps
+      // pricing and email rendering simple, and matches every real use case.
+      return res.status(400).json({ error: "mixed_programmes" });
+    }
+    const programmeId = slotRows[0].programme_id;
+
+    const progRows = await sbFetch<ProgrammeRow[]>(
+      `/rest/v1/programmes?id=eq.${programmeId}&select=slug,title,price_cents,location`,
       { service: true },
     );
     if (!progRows || progRows.length === 0) {
       return res.status(500).json({ error: "programme_not_found" });
     }
 
-    slot = {
-      id: sr.id,
-      starts_at: sr.starts_at,
-      ends_at: sr.ends_at,
-      programmes: progRows[0],
-    };
+    // Sort slots chronologically so receipt line items and confirmation email
+    // render in the natural order ("Mon 6 Jul", "Tue 7 Jul", …).
+    slots = [...slotRows].sort((a, b) => a.starts_at.localeCompare(b.starts_at));
+    programme = progRows[0];
   } catch (err) {
     console.error("[bookings/hold] slot lookup failed", err);
     return res.status(500).json({ error: "lookup_failed" });
   }
 
-  // 2. Atomic capacity check + insert pending booking.
-  let bookingId: string;
+  // ───────────────────────────────────────────────────────────────────────────
+  // 2. Atomic capacity check + insert one pending booking per slot.
+  // ───────────────────────────────────────────────────────────────────────────
+  let bookingIds: string[];
   try {
-    bookingId = await sbRpc<string>(
-      "book_slot",
+    bookingIds = await sbRpc<string[]>(
+      "book_slots",
       {
-        p_slot_id: payload.slot_id,
+        p_slot_ids: payload.slot_ids,
         p_child_name: payload.child_name,
         p_child_age: payload.child_age ?? null,
         p_caregiver_name: payload.caregiver_name,
@@ -117,80 +129,99 @@ export default async function handler(req: ReqLike, res: ResLike) {
       },
       { service: true },
     );
+    if (!bookingIds || bookingIds.length === 0) {
+      throw new Error("book_slots returned no ids");
+    }
   } catch (err) {
     const msg = err instanceof Error ? err.message : "";
     if (msg.includes("slot_full")) return res.status(409).json({ error: "slot_full" });
     if (msg.includes("slot_unavailable")) return res.status(409).json({ error: "slot_unavailable" });
-    console.error("[bookings/hold] book_slot rpc failed", err);
+    console.error("[bookings/hold] book_slots rpc failed", err);
     return res.status(500).json({ error: "book_failed" });
   }
 
-  // 3a. $0 fast path — peer-to-peer / donation programmes where booking is
-  // registration only and any koha is paid in person. Skip Stripe entirely,
-  // mark the booking paid, send the confirmation email, and hand the client
-  // a direct link to the confirmation page.
-  if (slot.programmes.price_cents === 0) {
+  const totalCents = programme.price_cents * slots.length;
+  const slotLabels = slots.map((s) => formatSlotLabel(s.starts_at, s.ends_at));
+  const firstBookingId = bookingIds[0];
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // 3a. $0 fast path — peer-to-peer / donation. No Stripe; immediate confirmation.
+  // ───────────────────────────────────────────────────────────────────────────
+  if (programme.price_cents === 0) {
     try {
-      await sbPatch(`/rest/v1/bookings?id=eq.${bookingId}`, {
+      const idList = bookingIds.map((id) => encodeURIComponent(id)).join(",");
+      await sbPatch(`/rest/v1/bookings?id=in.(${idList})`, {
         status: "paid",
         paid_at: new Date().toISOString(),
       });
     } catch (err) {
-      console.error("[bookings/hold] failed to mark $0 booking paid", err);
+      console.error("[bookings/hold] failed to mark $0 bookings paid", err);
     }
 
+    const emailArgs = {
+      to: payload.caregiver_email,
+      bookingId: firstBookingId,
+      caregiverName: payload.caregiver_name,
+      childName: payload.child_name,
+      programmeTitle: programme.title,
+      slotLabels,
+      amountCents: 0,
+      location: programme.location ?? "Lane Park Business Centre, Upper Hutt",
+    };
     try {
-      await sendBookingConfirmation({
-        to: payload.caregiver_email,
-        bookingId,
-        caregiverName: payload.caregiver_name,
-        childName: payload.child_name,
-        programmeTitle: slot.programmes.title,
-        slotLabel: formatSlotLabel(slot.starts_at, slot.ends_at),
-        amountCents: 0,
-        location: slot.programmes.location ?? "Lane Park Business Centre, Upper Hutt",
-      });
+      await sendBookingConfirmation(emailArgs);
     } catch (err) {
       console.error("[bookings/hold] $0 confirmation email failed (booking still saved)", err);
     }
+    // Fire-and-forget admin ping — never blocks the customer flow.
+    void sendAdminBookingNotification(emailArgs);
 
     return res.status(200).json({
-      booking_id: bookingId,
-      checkout_url: `${SITE_URL}/book/confirmation/${bookingId}`,
+      booking_id: firstBookingId,
+      booking_ids: bookingIds,
+      checkout_url: `${SITE_URL}/book/confirmation/${firstBookingId}`,
     });
   }
 
-  // 3b. Stripe Checkout session for paid programmes.
+  // ───────────────────────────────────────────────────────────────────────────
+  // 3b. Paid path — one Stripe Checkout session, one line item per slot.
+  // ───────────────────────────────────────────────────────────────────────────
+  const lineItems: CheckoutLineItem[] = slots.map((s, i) => ({
+    productName: programme.title,
+    description: slotLabels[i] ?? formatSlotLabel(s.starts_at, s.ends_at),
+    amountCents: programme.price_cents,
+  }));
+
   let session: { id: string; url: string };
   try {
     session = await createCheckoutSession({
-      bookingId,
-      programmeTitle: slot.programmes.title,
-      slotLabel: formatSlotLabel(slot.starts_at, slot.ends_at),
-      amountCents: slot.programmes.price_cents,
+      bookingIds,
       customerEmail: payload.caregiver_email,
+      lineItems,
     });
   } catch (err) {
     console.error("[bookings/hold] stripe session create failed", err);
-    // Don't try to rollback the booking — the availability filter will
-    // expire the pending hold in 10 minutes. Just surface the error.
     return res.status(500).json({ error: "stripe_failed" });
   }
 
-  // 4. Persist stripe_session_id so the webhook can locate the booking row.
+  // ───────────────────────────────────────────────────────────────────────────
+  // 4. Persist stripe_session_id on every booking row so the webhook can find
+  //    them by either metadata.booking_ids OR by stripe_session_id (defence in depth).
+  // ───────────────────────────────────────────────────────────────────────────
   try {
-    await sbPatch(`/rest/v1/bookings?id=eq.${bookingId}`, {
+    const idList = bookingIds.map((id) => encodeURIComponent(id)).join(",");
+    await sbPatch(`/rest/v1/bookings?id=in.(${idList})`, {
       stripe_session_id: session.id,
     });
   } catch (err) {
     console.error("[bookings/hold] failed to patch session id (continuing)", err);
-    // Non-fatal: webhook can fall back to metadata.booking_id from the
-    // Checkout Session itself. Don't fail the request.
   }
 
   return res.status(200).json({
-    booking_id: bookingId,
+    booking_id: firstBookingId,
+    booking_ids: bookingIds,
     checkout_url: session.url,
+    total_cents: totalCents,
   });
 }
 
@@ -206,18 +237,30 @@ function parsePayload(input: unknown): BookingPayload | null {
   if (!input || typeof input !== "object") return null;
   const p = input as Record<string, unknown>;
 
-  const slot_id = strOrNull(p.slot_id);
+  // Accept either slot_ids (array, preferred) or slot_id (legacy single).
+  let slot_ids: string[] = [];
+  if (Array.isArray(p.slot_ids)) {
+    slot_ids = p.slot_ids.filter((x): x is string => typeof x === "string" && x.length > 0);
+  } else if (typeof p.slot_id === "string" && p.slot_id.length > 0) {
+    slot_ids = [p.slot_id];
+  }
+  // Dedupe while preserving order
+  slot_ids = Array.from(new Set(slot_ids));
+  if (slot_ids.length === 0 || slot_ids.length > MAX_SLOTS_PER_BOOKING) return null;
+  // Loose UUID shape check — Supabase will reject malformed ids anyway
+  if (!slot_ids.every((id) => /^[0-9a-f-]{32,40}$/i.test(id))) return null;
+
   const child_name = strOrNull(p.child_name);
   const caregiver_name = strOrNull(p.caregiver_name);
   const caregiver_email = strOrNull(p.caregiver_email);
-  if (!slot_id || !child_name || !caregiver_name || !caregiver_email) return null;
+  if (!child_name || !caregiver_name || !caregiver_email) return null;
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(caregiver_email)) return null;
 
   const child_age = numOrUndef(p.child_age);
   if (child_age !== undefined && (child_age < 4 || child_age > 18)) return null;
 
   return {
-    slot_id,
+    slot_ids,
     child_name: child_name.trim().slice(0, 80),
     child_age,
     caregiver_name: caregiver_name.trim().slice(0, 80),

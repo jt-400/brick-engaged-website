@@ -14,7 +14,7 @@
 
 import { sbFetch, sbPatch } from "../_lib/supabase";
 import { verifyWebhookSignature } from "../_lib/stripe";
-import { sendBookingConfirmation } from "../_lib/email";
+import { sendBookingConfirmation, sendAdminBookingNotification } from "../_lib/email";
 
 // Vercel: disable JSON body parser so we can verify the raw signed payload.
 export const config = {
@@ -84,57 +84,85 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const session = event.data.object as {
     id?: string;
     payment_intent?: string;
-    metadata?: { booking_id?: string };
+    metadata?: { booking_id?: string; booking_ids?: string };
     customer_email?: string;
   };
 
-  const bookingId = session.metadata?.booking_id;
-  if (!bookingId) {
-    console.warn("[webhook] checkout.session.completed missing booking_id metadata", session.id);
+  // Prefer the multi-booking `booking_ids` (comma-separated) when present,
+  // fall back to the legacy single `booking_id` for older Checkout sessions.
+  const idsCsv = session.metadata?.booking_ids;
+  const bookingIds: string[] = idsCsv
+    ? idsCsv.split(",").map((s) => s.trim()).filter(Boolean)
+    : session.metadata?.booking_id
+      ? [session.metadata.booking_id]
+      : [];
+
+  if (bookingIds.length === 0) {
+    console.warn("[webhook] checkout.session.completed missing booking metadata", session.id);
     return res.status(200).json({ received: true, warning: "no_booking_id" });
   }
 
-  // 4. Mark booking paid.
+  // 4. Mark every booking paid.
   try {
-    await sbPatch(`/rest/v1/bookings?id=eq.${bookingId}`, {
+    const idList = bookingIds.map((id) => encodeURIComponent(id)).join(",");
+    await sbPatch(`/rest/v1/bookings?id=in.(${idList})`, {
       status: "paid",
       paid_at: new Date().toISOString(),
       stripe_payment_intent: typeof session.payment_intent === "string" ? session.payment_intent : null,
     });
   } catch (err) {
     console.error("[webhook] failed to mark booking paid", err);
-    // Don't 5xx — Stripe would retry. We've recorded the warning;
-    // admin can reconcile manually if needed.
     return res.status(200).json({ received: true, warning: "patch_failed" });
   }
 
-  // 5. Fetch booking + slot + programme for the confirmation email.
+  // 5. Fetch all booked rows so we can send ONE confirmation email listing
+  //    every date. Each booking points to its own slot; we sort by start time
+  //    so the email reads naturally.
   try {
+    const idList = bookingIds.map((id) => encodeURIComponent(id)).join(",");
     const rows = await sbFetch<BookingRow[]>(
-      `/rest/v1/bookings?id=eq.${bookingId}&select=id,caregiver_name,caregiver_email,child_name,amount_cents,slot:slot_id(starts_at,ends_at,programmes(title,location))`,
+      `/rest/v1/bookings?id=in.(${idList})&select=id,caregiver_name,caregiver_email,child_name,amount_cents,slot:slot_id(starts_at,ends_at,programmes(title,location))`,
       { service: true },
     );
-    const booking = rows?.[0];
-    if (booking?.caregiver_email && booking.slot) {
-      await sendBookingConfirmation({
-        to: booking.caregiver_email,
-        bookingId: booking.id,
-        caregiverName: booking.caregiver_name,
-        childName: booking.child_name,
-        programmeTitle: booking.slot.programmes.title,
-        slotLabel: formatSlotLabel(booking.slot.starts_at, booking.slot.ends_at),
-        amountCents: booking.amount_cents,
-        location: booking.slot.programmes.location ?? "Lane Park Business Centre, Upper Hutt",
-      });
+    if (!rows || rows.length === 0) {
+      console.warn("[webhook] no booking rows found", bookingIds);
+      return res.status(200).json({ received: true, warning: "no_rows" });
+    }
+
+    const sorted = [...rows]
+      .filter((r) => r.slot)
+      .sort((a, b) => (a.slot?.starts_at ?? "").localeCompare(b.slot?.starts_at ?? ""));
+    if (sorted.length === 0) {
+      console.warn("[webhook] booking rows missing slot info", bookingIds);
+      return res.status(200).json({ received: true, warning: "no_slot_info" });
+    }
+
+    const head = sorted[0];
+    const slotLabels = sorted.map((r) => formatSlotLabel(r.slot!.starts_at, r.slot!.ends_at));
+    const totalCents = sorted.reduce((sum, r) => sum + (r.amount_cents ?? 0), 0);
+
+    if (head.caregiver_email && head.slot) {
+      const emailArgs = {
+        to: head.caregiver_email,
+        bookingId: head.id,
+        caregiverName: head.caregiver_name,
+        childName: head.child_name,
+        programmeTitle: head.slot.programmes.title,
+        slotLabels,
+        amountCents: totalCents,
+        location: head.slot.programmes.location ?? "Lane Park Business Centre, Upper Hutt",
+      };
+      await sendBookingConfirmation(emailArgs);
+      // Fire-and-forget admin ping. Never blocks the webhook response.
+      void sendAdminBookingNotification(emailArgs);
     } else {
-      console.warn("[webhook] missing booking details for confirmation email", bookingId);
+      console.warn("[webhook] missing caregiver/slot details for confirmation email", bookingIds);
     }
   } catch (err) {
-    console.error("[webhook] confirmation email failed (booking still paid)", err);
-    // Email failure is non-fatal — booking is marked paid, admin can resend.
+    console.error("[webhook] confirmation email failed (bookings still paid)", err);
   }
 
-  return res.status(200).json({ received: true });
+  return res.status(200).json({ received: true, bookings: bookingIds.length });
 }
 
 async function readRawBody(req: IncomingMessage): Promise<string> {

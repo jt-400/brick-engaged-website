@@ -5,6 +5,18 @@ import { LegoButton } from "@/components/LegoButton";
 import { OutcomeGrid } from "@/components/category/OutcomeGrid";
 import { TrustStrip } from "@/components/category/TrustStrip";
 import { FAQ } from "@/components/category/FAQ";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { FOUNDATION_QUERY } from "@/lib/sanityQueries";
+
+interface FoundationData {
+  kicker?: string; title?: string; subtitle?: string;
+  howItWorksHeading?: string;
+  howItWorksSteps?: Array<{ iconKey?: string; title: string; body: string }>;
+}
+
+const STEP_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
+  FileText, Sparkles, HandHeart, Heart,
+};
 
 const HOW_IT_WORKS = [
   {
@@ -30,6 +42,21 @@ const HOW_IT_WORKS = [
 ];
 
 export default function Foundation() {
+  const { data } = useSanityDoc<FoundationData>("foundationPage", FOUNDATION_QUERY);
+
+  const stepsFallback: Array<{ icon: React.ReactNode; title: string; body: string }> = [
+    { icon: <FileText size={22} />, title: HOW_IT_WORKS[0].title, body: HOW_IT_WORKS[0].body },
+    { icon: <Sparkles size={22} />, title: HOW_IT_WORKS[1].title, body: HOW_IT_WORKS[1].body },
+    { icon: <HandHeart size={22} />, title: HOW_IT_WORKS[2].title, body: HOW_IT_WORKS[2].body },
+    { icon: <Heart size={22} />, title: HOW_IT_WORKS[3].title, body: HOW_IT_WORKS[3].body },
+  ];
+  const renderedSteps = data?.howItWorksSteps?.length
+    ? data.howItWorksSteps.map((s) => {
+        const Icon = STEP_ICONS[s.iconKey ?? "FileText"] ?? FileText;
+        return { icon: <Icon size={22} />, title: s.title, body: s.body };
+      })
+    : stepsFallback;
+
   return (
     <div className="flex flex-col w-full">
       {/* Hero */}
@@ -41,7 +68,7 @@ export default function Foundation() {
             animate={{ opacity: 1, y: 0 }}
             className="inline-block bg-lego-orange text-charcoal text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase"
           >
-            Charity arm
+            {data?.kicker ?? "Charity arm"}
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -50,7 +77,7 @@ export default function Foundation() {
             className="text-5xl md:text-6xl font-black mb-5 tracking-tight leading-[1.02]"
             style={{ letterSpacing: "-0.025em" }}
           >
-            Brick Engaged Foundation
+            {data?.title ?? "Brick Engaged Foundation"}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -58,8 +85,7 @@ export default function Foundation() {
             transition={{ delay: 0.25 }}
             className="text-lg md:text-xl font-medium text-white/80 max-w-2xl mx-auto leading-relaxed"
           >
-            Fully-funded LEGO®-based sessions for neurodivergent tamariki whose whānau couldn't
-            otherwise reach them. Apply for a place, refer a family, or help fund a term.
+            {data?.subtitle ?? "Fully-funded LEGO®-based sessions for neurodivergent tamariki whose whānau couldn't otherwise reach them. Apply for a place, refer a family, or help fund a term."}
           </motion.p>
 
           <motion.div
@@ -152,7 +178,7 @@ export default function Foundation() {
               className="text-3xl md:text-4xl font-black text-charcoal tracking-tight mb-3"
               style={{ letterSpacing: "-0.02em" }}
             >
-              How to apply
+              {data?.howItWorksHeading ?? "How to apply"}
             </h2>
             <p className="text-base md:text-lg font-medium text-slate-500 leading-relaxed">
               Four steps. No long forms. The first conversation costs nothing.
@@ -164,7 +190,7 @@ export default function Foundation() {
             viewport={{ once: true, margin: "-60px" }}
             className="grid grid-cols-1 md:grid-cols-2 gap-5"
           >
-            {HOW_IT_WORKS.map((step, i) => (
+            {renderedSteps.map((step, i) => (
               <li
                 key={step.title}
                 className="rounded-2xl border-2 border-slate-200 bg-white p-6 flex items-start gap-4"

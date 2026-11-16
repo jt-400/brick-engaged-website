@@ -36,21 +36,45 @@ const schema = z.object({
 
 type FormValues = z.input<typeof schema>;
 
-interface BookingFormProps {
+type SingleSlotProps = {
   slot: AvailabilitySlot;
   slotLabel: string;
-  programmeTitle: string;
+  /** $ per slot. Single-slot bookings are charged this amount. */
   priceCents: number;
-  onCancel: () => void;
-}
+  /** Multi-slot props must be undefined when single is used. */
+  slots?: never;
+  slotLabels?: never;
+  totalCents?: never;
+};
 
-export function BookingForm({
-  slot,
-  slotLabel,
-  programmeTitle,
-  priceCents,
-  onCancel,
-}: BookingFormProps) {
+type MultiSlotProps = {
+  /** Two or more slots (e.g. multi-day Holiday booking). */
+  slots: AvailabilitySlot[];
+  /** One human-readable label per slot. */
+  slotLabels: string[];
+  /** Sum charged for the whole bundle. */
+  totalCents: number;
+  slot?: never;
+  slotLabel?: never;
+  priceCents?: never;
+};
+
+type BookingFormProps = (SingleSlotProps | MultiSlotProps) & {
+  programmeTitle: string;
+  onCancel: () => void;
+};
+
+export function BookingForm(props: BookingFormProps) {
+  const isMulti = "slots" in props && Array.isArray(props.slots);
+  const slotIds = isMulti
+    ? props.slots.map((s) => s.slot_id)
+    : [props.slot.slot_id];
+  const slotLabels: string[] = isMulti
+    ? props.slotLabels
+    : [props.slotLabel];
+  const amountCents = isMulti ? props.totalCents : props.priceCents;
+  const { programmeTitle, onCancel } = props;
+
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,7 +100,7 @@ export function BookingForm({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          slot_id: slot.slot_id,
+          slot_ids: slotIds,
           child_name: values.child_name,
           child_age: values.child_age,
           caregiver_name: values.caregiver_name,
@@ -111,7 +135,7 @@ export function BookingForm({
     }
   }
 
-  const price = `$${(priceCents / 100).toFixed(0)}`;
+  const totalLabel = `$${(amountCents / 100).toFixed(0)}`;
 
   return (
     <div className="rounded-3xl border-2 border-slate-200 bg-white p-6 md:p-8 shadow-sm">
@@ -126,11 +150,26 @@ export function BookingForm({
           >
             {programmeTitle}
           </h3>
-          <p className="mt-1 text-sm font-bold text-charcoal/70">{slotLabel}</p>
+          {isMulti ? (
+            <div className="mt-2 space-y-1">
+              <p className="text-sm font-bold text-charcoal/70">
+                {slotLabels.length} {slotLabels.length === 1 ? "day" : "days"}
+              </p>
+              <ul className="text-xs font-medium text-slate-600 leading-snug">
+                {slotLabels.map((l, i) => (
+                  <li key={i} className="truncate">• {l}</li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p className="mt-1 text-sm font-bold text-charcoal/70">{slotLabels[0]}</p>
+          )}
         </div>
         <div className="shrink-0 rounded-2xl bg-lego-orange px-4 py-2.5 text-center font-black text-charcoal shadow-md">
-          <div className="text-xl leading-none">{price}</div>
-          <div className="mt-1 text-[10px] uppercase tracking-wider opacity-75">per day</div>
+          <div className="text-xl leading-none">{totalLabel}</div>
+          <div className="mt-1 text-[10px] uppercase tracking-wider opacity-75">
+            {isMulti ? "total" : "per day"}
+          </div>
         </div>
       </div>
 
@@ -327,7 +366,7 @@ export function BookingForm({
             >
               <span className="flex items-center gap-2">
                 {submitting ? <Loader2 size={14} className="animate-spin" /> : null}
-                {submitting ? "Redirecting…" : `Pay ${price} & confirm`}
+                {submitting ? "Redirecting…" : `Pay ${totalLabel} & confirm`}
               </span>
             </LegoButton>
             <button

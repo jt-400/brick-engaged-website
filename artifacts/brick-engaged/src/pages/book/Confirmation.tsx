@@ -32,8 +32,8 @@ export default function Confirmation() {
           A confirmation email is on its way. Check your inbox (and spam folder).
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/holiday">
-            <LegoButton variant="orange">Back to Holidays</LegoButton>
+          <Link href="/sessions">
+            <LegoButton variant="orange">Back to Sessions</LegoButton>
           </Link>
           <Link href="/">
             <LegoButton variant="white">Home</LegoButton>

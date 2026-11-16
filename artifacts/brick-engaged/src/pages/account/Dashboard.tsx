@@ -4,7 +4,7 @@ import { Link, useLocation } from "wouter";
 import { Calendar, ArrowRight, User, List, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { LegoButton } from "@/components/LegoButton";
-import type { User } from "@supabase/supabase-js";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 type Profile = {
   id: string;
@@ -24,7 +24,7 @@ type Booking = {
 
 export default function Dashboard() {
   const [, navigate] = useLocation();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);

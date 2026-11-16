@@ -1,0 +1,181 @@
+{
+  "mutations": [
+    {
+      "patch": {
+        "id": "homePage",
+        "set": {
+          "growthHeading": "LEGO® as a tool for growth",
+          "growthBody1": "Brick Engaged conducts Mindful LEGO® Building sessions for small groups in a safe, welcoming and inclusive environment.",
+          "growthBody2": "We focus on social skills, life skills, mental wellbeing and meaningful interactions while building and playing with LEGO® bricks.",
+          "growthCtaLabel": "Explore Sessions",
+          "growthCtaHref": "/sessions",
+          "whoBenefitHeading": "Who can benefit?",
+          "whoBenefitSubtitle": "Our programmes are designed for a wide range of individuals seeking growth and connection.",
+          "whoBenefitCards": [
+            {
+              "_key": "wbc1",
+              "badgeText": "Brick-by-Brick® Programme",
+              "title": "Children 7–12",
+              "accent": "orange",
+              "items": [
+                "Neurodiverse kids (ADHD, Autistic)",
+                "Home-schooled learners",
+                "Building friendships & social skills",
+                "Processing tough experiences",
+                "Growing confidence through play",
+                "Finding their tribe"
+              ]
+            },
+            {
+              "_key": "wbc2",
+              "badgeText": "Mindful Building Sessions",
+              "title": "Teens 13–19",
+              "accent": "charcoal",
+              "items": [
+                "Navigating anxiety or low mood",
+                "Feeling disconnected at school",
+                "Recovering from trauma",
+                "Quiet space for big feelings",
+                "Peer-to-peer connection",
+                "Calm focus through hands-on play"
+              ]
+            },
+            {
+              "_key": "wbc3",
+              "badgeText": "Therapeutic Use of LEGO®",
+              "title": "Adults 20+",
+              "accent": "orange",
+              "items": [
+                "Respite from a busy mind",
+                "Mindful, screen-free downtime",
+                "Wellbeing & mental health support",
+                "Reconnecting with creativity",
+                "Small-group or 1:1 sessions",
+                "A reset for tough weeks"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "programme-brick-club",
+        "set": {
+          "heroPrice": "$299",
+          "heroPriceCadence": "10-week term",
+          "heroFacts": [
+            { "_key": "bcf1", "label": "Ages", "value": "7–18" },
+            { "_key": "bcf2", "label": "Group size", "value": "Max 8–10" },
+            { "_key": "bcf3", "label": "Format", "value": "10-week term · weekly" },
+            { "_key": "bcf4", "label": "Location", "value": "Lane Park Business Centre, Upper Hutt" },
+            { "_key": "bcf5", "label": "Well suited to", "value": "ADHD · Autistic · Mental health support" }
+          ],
+          "buildModesHeading": "What's on offer",
+          "buildModesIntro": "From an extensive quantity of loose LEGO® bricks and pieces to a massive range of LEGO® sets, kids get to choose their project — guided and supported either way.",
+          "buildModes": [
+            { "_key": "bcbm1", "iconKey": "Boxes", "title": "LEGO® Sets", "body": "Build a set with instructions — from very small to very large. The range is vast: City, Friends, Creator, Minecraft, Monkey Kid, Icons, Star Wars, Harry Potter, and more." },
+            { "_key": "bcbm2", "iconKey": "Wand2", "title": "Free Build / MoC", "body": "From tens of thousands of parts, kids can free-build or make their own creation. Bricks, Technic gears and motors, wheels, windows, minifigures, road plates — whatever they can imagine." },
+            { "_key": "bcbm3", "iconKey": "Layers", "title": "Fixed build & play stations", "body": "Low-level (knee-high) build table with mixed elements. Fixed build wall for mosaics and horizontal building. Custom Minecraft build-and-play table. Quiet corner with beanbag chairs for self-centring." }
+          ],
+          "trustStripKicker": "Why parents trust Brick Club",
+          "trustStripStats": [
+            { "_key": "bcts1", "_type": "stat", "value": "Since 2021", "label": "Running in Upper Hutt" },
+            { "_key": "bcts2", "_type": "stat", "value": "15+ yrs", "label": "Dan's serious LEGO® years" },
+            { "_key": "bcts3", "_type": "stat", "value": "LMNZ S1", "label": "LEGO® Master credential" },
+            { "_key": "bcts4", "_type": "stat", "value": "Max 10", "label": "Per group, always" }
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "programme-home-schoolers",
+        "set": {
+          "heroPrice": "$150",
+          "heroPriceCadence": "10-week term",
+          "heroFacts": [
+            { "_key": "hsf1", "label": "Group size", "value": "Min 5 · Max 12" },
+            { "_key": "hsf2", "label": "Format", "value": "2-hour weekly sessions" },
+            { "_key": "hsf3", "label": "Subjects", "value": "Maths · Sciences · Arts · Environment" },
+            { "_key": "hsf4", "label": "Plus", "value": "Core life & social skills" },
+            { "_key": "hsf5", "label": "Location", "value": "Lane Park Business Centre, Upper Hutt" }
+          ],
+          "trustStripKicker": "Designed with home-school families",
+          "trustStripStats": [
+            { "_key": "hsts1", "_type": "stat", "value": "12 max", "label": "Per group" },
+            { "_key": "hsts2", "_type": "stat", "value": "2 hours", "label": "Per session" },
+            { "_key": "hsts3", "_type": "stat", "value": "10 weeks", "label": "Per term · 1 day a week" },
+            { "_key": "hsts4", "_type": "stat", "value": "STEAM", "label": "Maths · Sciences · Arts · Environment" }
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "programme-peer-to-peer",
+        "set": {
+          "heroFacts": [
+            { "_key": "ppf1", "label": "Ages", "value": "18+" },
+            { "_key": "ppf2", "label": "Group size", "value": "Max 10" },
+            { "_key": "ppf3", "label": "Format", "value": "Drop-in · 2 hours · weekly" },
+            { "_key": "ppf4", "label": "Donation", "value": "$10 suggested · tap-to-pay" },
+            { "_key": "ppf5", "label": "Location", "value": "Lane Park Business Centre, Upper Hutt" }
+          ],
+          "trustStripKicker": "The format that works",
+          "trustStripStats": [
+            { "_key": "ppts1", "_type": "stat", "value": "Max 10", "label": "Per session" },
+            { "_key": "ppts2", "_type": "stat", "value": "2 hrs", "label": "Drop in any time" },
+            { "_key": "ppts3", "_type": "stat", "value": "$10 koha", "label": "Suggested · pay what you can" },
+            { "_key": "ppts4", "_type": "stat", "value": "Tap to pay", "label": "Or BYO snacks" }
+          ],
+          "groupsByDayHeading": "Pick the night that fits",
+          "groupsByDayIntro": "Three drop-in groups per week. Same format each night — different room energy.",
+          "groupsByDay": [
+            { "_key": "ppg1", "day": "Monday", "name": "Men's Group", "kicker": "6:30 – 8:30pm", "description": "Quiet hands, real talk if it comes up. Most regulars say this is the only night a week they get to switch off without alcohol." },
+            { "_key": "ppg2", "day": "Tuesday", "name": "Couples Group", "kicker": "6:30 – 8:30pm", "description": "Build alongside your partner. Conversation optional. A low-pressure way to share a quiet evening that isn't another screen." },
+            { "_key": "ppg3", "day": "Wednesday", "name": "Women's Group", "kicker": "6:30 – 8:30pm", "description": "Same calm, building-focused space. The Wednesday group has its own steady rhythm — many come every week." }
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "programme-one-to-one",
+        "set": {
+          "heroPrice": "$45",
+          "heroPriceCadence": "per session",
+          "heroFacts": [
+            { "_key": "oof1", "label": "Ages", "value": "All ages" },
+            { "_key": "oof2", "label": "Format", "value": "1-hour booked slot" },
+            { "_key": "oof3", "label": "Price", "value": "$45 per session" },
+            { "_key": "oof4", "label": "With", "value": "Dan Mulholland — LEGO® Masters NZ S1 Finalist" },
+            { "_key": "oof5", "label": "Location", "value": "Lane Park Business Centre, Upper Hutt" }
+          ],
+          "trustStripKicker": "Why people book One-to-One",
+          "trustStripStats": [
+            { "_key": "oots1", "_type": "stat", "value": "1 hour", "label": "Booked timeslot" },
+            { "_key": "oots2", "_type": "stat", "value": "$45", "label": "Per session" },
+            { "_key": "oots3", "_type": "stat", "value": "LMNZ S1", "label": "Dan's credential" },
+            { "_key": "oots4", "_type": "stat", "value": "All ages", "label": "Welcome" }
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "aboutPage",
+        "set": {
+          "missionHeading": "Our Mission",
+          "missionStatement": "Our mission is to facilitate fun, meaningful social interactions, learning and support for Neurodivergent people through building with LEGO® Bricks in a safe and inclusive environment.",
+          "credentialsHeading": "Credentials",
+          "credentials": [
+            { "_key": "ac1", "text": "Certified Facilitator — LEGO® SERIOUS PLAY®", "accent": "orange" },
+            { "_key": "ac2", "text": "LEGO-Based Therapy Facilitator Training", "accent": "charcoal" },
+            { "_key": "ac3", "text": "Brick-by-Brick® Programme Foundation Course", "accent": "orange" }
+          ]
+        }
+      }
+    }
+  ]
+}

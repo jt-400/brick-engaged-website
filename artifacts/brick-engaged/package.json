@@ -74,6 +74,10 @@
     "zod": "catalog:"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.108.2"
+    "@supabase/supabase-js": "^2.108.2",
+    "@sanity/client": "^7.0.0",
+    "@sanity/vision": "^3.72.0",
+    "sanity": "^3.72.0",
+    "styled-components": "^6.1.0"
   }
 }

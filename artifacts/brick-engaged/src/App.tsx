@@ -31,6 +31,11 @@ import AccountLogin from "@/pages/account/Login";
 import AccountDashboard from "@/pages/account/Dashboard";
 import AccountBookings from "@/pages/account/Bookings";
 import AccountProfile from "@/pages/account/Profile";
+import Handover from "@/pages/Handover";
+import AdminBookings from "@/pages/admin/Bookings";
+import AdminSchedule from "@/pages/admin/Schedule";
+import { lazy } from "react";
+const StudioPage = lazy(() => import("@/pages/Studio"));
 
 const queryClient = new QueryClient();
 
@@ -48,6 +53,30 @@ function PageWrap({ children }: { children: React.ReactNode }) {
 
 function Router() {
   const [location] = useLocation();
+
+  // Standalone pages render bare — no nav, no footer, no site chrome.
+  if (location === "/handover") {
+    return (
+      <>
+        <ScrollToTop />
+        <Handover />
+      </>
+    );
+  }
+
+  if (location.startsWith("/studio")) {
+    return <StudioPage />;
+  }
+
+  if (location.startsWith("/admin")) {
+    return (
+      <>
+        <ScrollToTop />
+        {location.startsWith("/admin/schedule") ? <AdminSchedule /> : <AdminBookings />}
+      </>
+    );
+  }
+
   return (
     <Layout>
       <ScrollToTop />

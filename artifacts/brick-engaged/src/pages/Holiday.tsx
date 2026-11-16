@@ -1,50 +1,18 @@
 import { motion } from "framer-motion";
 import { Calendar, Clock, Mail, MapPin, Phone } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { LegoButton } from "@/components/LegoButton";
-import { CalendarGrid, type AvailabilitySlot } from "@/components/booking/CalendarGrid";
-import { BookingForm } from "@/components/booking/BookingForm";
+import { HolidayBooking } from "@/components/booking/HolidayBooking";
 import { OutcomeGrid } from "@/components/category/OutcomeGrid";
 import { SessionRhythm } from "@/components/category/SessionRhythm";
 import { TrustStrip } from "@/components/category/TrustStrip";
 import { FAQ } from "@/components/category/FAQ";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { HOLIDAY_QUERY } from "@/lib/sanityQueries";
 
-const HOLIDAY_PROGRAMME = {
-  title: "School Holiday Programme",
-  priceCents: 11500,
-  location: "Lane Park Business Centre, Upper Hutt",
-};
-
-function formatSlotLabel(slot: AvailabilitySlot) {
-  const s = new Date(slot.starts_at);
-  const e = new Date(slot.ends_at);
-  const date = s.toLocaleDateString("en-NZ", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    timeZone: "Pacific/Auckland",
-  });
-  const time = (d: Date) =>
-    d.toLocaleTimeString("en-NZ", {
-      hour: "numeric",
-      hour12: true,
-      timeZone: "Pacific/Auckland",
-    });
-  return `${date} · ${time(s)}–${time(e)}`;
-}
+interface HolidayData { kicker?: string; title?: string; subtitle?: string }
 
 export default function Holiday() {
-  const [selectedSlot, setSelectedSlot] = useState<AvailabilitySlot | null>(null);
-  const formRef = useRef<HTMLDivElement>(null);
-
-  // When the user picks a day, scroll the form into view so they can see the
-  // fields without hunting for them — important on phones where the calendar
-  // already fills the viewport.
-  useEffect(() => {
-    if (selectedSlot && formRef.current) {
-      formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [selectedSlot]);
+  const { data } = useSanityDoc<HolidayData>("holidayPage", HOLIDAY_QUERY);
 
   return (
     <div className="flex flex-col w-full">
@@ -61,13 +29,13 @@ export default function Holiday() {
             transition={{ duration: 0.6 }}
           >
             <div className="inline-block bg-lego-orange text-charcoal text-xs font-black px-4 py-1.5 rounded-lg mb-6 tracking-widest uppercase">
-              School Holidays
+              {data?.kicker ?? "School Holidays"}
             </div>
             <h1 className="text-5xl md:text-6xl font-black mb-6 tracking-tight leading-tight">
-              LEGO® Based School Holiday Programme
+              {data?.title ?? "LEGO® Based School Holiday Programme"}
             </h1>
             <p className="text-xl md:text-2xl font-medium text-white/80 mb-8 leading-relaxed">
-              Led by LEGO® Master Dan LMNZ S1. Small groups, meaningful interaction, fun, safe and inclusive!
+              {data?.subtitle ?? "Led by LEGO® Master Dan LMNZ S1. Small groups, meaningful interaction, fun, safe and inclusive!"}
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -193,7 +161,7 @@ export default function Holiday() {
         ]}
       />
 
-      {/* Live availability calendar + inline booking form */}
+      {/* Live availability calendar — multi-day picker + basket */}
       <section id="book-calendar" className="bg-slate-50 py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-3xl">
           <motion.div
@@ -207,12 +175,11 @@ export default function Holiday() {
               Live availability
             </div>
             <h2 className="text-4xl md:text-5xl font-black text-charcoal tracking-tight mb-3" style={{ letterSpacing: '-0.02em' }}>
-              {selectedSlot ? "Confirm your booking" : "See which days are open"}
+              Pick your holiday days
             </h2>
             <p className="text-base md:text-lg text-slate-500 font-medium">
-              {selectedSlot
-                ? "Fill the details below — payment is processed securely by Stripe."
-                : "Pick an open day below to start your booking."}
+              Tap each day you want to book — one, a few, or the whole eight days.
+              Pay once at the next step.
             </p>
           </motion.div>
 
@@ -221,23 +188,8 @@ export default function Holiday() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            ref={formRef}
           >
-            {selectedSlot ? (
-              <BookingForm
-                slot={selectedSlot}
-                slotLabel={formatSlotLabel(selectedSlot)}
-                programmeTitle={HOLIDAY_PROGRAMME.title}
-                priceCents={HOLIDAY_PROGRAMME.priceCents}
-                onCancel={() => setSelectedSlot(null)}
-              />
-            ) : (
-              <CalendarGrid
-                programme="holiday"
-                monthsAhead={3}
-                onSelect={setSelectedSlot}
-              />
-            )}
+            <HolidayBooking />
           </motion.div>
         </div>
       </section>

@@ -5,6 +5,14 @@ import { LegoButton } from "@/components/LegoButton";
 import { LegoCanvas } from "@/lego/LegoCanvas";
 import { LEGO_MODELS } from "@/lego/modelsData";
 import type { BrickTemplate } from "@/lego/types";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { HOME_PAGE_QUERY } from "@/lib/sanityQueries";
+
+interface HeroData {
+  heroHeadline?: string;
+  heroSubhead?: string;
+  heroPrimaryCta?: { label?: string; href?: string };
+}
 
 interface HeroMobileProps {
   className?: string;
@@ -21,6 +29,11 @@ interface HeroMobileProps {
  */
 export function HeroMobile({ className = "" }: HeroMobileProps) {
   const shouldReduceMotion = useReducedMotion();
+  const { data } = useSanityDoc<HeroData>("homePage", HOME_PAGE_QUERY);
+  const headline = data?.heroHeadline ?? "Building connections.\nOne brick at a time.";
+  const subhead = data?.heroSubhead ?? "Using the transformative power of play to create positive, lasting change.";
+  const primaryLabel = data?.heroPrimaryCta?.label ?? "View Sessions";
+  const primaryHref = data?.heroPrimaryCta?.href ?? "/sessions";
 
   // Central tower only, gridX/gridW doubled to span full canvas width.
   // Plus 5 extra rows on top to give the tower a proper peak.
@@ -91,26 +104,29 @@ export function HeroMobile({ className = "" }: HeroMobileProps) {
           className="font-black text-white text-center leading-[1.04] tracking-tight text-[34px]"
           style={{ letterSpacing: "-0.025em" }}
         >
-          Building connections.
-          <br />
-          One brick at a time.
+          {headline.split("\n").map((line, i) => (
+            <span key={i}>
+              {line}
+              {i < headline.split("\n").length - 1 && <br />}
+            </span>
+          ))}
         </h1>
 
         <p
           className="text-center text-white/85 font-medium leading-snug mt-3 max-w-[320px] text-[15px]"
           style={{ fontFamily: "var(--app-font-sans, Nunito), system-ui, sans-serif" }}
         >
-          Using the transformative power of play to create positive, lasting change.
+          {subhead}
         </p>
 
         <div className="mt-5">
-          <Link href="/sessions">
+          <Link href={primaryHref}>
             <LegoButton
               variant="green"
-              aria-label="View our sessions"
+              aria-label={primaryLabel}
               data-testid="hero-mobile-cta"
             >
-              View Sessions
+              {primaryLabel}
             </LegoButton>
           </Link>
         </div>

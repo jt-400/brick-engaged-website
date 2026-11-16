@@ -3,6 +3,17 @@ import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { LegoCanvas } from "@/lego/LegoCanvas";
 import { LEGO_MODELS } from "@/lego/modelsData";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { HOME_PAGE_QUERY } from "@/lib/sanityQueries";
+
+interface HeroData {
+  heroEyebrow?: string;
+  heroHeadline?: string;
+  heroSubhead?: string;
+  heroMetaLine?: string;
+  heroPrimaryCta?: { label?: string; href?: string };
+  heroSecondaryCta?: { label?: string; href?: string };
+}
 
 interface HeroDesktopProps {
   className?: string;
@@ -23,6 +34,15 @@ const MINIFIG_COLORS = [
 export function HeroDesktop({ className = "" }: HeroDesktopProps) {
   const activeModel = LEGO_MODELS[0];
   const shouldReduceMotion = useReducedMotion();
+  const { data } = useSanityDoc<HeroData>("homePage", HOME_PAGE_QUERY);
+  const eyebrow = data?.heroEyebrow ?? "LEGO®-based sessions";
+  const headline = data?.heroHeadline ?? "Building connections.\nOne brick at a time.";
+  const subhead = data?.heroSubhead ?? "Using the transformative power of play to create positive, lasting change.";
+  const metaLine = data?.heroMetaLine ?? "Weekly Brick Club · school-holiday programmes · peer-to-peer support sessions";
+  const primaryLabel = data?.heroPrimaryCta?.label ?? "View Sessions";
+  const primaryHref = data?.heroPrimaryCta?.href ?? "/sessions";
+  const secondaryLabel = data?.heroSecondaryCta?.label ?? "Book a holiday session";
+  const secondaryHref = data?.heroSecondaryCta?.href ?? "/holiday";
 
   return (
     <section
@@ -50,7 +70,7 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
               color: "#5fd6aa",
             }}
           >
-            LEGO®-based sessions
+            {eyebrow}
           </span>
 
           {/* Headline — left-aligned, big */}
@@ -63,9 +83,12 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
                 "var(--app-font-display, Outfit), system-ui, sans-serif",
             }}
           >
-            Building connections.
-            <br />
-            One brick at a time.
+            {headline.split("\n").map((line, i) => (
+              <span key={i}>
+                {line}
+                {i < headline.split("\n").length - 1 && <br />}
+              </span>
+            ))}
           </h1>
 
           {/* Subhead — larger, wider max-width */}
@@ -78,14 +101,13 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
               fontFamily: "var(--app-font-sans, Nunito), system-ui, sans-serif",
             }}
           >
-            Using the transformative power of play to create positive, lasting
-            change.
+            {subhead}
           </p>
 
           {/* CTA row — chunky, properly tappable */}
           <div className="flex gap-4 items-center flex-wrap">
             {/* Primary — solid green brick-button */}
-            <Link href="/sessions">
+            <Link href={primaryHref}>
               <a
                 className="inline-flex items-center gap-2.5 font-semibold rounded-[10px] transition-all hover:brightness-110 active:translate-y-[2px] active:border-b-2 cursor-pointer"
                 style={{
@@ -98,15 +120,15 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
                   minHeight: "56px",
                 }}
                 data-testid="hero-cta-primary"
-                aria-label="View our sessions"
+                aria-label={primaryLabel}
               >
-                View Sessions
+                {primaryLabel}
                 <ArrowRight size={20} strokeWidth={2.5} aria-hidden />
               </a>
             </Link>
 
             {/* Secondary — yellow brick-button */}
-            <Link href="/holiday">
+            <Link href={secondaryHref}>
               <a
                 className="inline-flex items-center gap-2.5 font-semibold rounded-[10px] transition-all hover:brightness-110 active:translate-y-[2px] active:border-b-2 cursor-pointer"
                 style={{
@@ -120,7 +142,7 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
                 }}
                 data-testid="hero-cta-secondary"
               >
-                Book a holiday session
+                {secondaryLabel}
               </a>
             </Link>
           </div>
@@ -133,16 +155,13 @@ export function HeroDesktop({ className = "" }: HeroDesktopProps) {
               letterSpacing: "0.07em",
             }}
           >
-            Weekly Brick Club · school-holiday programmes · peer-to-peer support sessions
+            {metaLine}
           </p>
         </motion.div>
 
-        {/* Right column: LEGO castle — bottom-aligned with left column meta line, scaled via CSS transform */}
-        <div className="relative w-full self-end overflow-hidden min-h-[360px] min-[900px]:min-h-[420px] lg:min-h-[480px]">
-          <div
-            className="absolute inset-0"
-            style={{ transform: 'scale(1.45)', transformOrigin: 'center bottom' }}
-          >
+        {/* Right column: LEGO castle — bottom-aligned with left column meta line */}
+        <div className="relative w-full self-end overflow-hidden min-h-[420px] min-[900px]:min-h-[520px] lg:min-h-[580px]">
+          <div className="absolute inset-0">
             {!shouldReduceMotion && (
               <LegoCanvas
                 key="castle-desktop"

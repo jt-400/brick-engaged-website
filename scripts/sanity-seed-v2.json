@@ -1,0 +1,126 @@
+{
+  "mutations": [
+    {
+      "patch": {
+        "id": "programme-brick-club",
+        "set": {
+          "outcomesHeading": "How it's helpful",
+          "outcomesIntro": "Building with LEGO® encourages learning through play and develops cognitive and social skills. Participants are encouraged, guided, and assisted by our experienced LEGO® Play Specialist.",
+          "outcomes": [
+            { "_key": "bco1", "title": "Fine motor skills", "body": "Hands-on building, sorting, and connecting fine pieces — every session is a workout for small muscle control." },
+            { "_key": "bco2", "title": "Problem solving & perseverance", "body": "Builds don't always go to plan. Managing frustration and finding a way through is the whole point." },
+            { "_key": "bco3", "title": "Communication & teamwork", "body": "Sharing pieces, negotiating ideas, asking for help, explaining a build — all practised in a small, supported group." },
+            { "_key": "bco4", "title": "Creativity & self-confidence", "body": "Finishing a project no-one helped you with builds a kind of confidence that's hard to fake or fast-forward." },
+            { "_key": "bco5", "title": "Basic mathematics", "body": "Counting pieces, working out symmetry, measuring stud-grids — maths shows up in every build whether kids notice it or not." },
+            { "_key": "bco6", "title": "Lowering anxiety & stress", "body": "The repetitive, tactile, predictable nature of LEGO® play has a measurable calming effect. Many parents notice this most." }
+          ],
+          "faqs": [
+            { "_key": "bcf1", "_type": "faq", "question": "My child is shy / new to groups. Will they be ok?", "answer": "Yes. Brick Club is built for kids who find groups hard. The size is capped at 8–10, the structure is the same every week, and there's no pressure to perform. Most quieter kids settle in within a few sessions." },
+            { "_key": "bcf2", "_type": "faq", "question": "What if my child doesn't connect with the group?", "answer": "We'll keep an eye on it together. If after a couple of weeks it's not the right fit, Dan will be honest about that — and we'll either find a different group, a 1:1 alternative, or refund the unused weeks." },
+            { "_key": "bcf3", "_type": "faq", "question": "How are kids grouped?", "answer": "By age or age-appropriate needs. Different sessions tend to have kids grouped accordingly — see the calendar for available days and times." },
+            { "_key": "bcf4", "_type": "faq", "question": "Is it just for neurodivergent kids?", "answer": "Brick Club is particularly well suited to kids who love LEGO® and who are ADHD, autistic, or need mental health support or respite. But it works for any kid who loves building and wants a steady, low-pressure group." },
+            { "_key": "bcf5", "_type": "faq", "question": "Can my child bring their own LEGO®?", "answer": "We stick to the club LEGO® during the session — it keeps the sharing dynamic alive and prevents the 'that's mine' tangles. Kids are welcome to bring a small build to show off at the start." },
+            { "_key": "bcf6", "_type": "faq", "question": "How do I enrol?", "answer": "Use the calendar below to see which days and times are open, then book the term. If you'd like to chat first, send Dan a message via the contact form." }
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "programme-home-schoolers",
+        "set": {
+          "outcomesHeading": "What kids and whānau take away",
+          "outcomesIntro": "Sessions are designed for the practical application of curriculum subjects — built, shared, refined — alongside the core life and social skills home-schooled kids don't always get from solo work.",
+          "outcomes": [
+            { "_key": "hso1", "title": "Curriculum that sticks because they built it", "body": "Maths, sciences, arts, environment — concepts are explored through LEGO® and then defended out loud. Kids remember what they made next week, not what they were told." },
+            { "_key": "hso2", "title": "Critical thinking through build → share → revise", "body": "Each build has a reason. Kids explain the story and thinking behind it, take collective feedback, and iterate. That's the loop we work in." },
+            { "_key": "hso3", "title": "Social practice in a steady weekly group", "body": "Mixed ages, same faces, two hours a week. For families whose week is otherwise individual learning, this is the consistent peer time kids need." },
+            { "_key": "hso4", "title": "Two hours of structured learning that isn't on you", "body": "Many home educators use the time for their own deep work, errands, or a coffee with another parent. The kids are fully engaged." }
+          ],
+          "rhythmHeading": "What a session looks like",
+          "rhythmIntro": "Sessions follow a predictable plan — present, build, share, refine — and may take several weeks to complete a topic or task.",
+          "rhythmSteps": [
+            { "_key": "hsr1", "duration": "First 15 min", "title": "Idea or concept presented", "body": "Dan introduces the topic — could be forces and motion, an ecosystem, a maths challenge, a story arc. We talk through what we're exploring." },
+            { "_key": "hsr2", "duration": "15–80 min", "title": "Build the answer", "body": "Kids build their thoughts and answers with LEGO® bricks and pieces. Ample parts are provided. On some sessions a selected number of parts or a kit is used." },
+            { "_key": "hsr3", "duration": "80–105 min", "title": "Share & explain", "body": "Each build is shared. Kids explain the story, the reason, and the critical thinking behind it. The others listen, ask questions, take it in." },
+            { "_key": "hsr4", "duration": "Last 15 min", "title": "Feedback & refine", "body": "Collective and constructive feedback. If the build needs revision, refinement, or further exploration, we pick it up next week." }
+          ],
+          "faqs": [
+            { "_key": "hsf1", "_type": "faq", "question": "How long are the sessions?", "answer": "Two hours, weekly. A topic or task may take several weeks to complete. See the calendar below for available days and times." },
+            { "_key": "hsf2", "_type": "faq", "question": "Can the kids just build what they want?", "answer": "Yes and no. Kids use our extensive LEGO® parts collection to build the answer to the topic we're studying. Ample pieces are provided. Sometimes the task uses a selected number of parts or a kit. The expectation is the kids will participate in the session as designed — we have other programmes that cater to fully free building, LEGO® sets, and tutoring." },
+            { "_key": "hsf3", "_type": "faq", "question": "Will kids build regular LEGO® sets with instructions?", "answer": "Not in these sessions. The home-schoolers programme is about exploring concepts through building, not following instructions. If your child wants the instruction-following experience, Brick Club is a better fit." },
+            { "_key": "hsf4", "_type": "faq", "question": "What age range works best?", "answer": "Mixed-age groups from around 6 to 14 work well. Older kids mentor younger ones; younger ones stretch. The dynamic is one of the things home-school families value most." },
+            { "_key": "hsf5", "_type": "faq", "question": "Does this align with the NZ Curriculum?", "answer": "Themes map to NZC strands (Science, Technology, Maths, English, The Arts), but sessions aren't a formal substitute for any one subject. Most home-school families use Brick Engaged as one of several weekly anchors." },
+            { "_key": "hsf6", "_type": "faq", "question": "Can siblings attend together?", "answer": "Yes, and we recommend it. Siblings often work as a built-in support pair, especially in the early weeks." },
+            { "_key": "hsf7", "_type": "faq", "question": "How do I enrol?", "answer": "Use the calendar below to enrol for the upcoming term, or send a quick message if you'd like to chat first about fit." }
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "programme-peer-to-peer",
+        "set": {
+          "outcomesHeading": "What people come for",
+          "outcomesIntro": "Most attendees aren't here for the LEGO® specifically — they're here for what an evening of focused, low-pressure hand-work does to a busy mind, in a room with like-minded people.",
+          "outcomes": [
+            { "_key": "ppo1", "title": "A genuine break from the noise", "body": "Two hours where you don't have to be productive, articulate, or 'on'. Your hands work and your mind quiets — many people describe it as their only real downtime that week." },
+            { "_key": "ppo2", "title": "Co-regulation in a shared room", "body": "You're not alone, but you're not expected to socialise either. The presence of others doing the same gentle thing has its own calming effect." },
+            { "_key": "ppo3", "title": "Optional, easy connection", "body": "Conversation happens when it happens. Many regulars have made friendships with people they'd never have met otherwise." },
+            { "_key": "ppo4", "title": "Permission to be a beginner", "body": "No-one is expected to be good. The point is the practice, not the product. People often discover they're more creative than they thought." }
+          ],
+          "faqs": [
+            { "_key": "ppf1", "_type": "faq", "question": "Is this therapy or counselling?", "answer": "No. Dan is a LEGO® Master and group facilitator, not a clinician. These sessions are therapeutic in their effect — calming, regulating, connecting — but they're not a substitute for therapy. They sit alongside it well." },
+            { "_key": "ppf2", "_type": "faq", "question": "Do I need a referral?", "answer": "No referral, no diagnosis, no paperwork. Just book and turn up." },
+            { "_key": "ppf3", "_type": "faq", "question": "Do I have to talk?", "answer": "No expectation at all. Anything shared during a session is treated as confidential unless you say otherwise. Plenty of people come and barely speak — that's completely fine." },
+            { "_key": "ppf4", "_type": "faq", "question": "Can I come for part of the night?", "answer": "Yes. The session runs two hours but you're welcome to come for some of it. Just please book or let us know, because group size is capped at 10 and others may be on the wait list." },
+            { "_key": "ppf5", "_type": "faq", "question": "What's the donation actually for?", "answer": "Donations go towards the coffee bar, rent, and running costs. $10 is the suggested contribution — pay what you can. Tap-to-pay is available on the night." },
+            { "_key": "ppf6", "_type": "faq", "question": "Can I bring my own LEGO® / sets / projects?", "answer": "Yes, all of the above. Bring sets to build, build a MoC, sort pieces, or just chat. Some people come specifically to dismantle our sets back into numbered bags — there's always a backlog." }
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "programme-one-to-one",
+        "set": {
+          "faqs": [
+            { "_key": "ooof1", "_type": "faq", "question": "How long are the sessions?", "answer": "Sessions are booked for a one-hour timeslot. Use the calendar below to pick a time that works for you." },
+            { "_key": "ooof2", "_type": "faq", "question": "What does it cost?", "answer": "$45 per session. Payment is taken securely via Stripe at the time of booking — same as any other paid session on the site." },
+            { "_key": "ooof3", "_type": "faq", "question": "Can I bring my own set or project to work on?", "answer": "Absolutely. Bring an old set with missing instructions, a stalled MoC, a complex Icons set — whatever you'd like Dan's help with." },
+            { "_key": "ooof4", "_type": "faq", "question": "Are these sessions just for adults?", "answer": "No — all ages. Plenty of kids book One-to-One sessions to level up their building, learn techniques, or work on something specific. Parents are welcome to stay or step out." },
+            { "_key": "ooof5", "_type": "faq", "question": "Available days?", "answer": "Mondays, Tuesdays, and Wednesdays only for now. Thursdays and Fridays are closed. The booking calendar below shows every open time over the next 12 weeks." },
+            { "_key": "ooof6", "_type": "faq", "question": "How do I book?", "answer": "Pick a day and time below, fill in your details, and pay $45 via Stripe. You'll get a confirmation email straight away." }
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "foundationPage",
+        "set": {
+          "howItWorksHeading": "How it works",
+          "howItWorksSteps": [
+            { "_key": "fhw1", "iconKey": "FileText", "title": "Whānau gets in touch", "body": "Caregivers (or referring clinicians, teachers, support workers) send a short note describing the child and what they're hoping for." },
+            { "_key": "fhw2", "iconKey": "Sparkles", "title": "Quick fit conversation", "body": "Dan has a no-pressure chat — usually 15 minutes by phone or email — to understand the child, the family situation, and what a good fit looks like." },
+            { "_key": "fhw3", "iconKey": "HandHeart", "title": "Funded sessions begin", "body": "When there's a match, the foundation covers the cost of a 10-week Brick Club term, or therapeutic drop-ins, or a holiday day. No family pays." },
+            { "_key": "fhw4", "iconKey": "Heart", "title": "Whānau stays in the loop", "body": "Brief check-ins partway through and at term end. We follow whether the sessions are landing — and adjust together if they're not." }
+          ]
+        }
+      }
+    },
+    {
+      "patch": {
+        "id": "aboutPage",
+        "set": {
+          "danBio": [
+            { "_key": "bio1", "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "I joined the NZ Army as a Medic at 17. When I left the Army, I traveled overseas with my wife before finally settling in Upper Hutt where we started our family and raised our three children. I worked in Emergency Services (Paramedic) and Allied Health (Laboratory) for nearly 20 years. I have gained vast experience in life and social skills, managing people, developing education and communication." }] },
+            { "_key": "bio2", "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "LEGO became an important part of my life again in 2014. My passion for LEGO and sharing the experience of LEGO Play has provided me with many opportunities. I started a LEGO User Group (LUG) in Wellington which is still thriving today (Well-LUG). After five years as the LUG's President, I stepped down to pursue another direction, Content Creation which went on to become New Zealand's only Recognized LEGO Fan Media (RLFM) with Between the Bricks." }] },
+            { "_key": "bio3", "_type": "block", "style": "blockquote", "children": [{ "_type": "span", "text": "Around the same time as starting Between the Bricks, I had a Mental Health Crisis and was diagnosed with PTSD. LEGO now became part of my therapy and recovery playing a very important role in my rehabilitation. This experience has shaped me and who I am today and the direction I wish to take for the rest of my life." }] },
+            { "_key": "bio4", "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "I started working on the Brick Engaged concept in mid 2021, completing training in LEGO Serious Play®, LEGO-Based Therapy then furthering this in 2022 with Brick-by-Brick® facilitator training. In 2023, to ensure we remain accessible to all children and families no matter their financial situation I formed Brick Engaged Foundation a charity whose sole aim is to seek funding that will enable more children to have access to the service." }] }
+          ]
+        }
+      }
+    }
+  ]
+}

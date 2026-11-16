@@ -5,31 +5,48 @@ import { TrustStrip } from "@/components/category/TrustStrip";
 import { FAQ } from "@/components/category/FAQ";
 import { CategoryCta } from "@/components/category/CategoryCta";
 import { TermEnrolment } from "@/components/booking/TermEnrolment";
+import { MidTermEnquiry } from "@/components/booking/MidTermEnquiry";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { PROGRAMME_QUERY } from "@/lib/sanityQueries";
+
+interface ProgrammeData {
+  kicker?: string; title?: string; subtitle?: string;
+  heroPrice?: string; heroPriceCadence?: string;
+  heroFacts?: Array<{ label: string; value: string }>;
+  trustStripKicker?: string;
+  trustStripStats?: Array<{ value: string; label: string }>;
+  outcomesHeading?: string; outcomesIntro?: string;
+  outcomes?: Array<{ title: string; body: string }>;
+  rhythmHeading?: string; rhythmIntro?: string;
+  rhythmSteps?: Array<{ duration: string; title: string; body: string }>;
+  faqs?: Array<{ q: string; a: string }>;
+}
 
 export default function HomeSchoolers() {
+  const { data } = useSanityDoc<ProgrammeData>("programme-home-schoolers", PROGRAMME_QUERY, { slug: "home-schoolers" });
   return (
     <div className="flex flex-col w-full">
       <CategoryHero
-        kicker="Weekly · 2-hour sessions"
-        title="Home schoolers sessions"
-        tagline="Explore learning through the practical application of LEGO®. An idea is presented, kids build their answer, then share the thinking behind it — and we go from there."
-        facts={[
+        kicker={data?.kicker ?? "Weekly · 2-hour sessions"}
+        title={data?.title ?? "Home schoolers sessions"}
+        tagline={data?.subtitle ?? "Explore learning through the practical application of LEGO®. An idea is presented, kids build their answer, then share the thinking behind it — and we go from there."}
+        facts={data?.heroFacts?.length ? data.heroFacts : [
           { label: "Group size", value: "Min 5 · Max 12" },
           { label: "Format", value: "2-hour weekly sessions" },
           { label: "Subjects", value: "Maths · Sciences · Arts · Environment" },
           { label: "Plus", value: "Core life & social skills" },
           { label: "Location", value: "Lane Park Business Centre, Upper Hutt" },
         ]}
-        price="$150"
-        priceCadence="10-week term"
+        price={data?.heroPrice ?? "$150"}
+        priceCadence={data?.heroPriceCadence ?? "10-week term"}
         primaryCta={{ label: "Enrol for next term", anchor: "enrol" }}
         secondaryCta={{ label: "Email Dan", href: "mailto:info@brickengaged.org", external: true }}
       />
 
       <OutcomeGrid
-        heading="What kids and whānau take away"
-        intro="Sessions are designed for the practical application of curriculum subjects — built, shared, refined — alongside the core life and social skills home-schooled kids don't always get from solo work."
-        outcomes={[
+        heading={data?.outcomesHeading ?? "What kids and whānau take away"}
+        intro={data?.outcomesIntro ?? "Sessions are designed for the practical application of curriculum subjects — built, shared, refined — alongside the core life and social skills home-schooled kids don't always get from solo work."}
+        outcomes={data?.outcomes?.length ? data.outcomes : [
           {
             title: "Curriculum that sticks because they built it",
             body: "Maths, sciences, arts, environment — concepts are explored through LEGO® and then defended out loud. Kids remember what they made next week, not what they were told.",
@@ -50,8 +67,9 @@ export default function HomeSchoolers() {
       />
 
       <SessionRhythm
-        intro="Sessions follow a predictable plan — present, build, share, refine — and may take several weeks to complete a topic or task."
-        steps={[
+        heading={data?.rhythmHeading ?? undefined}
+        intro={data?.rhythmIntro ?? "Sessions follow a predictable plan — present, build, share, refine — and may take several weeks to complete a topic or task."}
+        steps={data?.rhythmSteps?.length ? data.rhythmSteps : [
           {
             duration: "First 15 min",
             title: "Idea or concept presented",
@@ -76,8 +94,8 @@ export default function HomeSchoolers() {
       />
 
       <TrustStrip
-        kicker="Designed with home-school families"
-        stats={[
+        kicker={data?.trustStripKicker ?? "Designed with home-school families"}
+        stats={data?.trustStripStats?.length ? data.trustStripStats : [
           { value: "12 max", label: "Per group" },
           { value: "2 hours", label: "Per session" },
           { value: "10 weeks", label: "Per term · 1 day a week" },
@@ -86,7 +104,7 @@ export default function HomeSchoolers() {
       />
 
       <FAQ
-        items={[
+        items={data?.faqs?.length ? data.faqs : [
           {
             q: "How long are the sessions?",
             a: "Two hours, weekly. A topic or task may take several weeks to complete. See the calendar below for available days and times.",
@@ -123,9 +141,10 @@ export default function HomeSchoolers() {
         programmeTitle="Home schoolers sessions"
         priceCents={15000}
         location="Lane Park Business Centre, Upper Hutt"
-        termLabel="Term 3 2026 · weekly Thursdays 10:00am–12:30pm"
-        schedule="10 weekly sessions · Thursdays 10:00am–12:30pm"
+        termHeading="Term 3 2026 — pick a session"
       />
+
+      <MidTermEnquiry programmeTitle="Home schoolers sessions" />
 
       <CategoryCta
         heading="Got a home-school co-op?"

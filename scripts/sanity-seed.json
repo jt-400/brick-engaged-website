@@ -1,0 +1,240 @@
+{
+  "mutations": [
+    {
+      "createOrReplace": {
+        "_id": "siteSettings",
+        "_type": "siteSettings",
+        "businessName": "Brick Engaged",
+        "tagline": "Using the transformative power of play to create positive, lasting change.",
+        "phone": "021 270 0301",
+        "email": "info@brickengaged.org",
+        "address": "Lane Park Business Centre, Upper Hutt",
+        "footerNote": "© Brick Engaged. LEGO® is a trademark of the LEGO Group of companies which does not sponsor, authorize or endorse this site."
+      }
+    },
+    {
+      "createOrReplace": {
+        "_id": "homePage",
+        "_type": "homePage",
+        "heroEyebrow": "LEGO®-based sessions",
+        "heroHeadline": "Building connections.\nOne brick at a time.",
+        "heroSubhead": "Using the transformative power of play to create positive, lasting change.",
+        "heroMetaLine": "Weekly Brick Club · school-holiday programmes · peer-to-peer support sessions",
+        "heroPrimaryCta": { "_type": "cta", "label": "View Sessions", "href": "/sessions", "variant": "primary" },
+        "heroSecondaryCta": { "_type": "cta", "label": "Book a holiday session", "href": "/holiday", "variant": "secondary" },
+        "trustStrip": [
+          { "_type": "stat", "_key": "stat1", "value": "4", "label": "Specialised programmes" },
+          { "_type": "stat", "_key": "stat2", "value": "15+", "label": "Years of LEGO® experience" },
+          { "_type": "stat", "_key": "stat3", "value": "Since 2021", "label": "Building brighter futures" },
+          { "_type": "stat", "_key": "stat4", "value": "Upper Hutt", "label": "Lane Park Business Centre" }
+        ],
+        "pathwaysHeading": "Find your path",
+        "pathwaysSubtitle": "Three ways into Brick Engaged. Tap one to see how it works and what's available.",
+        "pathways": [
+          {
+            "_key": "p1",
+            "kicker": "Weekly sessions",
+            "title": "Brick Club, Home schoolers & Therapeutic",
+            "blurb": "Term-long groups for kids, teens and home-schooled families building friendships, focus, and confidence — one brick at a time.",
+            "chips": [
+              { "_type": "chip", "_key": "c1", "text": "10-week terms" },
+              { "_type": "chip", "_key": "c2", "text": "From $150" },
+              { "_type": "chip", "_key": "c3", "text": "Ages 7–18" }
+            ],
+            "href": "/sessions",
+            "accent": "emerald"
+          },
+          {
+            "_key": "p2",
+            "kicker": "School holidays",
+            "title": "Holiday Programme",
+            "blurb": "Full-day school holiday sessions, 9am–4pm. Massive LEGO® selection, small groups, safe and inclusive environment.",
+            "chips": [
+              { "_type": "chip", "_key": "c4", "text": "Ages 8–14" },
+              { "_type": "chip", "_key": "c5", "text": "$115 / day" },
+              { "_type": "chip", "_key": "c6", "text": "Book online" }
+            ],
+            "href": "/holiday",
+            "accent": "amber"
+          },
+          {
+            "_key": "p3",
+            "kicker": "Charity arm",
+            "title": "Brick Engaged Foundation",
+            "blurb": "Fully-funded sessions for neurodivergent tamariki whose whānau couldn't otherwise access them. Apply for a place or donate.",
+            "chips": [
+              { "_type": "chip", "_key": "c7", "text": "Funded sessions" },
+              { "_type": "chip", "_key": "c8", "text": "Apply or refer" },
+              { "_type": "chip", "_key": "c9", "text": "Donate" }
+            ],
+            "href": "/foundation",
+            "accent": "sky"
+          }
+        ]
+      }
+    },
+    {
+      "createOrReplace": {
+        "_id": "sessionsHubPage",
+        "_type": "sessionsHubPage",
+        "kicker": "Termly sessions",
+        "title": "Find the right session",
+        "subtitle": "Four ways to play, build, and connect — pick what fits.",
+        "cards": [
+          {
+            "_key": "h1",
+            "kicker": "Weekly",
+            "title": "Brick Club",
+            "blurb": "Term-long after-school groups. Build, play, make friends.",
+            "chips": [{ "_type": "chip", "_key": "k1", "text": "Ages 7–12" }, { "_type": "chip", "_key": "k2", "text": "10 weeks · $150" }],
+            "href": "/sessions/brick-club",
+            "accent": "emerald"
+          },
+          {
+            "_key": "h2",
+            "kicker": "Daytime",
+            "title": "Home Schoolers",
+            "blurb": "Term-long daytime LEGO® sessions for home-schooled tamariki.",
+            "chips": [{ "_type": "chip", "_key": "k3", "text": "Ages 7–18" }, { "_type": "chip", "_key": "k4", "text": "10 weeks · $150" }],
+            "href": "/sessions/home-schoolers",
+            "accent": "sky"
+          },
+          {
+            "_key": "h3",
+            "kicker": "Peer support",
+            "title": "Peer-to-Peer",
+            "blurb": "Free koha-based men's, neurodivergent, and family-bond groups.",
+            "chips": [{ "_type": "chip", "_key": "k5", "text": "Adults" }, { "_type": "chip", "_key": "k6", "text": "Free (koha welcome)" }],
+            "href": "/sessions/peer-to-peer",
+            "accent": "amber"
+          },
+          {
+            "_key": "h4",
+            "kicker": "1-on-1",
+            "title": "One-to-One",
+            "blurb": "Bespoke sessions tailored to your goals or your child's.",
+            "chips": [{ "_type": "chip", "_key": "k7", "text": "All ages" }, { "_type": "chip", "_key": "k8", "text": "$45 / hour" }],
+            "href": "/sessions/one-to-one",
+            "accent": "emerald"
+          }
+        ]
+      }
+    },
+    {
+      "createOrReplace": {
+        "_id": "programme-brick-club",
+        "_type": "programmePage",
+        "slug": { "_type": "slug", "current": "brick-club" },
+        "kicker": "Weekly after-school sessions",
+        "title": "Brick Club",
+        "subtitle": "Term-long groups for kids learning to build friendships, focus, and confidence — one brick at a time.",
+        "heroChips": [
+          { "_type": "chip", "_key": "bc1", "text": "Ages 7–12" },
+          { "_type": "chip", "_key": "bc2", "text": "10 weeks · $150" },
+          { "_type": "chip", "_key": "bc3", "text": "Tues & Thurs · 3:30–5pm" }
+        ],
+        "ctaLabel": "Enrol for next term",
+        "ctaHref": "#enrol"
+      }
+    },
+    {
+      "createOrReplace": {
+        "_id": "programme-home-schoolers",
+        "_type": "programmePage",
+        "slug": { "_type": "slug", "current": "home-schoolers" },
+        "kicker": "Daytime sessions",
+        "title": "Home Schoolers",
+        "subtitle": "Term-long daytime LEGO® sessions for home-schooled tamariki and whānau.",
+        "heroChips": [
+          { "_type": "chip", "_key": "hs1", "text": "Ages 7–18" },
+          { "_type": "chip", "_key": "hs2", "text": "10 weeks · $150" },
+          { "_type": "chip", "_key": "hs3", "text": "Weekday mornings" }
+        ],
+        "ctaLabel": "Enrol for next term",
+        "ctaHref": "#enrol"
+      }
+    },
+    {
+      "createOrReplace": {
+        "_id": "programme-peer-to-peer",
+        "_type": "programmePage",
+        "slug": { "_type": "slug", "current": "peer-to-peer" },
+        "kicker": "Peer support",
+        "title": "Peer-to-Peer",
+        "subtitle": "Free, koha-welcome sessions for adults — men's groups, neurodivergent peer support, and family-bond evenings.",
+        "heroChips": [
+          { "_type": "chip", "_key": "pp1", "text": "Adults 15+" },
+          { "_type": "chip", "_key": "pp2", "text": "Free · koha welcome" },
+          { "_type": "chip", "_key": "pp3", "text": "Evenings" }
+        ],
+        "ctaLabel": "Reserve a spot",
+        "ctaHref": "#book"
+      }
+    },
+    {
+      "createOrReplace": {
+        "_id": "programme-one-to-one",
+        "_type": "programmePage",
+        "slug": { "_type": "slug", "current": "one-to-one" },
+        "kicker": "Tailored sessions",
+        "title": "One-to-One",
+        "subtitle": "Bespoke LEGO®-based sessions tailored to a specific goal — therapeutic, developmental, or just focused fun.",
+        "heroChips": [
+          { "_type": "chip", "_key": "oo1", "text": "All ages" },
+          { "_type": "chip", "_key": "oo2", "text": "$45 / hour" },
+          { "_type": "chip", "_key": "oo3", "text": "Flexible scheduling" }
+        ],
+        "ctaLabel": "Book a session",
+        "ctaHref": "#book"
+      }
+    },
+    {
+      "createOrReplace": {
+        "_id": "foundationPage",
+        "_type": "foundationPage",
+        "kicker": "Charity arm",
+        "title": "Brick Engaged Foundation",
+        "subtitle": "Fully-funded sessions for neurodivergent tamariki whose whānau couldn't otherwise access them.",
+        "missionStatement": "Every child deserves a place where they can build, play, and belong — regardless of circumstance. The Foundation removes the cost barrier so the door is open to everyone.",
+        "donateCtaLabel": "Donate",
+        "donateCtaHref": "#donate",
+        "applyCtaLabel": "Apply or refer a child",
+        "applyCtaHref": "#apply"
+      }
+    },
+    {
+      "createOrReplace": {
+        "_id": "holidayPage",
+        "_type": "holidayPage",
+        "kicker": "School holidays",
+        "title": "Holiday Programme",
+        "subtitle": "Full-day school holiday sessions, 9am–4pm. Massive LEGO® selection, small groups, safe and inclusive environment.",
+        "heroChips": [
+          { "_type": "chip", "_key": "h1", "text": "Ages 8–14" },
+          { "_type": "chip", "_key": "h2", "text": "$115 / day" },
+          { "_type": "chip", "_key": "h3", "text": "Multi-day discounts" }
+        ]
+      }
+    },
+    {
+      "createOrReplace": {
+        "_id": "aboutPage",
+        "_type": "aboutPage",
+        "kicker": "About",
+        "title": "Meet Dan",
+        "subtitle": "Facilitator, builder, and the heart of Brick Engaged.",
+        "danName": "Daniel Mulholland",
+        "danRole": "Facilitator · He/Him"
+      }
+    },
+    {
+      "createOrReplace": {
+        "_id": "contactPage",
+        "_type": "contactPage",
+        "title": "Get in touch",
+        "subtitle": "Got a question? Want to enrol? Or just want to say hi? We're here.",
+        "introCopy": "Drop us a line, give us a call, or come visit during a session. We respond within a day or two."
+      }
+    }
+  ]
+}

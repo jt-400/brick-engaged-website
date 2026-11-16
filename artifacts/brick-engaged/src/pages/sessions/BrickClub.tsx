@@ -8,6 +8,31 @@ import { TrustStrip } from "@/components/category/TrustStrip";
 import { FAQ } from "@/components/category/FAQ";
 import { CategoryCta } from "@/components/category/CategoryCta";
 import { TermEnrolment } from "@/components/booking/TermEnrolment";
+import { MidTermEnquiry } from "@/components/booking/MidTermEnquiry";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { PROGRAMME_QUERY } from "@/lib/sanityQueries";
+
+interface ProgrammeData {
+  kicker?: string;
+  title?: string;
+  subtitle?: string;
+  heroPrice?: string;
+  heroPriceCadence?: string;
+  heroFacts?: Array<{ label: string; value: string }>;
+  buildModesHeading?: string;
+  buildModesIntro?: string;
+  buildModes?: Array<{ iconKey?: string; title: string; body: string }>;
+  trustStripKicker?: string;
+  trustStripStats?: Array<{ value: string; label: string }>;
+  outcomesHeading?: string;
+  outcomesIntro?: string;
+  outcomes?: Array<{ title: string; body: string }>;
+  faqs?: Array<{ q: string; a: string }>;
+}
+
+const BUILD_MODE_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
+  Boxes, Wand2, Layers,
+};
 
 const BUILD_MODES = [
   {
@@ -31,21 +56,32 @@ const BUILD_MODES = [
 ];
 
 export default function BrickClub() {
+  const { data } = useSanityDoc<ProgrammeData>("programme-brick-club", PROGRAMME_QUERY, { slug: "brick-club" });
+
+  const facts = data?.heroFacts?.length ? data.heroFacts : [
+    { label: "Ages", value: "7–18" },
+    { label: "Group size", value: "Max 8–10" },
+    { label: "Format", value: "10-week term · weekly" },
+    { label: "Location", value: "Lane Park Business Centre, Upper Hutt" },
+    { label: "Well suited to", value: "ADHD · Autistic · Mental health support" },
+  ];
+
+  const buildModesData: Array<{ icon: React.ReactNode; title: string; body: string }> = data?.buildModes?.length
+    ? data.buildModes.map((m) => {
+        const Icon = BUILD_MODE_ICONS[m.iconKey ?? "Boxes"] ?? Boxes;
+        return { icon: <Icon size={24} />, title: m.title, body: m.body };
+      })
+    : BUILD_MODES;
+
   return (
     <div className="flex flex-col w-full">
       <CategoryHero
-        kicker="Afterschool · 10-week term"
-        title="Brick Club"
-        tagline="An afterschool programme where kids get to just be themselves — building, learning, and creating their own mini masterpieces in a safe, inclusive group."
-        facts={[
-          { label: "Ages", value: "7–18" },
-          { label: "Group size", value: "Max 8–10" },
-          { label: "Format", value: "10-week term · weekly" },
-          { label: "Location", value: "Lane Park Business Centre, Upper Hutt" },
-          { label: "Well suited to", value: "ADHD · Autistic · Mental health support" },
-        ]}
-        price="$299"
-        priceCadence="10-week term"
+        kicker={data?.kicker ?? "Afterschool · 10-week term"}
+        title={data?.title ?? "Brick Club"}
+        tagline={data?.subtitle ?? "An afterschool programme where kids get to just be themselves — building, learning, and creating their own mini masterpieces in a safe, inclusive group."}
+        facts={facts}
+        price={data?.heroPrice ?? "$299"}
+        priceCadence={data?.heroPriceCadence ?? "10-week term"}
         primaryCta={{ label: "Enrol for next term", anchor: "enrol" }}
         secondaryCta={{ label: "Email Dan", href: "mailto:info@brickengaged.org", external: true }}
       />
@@ -63,11 +99,10 @@ export default function BrickClub() {
               className="text-3xl md:text-4xl font-black text-charcoal tracking-tight mb-3"
               style={{ letterSpacing: "-0.02em" }}
             >
-              What's on offer
+              {data?.buildModesHeading ?? "What's on offer"}
             </h2>
             <p className="text-base md:text-lg font-medium text-slate-500 leading-relaxed">
-              From an extensive quantity of loose LEGO® bricks and pieces to a massive range of
-              LEGO® sets, kids get to choose their project — guided and supported either way.
+              {data?.buildModesIntro ?? "From an extensive quantity of loose LEGO® bricks and pieces to a massive range of LEGO® sets, kids get to choose their project — guided and supported either way."}
             </p>
           </motion.div>
 
@@ -78,7 +113,7 @@ export default function BrickClub() {
             variants={staggerContainer}
             className="grid grid-cols-1 md:grid-cols-3 gap-5"
           >
-            {BUILD_MODES.map((m) => (
+            {buildModesData.map((m) => (
               <motion.div
                 key={m.title}
                 variants={fadeInUp}
@@ -142,9 +177,9 @@ export default function BrickClub() {
 
       {/* How is it helpful — skills outcomes */}
       <OutcomeGrid
-        heading="How it's helpful"
-        intro="Building with LEGO® encourages learning through play and develops cognitive and social skills. Participants are encouraged, guided, and assisted by our experienced LEGO® Play Specialist."
-        outcomes={[
+        heading={data?.outcomesHeading ?? "How it's helpful"}
+        intro={data?.outcomesIntro ?? "Building with LEGO® encourages learning through play and develops cognitive and social skills. Participants are encouraged, guided, and assisted by our experienced LEGO® Play Specialist."}
+        outcomes={data?.outcomes?.length ? data.outcomes : [
           { title: "Fine motor skills", body: "Hands-on building, sorting, and connecting fine pieces — every session is a workout for small muscle control." },
           { title: "Problem solving & perseverance", body: "Builds don't always go to plan. Managing frustration and finding a way through is the whole point." },
           { title: "Communication & teamwork", body: "Sharing pieces, negotiating ideas, asking for help, explaining a build — all practised in a small, supported group." },
@@ -155,17 +190,17 @@ export default function BrickClub() {
       />
 
       <TrustStrip
-        kicker="Why parents trust Brick Club"
-        stats={[
+        kicker={data?.trustStripKicker ?? "Why parents trust Brick Club"}
+        stats={data?.trustStripStats?.length ? data.trustStripStats : [
           { value: "Since 2021", label: "Running in Upper Hutt" },
-          { value: "12+ yrs", label: "Dan's LEGO® experience" },
+          { value: "15+ yrs", label: "Dan's serious LEGO® years" },
           { value: "LMNZ S1", label: "LEGO® Master credential" },
           { value: "Max 10", label: "Per group, always" },
         ]}
       />
 
       <FAQ
-        items={[
+        items={data?.faqs?.length ? data.faqs : [
           {
             q: "My child is shy / new to groups. Will they be ok?",
             a: "Yes. Brick Club is built for kids who find groups hard. The size is capped at 8–10, the structure is the same every week, and there's no pressure to perform. Most quieter kids settle in within a few sessions.",
@@ -198,9 +233,10 @@ export default function BrickClub() {
         programmeTitle="Brick Club"
         priceCents={29900}
         location="Lane Park Business Centre, Upper Hutt"
-        termLabel="Term 3 2026 · weekly Tuesdays 4:00–5:30pm"
-        schedule="10 weekly sessions · Tuesdays 4:00–5:30pm"
+        termHeading="Term 3 2026 — pick a session"
       />
+
+      <MidTermEnquiry programmeTitle="Brick Club" />
 
       <CategoryCta
         heading="Want to chat first?"

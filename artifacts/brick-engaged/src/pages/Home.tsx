@@ -6,12 +6,70 @@ import { LegoButton } from "@/components/LegoButton";
 import { HeroDesktop } from "@/components/HeroDesktop";
 import { HeroMobile } from "@/components/HeroMobile";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
+import { useSanityDoc } from "@/lib/useSanityDoc";
+import { HOME_PAGE_QUERY } from "@/lib/sanityQueries";
 import happyMinifigsImg from "@assets/lego_happy_minifigs.webp";
 import minifigsImg from "@assets/lego_minifigs.webp";
 import bricksImg from "@assets/lego_bricks_close.webp";
 import kidsImg from "@assets/lego_kids.webp";
 
-const PATHWAYS = [
+interface HomeData {
+  pathwaysHeading?: string;
+  pathwaysSubtitle?: string;
+  trustStrip?: Array<{ value: string; label: string }>;
+  pathways?: Array<{
+    kicker: string;
+    title: string;
+    blurb: string;
+    chips: Array<{ text: string }>;
+    href: string;
+    accent: "emerald" | "amber" | "sky";
+  }>;
+  growthHeading?: string;
+  growthBody1?: string;
+  growthBody2?: string;
+  growthCtaLabel?: string;
+  growthCtaHref?: string;
+  whoBenefitHeading?: string;
+  whoBenefitSubtitle?: string;
+  whoBenefitCards?: Array<{
+    badgeText: string;
+    title: string;
+    accent: "orange" | "charcoal";
+    items: string[];
+  }>;
+}
+
+const WHO_BENEFIT_FALLBACK: HomeData["whoBenefitCards"] = [
+  { badgeText: "Brick-by-Brick® Programme", title: "Children 7–12", accent: "orange", items: ["Neurodiverse kids (ADHD, Autistic)", "Home-schooled learners", "Building friendships & social skills", "Processing tough experiences", "Growing confidence through play", "Finding their tribe"] },
+  { badgeText: "Mindful Building Sessions", title: "Teens 13–19", accent: "charcoal", items: ["Navigating anxiety or low mood", "Feeling disconnected at school", "Recovering from trauma", "Quiet space for big feelings", "Peer-to-peer connection", "Calm focus through hands-on play"] },
+  { badgeText: "Therapeutic Use of LEGO®", title: "Adults 20+", accent: "orange", items: ["Respite from a busy mind", "Mindful, screen-free downtime", "Wellbeing & mental health support", "Reconnecting with creativity", "Small-group or 1:1 sessions", "A reset for tough weeks"] },
+];
+
+const ACCENT_BG: Record<string, string> = {
+  emerald: "bg-emerald-100",
+  amber: "bg-amber-100",
+  sky: "bg-sky-100",
+};
+const ACCENT_TEXT: Record<string, string> = {
+  emerald: "text-emerald-900",
+  amber: "text-amber-900",
+  sky: "text-sky-900",
+};
+const PATHWAY_IMAGE: Record<string, string> = {
+  "/sessions": bricksImg,
+  "/holiday": kidsImg,
+  "/foundation": minifigsImg,
+};
+
+const TRUST_STRIP_FALLBACK = [
+  { value: "4", label: "Specialised programmes" },
+  { value: "15+", label: "Years of LEGO® experience" },
+  { value: "Since 2021", label: "Building brighter futures" },
+  { value: "Upper Hutt", label: "Lane Park Business Centre" },
+];
+
+const PATHWAYS_FALLBACK = [
   {
     href: "/sessions",
     testId: "link-sessions-card",
@@ -54,6 +112,40 @@ const PATHWAYS = [
 ];
 
 export default function Home() {
+  const { data } = useSanityDoc<HomeData>("homePage", HOME_PAGE_QUERY);
+
+  const trustStrip = data?.trustStrip?.length ? data.trustStrip : TRUST_STRIP_FALLBACK;
+  const pathwaysHeading = data?.pathwaysHeading ?? "Find your path";
+  const pathwaysSubtitle =
+    data?.pathwaysSubtitle ??
+    "Three ways into Brick Engaged. Tap one to see how it works and what's available.";
+
+  // Normalise Sanity pathways into the shape the JSX expects.
+  const growthHeading = data?.growthHeading ?? "LEGO® as a tool for growth";
+  const growthBody1 = data?.growthBody1 ?? "Brick Engaged conducts Mindful LEGO® Building sessions for small groups in a safe, welcoming and inclusive environment.";
+  const growthBody2 = data?.growthBody2 ?? "We focus on social skills, life skills, mental wellbeing and meaningful interactions while building and playing with LEGO® bricks.";
+  const growthCtaLabel = data?.growthCtaLabel ?? "Explore Sessions";
+  const growthCtaHref = data?.growthCtaHref ?? "/sessions";
+
+  const whoBenefitHeading = data?.whoBenefitHeading ?? "Who can benefit?";
+  const whoBenefitSubtitle = data?.whoBenefitSubtitle ?? "Our programmes are designed for a wide range of individuals seeking growth and connection.";
+  const whoBenefitCards = data?.whoBenefitCards?.length ? data.whoBenefitCards : WHO_BENEFIT_FALLBACK!;
+
+  const pathways = data?.pathways?.length
+    ? data.pathways.map((p) => ({
+        href: p.href,
+        title: p.title,
+        kicker: p.kicker,
+        blurb: p.blurb,
+        chips: p.chips?.map((c) => c.text) ?? [],
+        image: PATHWAY_IMAGE[p.href] ?? bricksImg,
+        alt: p.title,
+        accentBg: ACCENT_BG[p.accent] ?? "bg-emerald-100",
+        accentText: ACCENT_TEXT[p.accent] ?? "text-emerald-900",
+        testId: `link-${p.href.replace(/^\//, "")}-card`,
+      }))
+    : PATHWAYS_FALLBACK;
+
   return (
     <div className="flex flex-col w-full">
       {/* Two heroes — each designed for its viewport, swapped via CSS only */}
@@ -72,12 +164,7 @@ export default function Home() {
             }}
             className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6"
           >
-            {[
-              { value: "3", label: "Specialised programmes" },
-              { value: "12+", label: "Years of LEGO® experience" },
-              { value: "Since 2021", label: "Building brighter futures" },
-              { value: "Upper Hutt", label: "Lane Park Business Centre" },
-            ].map((stat) => (
+            {trustStrip.map((stat) => (
               <motion.div
                 key={stat.label}
                 variants={{
@@ -116,20 +203,18 @@ export default function Home() {
                 className="text-4xl md:text-5xl font-black mb-6 tracking-tight leading-tight"
                 style={{ letterSpacing: '-0.02em' }}
               >
-                LEGO® as a tool for growth
+                {growthHeading}
               </h2>
               <p className="text-lg font-normal opacity-85 leading-relaxed mb-6">
-                Brick Engaged conducts Mindful LEGO® Building sessions for small groups in a safe,
-                welcoming and inclusive environment.
+                {growthBody1}
               </p>
               <p className="text-base font-normal opacity-65 leading-relaxed">
-                We focus on social skills, life skills, mental wellbeing and meaningful interactions
-                while building and playing with LEGO® bricks.
+                {growthBody2}
               </p>
               <div className="mt-8">
-                <Link href="/sessions">
+                <Link href={growthCtaHref}>
                   <LegoButton variant="orange">
-                    <span className="flex items-center gap-2">Explore Sessions <ArrowRight size={16} /></span>
+                    <span className="flex items-center gap-2">{growthCtaLabel} <ArrowRight size={16} /></span>
                   </LegoButton>
                 </Link>
               </div>
@@ -168,11 +253,10 @@ export default function Home() {
               className="text-4xl md:text-5xl font-black text-charcoal mb-4 tracking-tight"
               style={{ letterSpacing: '-0.02em' }}
             >
-              Who can benefit?
+              {whoBenefitHeading}
             </h2>
             <p className="text-lg font-normal text-muted-foreground max-w-2xl mx-auto">
-              Our programmes are designed for a wide range of individuals seeking growth and
-              connection.
+              {whoBenefitSubtitle}
             </p>
           </motion.div>
 
@@ -183,95 +267,32 @@ export default function Home() {
             variants={staggerContainer}
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
-            {/* Children */}
-            <motion.div variants={fadeInUp}>
-              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.99] active:translate-y-0 transition-all duration-300">
-                <div className="bg-lego-orange h-2"></div>
-                <CardContent className="p-8">
-                  <div className="flex mb-4">
-                    <span className="text-xs font-black bg-lego-orange text-charcoal px-3 py-1 rounded-lg">
-                      Brick-by-Brick® Programme
-                    </span>
-                  </div>
-                  <h3 className="text-2xl font-black text-charcoal mb-4">Children 7–12</h3>
-                  <ul className="space-y-2 font-medium text-muted-foreground">
-                    {[
-                      "Neurodiverse kids (ADHD, Autistic)",
-                      "Home-schooled learners",
-                      "Building friendships & social skills",
-                      "Processing tough experiences",
-                      "Growing confidence through play",
-                      "Finding their tribe",
-                    ].map((item) => (
-                      <li key={item} className="flex gap-2">
-                        <span className="text-charcoal/40 font-black text-lg leading-tight">•</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Teens */}
-            <motion.div variants={fadeInUp}>
-              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.99] active:translate-y-0 transition-all duration-300">
-                <div className="bg-charcoal h-2"></div>
-                <CardContent className="p-8">
-                  <div className="flex mb-4">
-                    <span className="text-xs font-black bg-charcoal text-white px-3 py-1 rounded-lg">
-                      Mindful Building Sessions
-                    </span>
-                  </div>
-                  <h3 className="text-2xl font-black text-charcoal mb-4">Teens 13–19</h3>
-                  <ul className="space-y-2 font-medium text-muted-foreground">
-                    {[
-                      "Navigating anxiety or low mood",
-                      "Feeling disconnected at school",
-                      "Recovering from trauma",
-                      "Quiet space for big feelings",
-                      "Peer-to-peer connection",
-                      "Calm focus through hands-on play",
-                    ].map((item) => (
-                      <li key={item} className="flex gap-2">
-                        <span className="text-charcoal font-black text-lg leading-tight">•</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Adults */}
-            <motion.div variants={fadeInUp}>
-              <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.99] active:translate-y-0 transition-all duration-300">
-                <div className="bg-lego-orange h-2"></div>
-                <CardContent className="p-8">
-                  <div className="flex mb-4">
-                    <span className="text-xs font-black bg-lego-orange text-charcoal px-3 py-1 rounded-lg">
-                      Therapeutic Use of LEGO®
-                    </span>
-                  </div>
-                  <h3 className="text-2xl font-black text-charcoal mb-4">Adults 20+</h3>
-                  <ul className="space-y-2 font-medium text-muted-foreground">
-                    {[
-                      "Respite from a busy mind",
-                      "Mindful, screen-free downtime",
-                      "Wellbeing & mental health support",
-                      "Reconnecting with creativity",
-                      "Small-group or 1:1 sessions",
-                      "A reset for tough weeks",
-                    ].map((item) => (
-                      <li key={item} className="flex gap-2">
-                        <span className="text-charcoal/40 font-black text-lg leading-tight">•</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
+            {whoBenefitCards.map((card) => {
+              const isCharcoal = card.accent === "charcoal";
+              return (
+                <motion.div key={card.title} variants={fadeInUp}>
+                  <Card className="h-full border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.99] active:translate-y-0 transition-all duration-300">
+                    <div className={isCharcoal ? "bg-charcoal h-2" : "bg-lego-orange h-2"} />
+                    <CardContent className="p-8">
+                      <div className="flex mb-4">
+                        <span className={isCharcoal ? "text-xs font-black bg-charcoal text-white px-3 py-1 rounded-lg" : "text-xs font-black bg-lego-orange text-charcoal px-3 py-1 rounded-lg"}>
+                          {card.badgeText}
+                        </span>
+                      </div>
+                      <h3 className="text-2xl font-black text-charcoal mb-4">{card.title}</h3>
+                      <ul className="space-y-2 font-medium text-muted-foreground">
+                        {card.items.map((item) => (
+                          <li key={item} className="flex gap-2">
+                            <span className={isCharcoal ? "text-charcoal font-black text-lg leading-tight" : "text-charcoal/40 font-black text-lg leading-tight"}>•</span>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
@@ -290,10 +311,10 @@ export default function Home() {
               className="text-4xl md:text-5xl font-black text-charcoal tracking-tight mb-3"
               style={{ letterSpacing: "-0.02em" }}
             >
-              Find your path
+              {pathwaysHeading}
             </h2>
             <p className="text-base md:text-lg font-medium text-slate-500 max-w-xl mx-auto">
-              Three ways into Brick Engaged. Tap one to see how it works and what's available.
+              {pathwaysSubtitle}
             </p>
           </motion.div>
 
@@ -304,7 +325,7 @@ export default function Home() {
             variants={staggerContainer}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto"
           >
-            {PATHWAYS.map((p) => (
+            {pathways.map((p) => (
               <motion.div key={p.href} variants={fadeInUp}>
                 <Link href={p.href}>
                   <div

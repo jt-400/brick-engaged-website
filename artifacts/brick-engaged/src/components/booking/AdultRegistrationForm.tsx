@@ -33,22 +33,36 @@ interface AdultRegistrationFormProps {
   slot: AvailabilitySlot;
   slotLabel: string;
   programmeTitle: string;
-  /** Suggested koha — shown to the user, but not collected here. Pay in person. */
+  /**
+   * If > 0, the form behaves as a paid booking — price shown prominently and
+   * the API redirects to Stripe Checkout.
+   * If 0 (or omitted), it's a koha/$0 registration — koha note is shown and
+   * the API skips Stripe + sends the confirmation email immediately.
+   */
+  priceCents?: number;
+  /** Suggested koha — shown only when priceCents is 0. */
   koha?: string;
   onCancel: () => void;
 }
 
 /**
- * Adult-only $0 registration form for Peer-to-Peer (and similar).
- * No payment, no child fields. Koha is collected in person on the night.
+ * Adult registration form. Powers both:
+ *   • $0 koha sessions (Peer-to-Peer) — "Reserve my spot", in-person koha
+ *   • Paid sessions (One-to-One) — "Pay $X & confirm", Stripe Checkout
+ *
+ * The backend at /api/bookings/hold decides paid vs $0 based on the
+ * programme's price_cents — this component just adjusts the UI copy.
  */
 export function AdultRegistrationForm({
   slot,
   slotLabel,
   programmeTitle,
+  priceCents = 0,
   koha,
   onCancel,
 }: AdultRegistrationFormProps) {
+  const isPaid = priceCents > 0;
+  const priceLabel = `$${(priceCents / 100).toFixed(0)}`;
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -112,7 +126,7 @@ export function AdultRegistrationForm({
       <div className="mb-6 flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
-            Reserve your spot
+            {isPaid ? "Book your session" : "Reserve your spot"}
           </p>
           <h3
             className="mt-1 text-2xl font-black tracking-tight text-charcoal"
@@ -122,12 +136,17 @@ export function AdultRegistrationForm({
           </h3>
           <p className="mt-1 text-sm font-bold text-charcoal/70">{slotLabel}</p>
         </div>
-        {koha && (
+        {isPaid ? (
+          <div className="shrink-0 rounded-2xl bg-lego-orange px-4 py-2.5 text-center font-black text-charcoal shadow-md">
+            <div className="text-xl leading-none">{priceLabel}</div>
+            <div className="mt-1 text-[10px] uppercase tracking-wider opacity-75">per session</div>
+          </div>
+        ) : koha ? (
           <div className="shrink-0 rounded-2xl bg-slate-100 px-4 py-2.5 text-center font-black text-charcoal">
             <div className="text-base leading-none">{koha}</div>
             <div className="mt-1 text-[10px] uppercase tracking-wider opacity-75">koha · in person</div>
           </div>
-        )}
+        ) : null}
       </div>
 
       <Form {...form}>
@@ -257,7 +276,13 @@ export function AdultRegistrationForm({
             >
               <span className="flex items-center gap-2">
                 {submitting ? <Loader2 size={14} className="animate-spin" /> : null}
-                {submitting ? "Reserving…" : "Reserve my spot"}
+                {submitting
+                  ? isPaid
+                    ? "Redirecting…"
+                    : "Reserving…"
+                  : isPaid
+                    ? `Pay ${priceLabel} & confirm`
+                    : "Reserve my spot"}
               </span>
             </LegoButton>
             <button
@@ -266,12 +291,14 @@ export function AdultRegistrationForm({
               disabled={submitting}
               className="text-sm font-bold text-charcoal/70 hover:text-charcoal disabled:opacity-50"
             >
-              ← Pick a different night
+              ← Pick a different time
             </button>
           </div>
 
           <p className="text-xs leading-relaxed text-slate-500">
-            No payment required to register. {koha ? `${koha} suggested koha is paid in person on the night, tap-to-pay or cash.` : "Koha (donation) is paid in person on the night."}
+            {isPaid
+              ? `Payment is processed securely by Stripe. We never store card details. If we cancel the session you'll be fully refunded.`
+              : `No payment required to register. ${koha ? `${koha} suggested koha is paid in person on the night, tap-to-pay or cash.` : "Koha (donation) is paid in person on the night."}`}
           </p>
         </form>
       </Form>
